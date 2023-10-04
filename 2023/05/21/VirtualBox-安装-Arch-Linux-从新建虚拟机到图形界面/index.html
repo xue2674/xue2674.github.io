@@ -1,0 +1,331 @@
+<!DOCTYPE html><html lang="en" theme-mode="dark"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>VirtualBox 安装 Arch Linux: 从新建虚拟机到图形界面 | xue的个人博客</title><link rel="icon" type="image/x-icon" href="/favicon.ico"><script>var config = {"root":"/","search":{"preload":false,"activeHolder":"Enter here","blurHolder":"Search","noResult":"Data \"$0\" not found"},"code":{"codeInfo":"$0 - $1 lines","copy":"copy","copyFinish":"copied","expand":"expand"}}</script><script src="//unpkg.com/mermaid@9.2.2/dist/mermaid.min.js"></script><link type="text/css" rel="stylesheet" href="//unpkg.com/lightgallery@2.7.1/css/lightgallery.css"><link type="text/css" rel="stylesheet" href="//unpkg.com/lightgallery@2.7.1/css/lg-zoom.css"><link type="text/css" rel="stylesheet" href="//unpkg.com/lightgallery@2.7.1/css/lg-thumbnail.css"><link type="text/css" rel="stylesheet" href="/lib/fontawesome/brands.min.css"><link type="text/css" rel="stylesheet" href="/lib/fontawesome/fontawesome.min.css"><link rel="stylesheet" href="/css/arknights.css"><script>if (window.localStorage.getItem('theme-mode') === 'light') document.documentElement.setAttribute('theme-mode', 'light')
+if (window.localStorage.getItem('theme-mode') === 'dark') document.documentElement.setAttribute('theme-mode', 'dark')</script><style>@font-face {
+ font-family: BenderLight;
+ src: local('Bender'), url("/font/BenderLight.ttf");
+}
+@font-face {
+ font-family: 'JetBrains Mono';
+ src: local('JetBrains Mono'), url('/font/JetBrainsMono-Regular.woff2') format('woff2');
+}
+@font-face {
+ font-family: 'Font Awesome 6 Brands';
+ src: local('Font Awesome 6 Brands'), url('/lib/fontawesome/fa-brands.woff2') format('woff2');
+}
+@font-face {
+ font-family: 'Font Awesome 6 Free';
+ src: local('Font Awesome 6 Free'), url('/lib/fontawesome/fa-regular.woff2') format('woff2');
+}</style><style>:root {
+  --dark-background: url('https://ak.hypergryph.com/assets/index/images/ak/pc/bk.jpg');
+  --light-background: url('/img/bk.jpg');
+}</style><meta name="generator" content="Hexo 7.0.0-rc2"></head><body><div class="loading" style="opacity: 0"><div class="loadingBar left"></div><div class="loadingBar right"></div></div><main><header class="closed"><nav><div class="navBtn hide"><i class="navBtnIcon"><span class="navBtnIconBar"></span><span class="navBtnIconBar"></span><span class="navBtnIconBar"></span></i></div><div class="navItem" id="search-header"><span class="navItemTitle"><input autocomplete="off" autocorrect="off" autocapitalize="none" placeholder="Search" spellcheck="false" maxlength="50" type="text" id="search-input"></span></div><div class="navItem" id="search-holder"></div><div class="search-popup"><div id="search-result"></div></div><ol class="navContent"><li class="navItem"><a class="navBlock" href="/"><span class="navItemTitle">Home</span></a></li><li class="navItem" matchdata="categories,tags"><a class="navBlock" href="/archives/"><span class="navItemTitle">Archives</span></a></li><li class="navItem"><a class="navBlock" href="/categories/"><span class="navItemTitle">About</span></a></li></ol></nav></header><article><div id="post-bg"><div id="post-title"><h1>VirtualBox 安装 Arch Linux: 从新建虚拟机到图形界面</h1><div id="post-info"><span>First Post: <div class="control"><time datetime="2023-05-20T17:03:41.000Z" id="date"> 2023-05-21</time></div></span><br><span>Last Update: <div class="control"><time datetime="2023-09-18T07:55:46.387Z" id="updated"> 2023-09-18</time></div></span><br><span>Word Count: <div class="control">2.7k</div></span><br><span>Read Time: <div class="control">10 min</div></span></div></div><hr><div id="post-content"><p>来源：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/355826301">https://zhuanlan.zhihu.com/p/355826301</a></p>
+<h2 id="一、下载-Arch-Linux-镜像"><a href="#一、下载-Arch-Linux-镜像" class="headerlink" title="一、下载 Arch Linux 镜像"></a>一、下载 Arch Linux 镜像</h2><p>镜像文件，扩展名为 .iso，包含了安装系统所需要的文件。访问以下链接（这是清华大学的开源软件镜像站，国内下载速度更快），下载以「.iso」结尾的文件：</p>
+<p><a href="https://link.zhihu.com/?target=https://mirrors.tuna.tsinghua.edu.cn/archlinux/iso/latest/">Index of &#x2F;archlinux&#x2F;iso&#x2F;latest&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;archlinux&#x2F;iso&#x2F;latest&#x2F;<img src="https://pic2.zhimg.com/v2-22b1ca2db10aa9b49fd1e815a45ab431_180x120.jpg" alt="img"></a></p>
+<h2 id="二、安装-VirtualBox"><a href="#二、安装-VirtualBox" class="headerlink" title="二、安装 VirtualBox"></a>二、安装 VirtualBox</h2><p>VirtualBox 是由 Oracle 公司开发的免费虚拟机软件。访问以下链接，根据你的宿主（即你所使用的物理意义上的、「真实的」电脑）操作系统下载安装包：</p>
+<p><a href="https://link.zhihu.com/?target=https://www.virtualbox.org/wiki/Downloads">Downloads - Oracle VM VirtualBoxwww.virtualbox.org/wiki/Downloads</a></p>
+<p class='item-img' data-src='https://pic3.zhimg.com/80/v2-fc0f36a98df9ed5304a4a85a5c66a372_720w.webp'><img src="https://pic3.zhimg.com/80/v2-fc0f36a98df9ed5304a4a85a5c66a372_720w.webp" alt="img">下载虚拟机软件安装包</p>
+<p>安装好后打开应看到形如以下的界面：</p>
+<p class='item-img' data-src='https://pic2.zhimg.com/80/v2-698fcc83647c066060573949c4f09299_720w.webp'><img src="https://pic2.zhimg.com/80/v2-698fcc83647c066060573949c4f09299_720w.webp" alt="img">我这已经存在一台虚拟机</p>
+<h2 id="三、新建虚拟机"><a href="#三、新建虚拟机" class="headerlink" title="三、新建虚拟机"></a>三、新建虚拟机</h2><p>点击「新建」；尽量不要在虚拟机的名称中加入空格，可以使用 arch, archlinux 或 arch_linux 之类的；</p>
+<p class='item-img' data-src='https://pic1.zhimg.com/80/v2-365214e581c1985ae4a0f531ab2ceafc_720w.webp'><img src="https://pic1.zhimg.com/80/v2-365214e581c1985ae4a0f531ab2ceafc_720w.webp" alt="img">新建虚拟机</p>
+<p>根据宿主内存大小和需求设置内存大小，这里选 2048 MB；</p>
+<p class='item-img' data-src='https://pic4.zhimg.com/80/v2-6d48d6f30a3e022e7801c7bdc9363eeb_720w.webp'><img src="https://pic4.zhimg.com/80/v2-6d48d6f30a3e022e7801c7bdc9363eeb_720w.webp" alt="img">调整内存</p>
+<p>下面两步按照默认走；</p>
+<p class='item-img' data-src='https://pic2.zhimg.com/80/v2-8d9e82db1d09133b5945e2cf846fa659_720w.webp'><img src="https://pic2.zhimg.com/80/v2-8d9e82db1d09133b5945e2cf846fa659_720w.webp" alt="img"></p>
+<p class='item-img' data-src='https://pic2.zhimg.com/80/v2-5c114c88e51e9dccef6271db72e4be3d_720w.webp'><img src="https://pic2.zhimg.com/80/v2-5c114c88e51e9dccef6271db72e4be3d_720w.webp" alt="img"></p>
+<p>这里建议选择「固定大小」；</p>
+<p class='item-img' data-src='https://pic3.zhimg.com/80/v2-ef3cfcc633539064ac1b36d29aec1676_720w.webp'><img src="https://pic3.zhimg.com/80/v2-ef3cfcc633539064ac1b36d29aec1676_720w.webp" alt="img"></p>
+<p>这里就按照默认的 8 GB，可以按照需求和宿主机磁盘空间自行调整；</p>
+<p class='item-img' data-src='https://pic2.zhimg.com/80/v2-cb046e34b77cd00962504429acda3ae1_720w.webp'><img src="https://pic2.zhimg.com/80/v2-cb046e34b77cd00962504429acda3ae1_720w.webp" alt="img"></p>
+<p>等待片刻；</p>
+<p class='item-img' data-src='https://pic4.zhimg.com/80/v2-50ab32859b6773eec817f5db75551a6b_720w.webp'><img src="https://pic4.zhimg.com/80/v2-50ab32859b6773eec817f5db75551a6b_720w.webp" alt="img"></p>
+<p>到这一步就新建好了。我们在启动前把显存拉满，保证体验；点击「设置」；进入「显示」，如图把显存拉到 128 MB；</p>
+<p class='item-img' data-src='https://pic1.zhimg.com/80/v2-82909282ddfd6bba09c143eb116949cc_720w.webp'><img src="https://pic1.zhimg.com/80/v2-82909282ddfd6bba09c143eb116949cc_720w.webp" alt="img"></p>
+<p>点击「OK」应用设置，这时我们可以启动了。</p>
+<h2 id="四、启动虚拟机"><a href="#四、启动虚拟机" class="headerlink" title="四、启动虚拟机"></a>四、启动虚拟机</h2><p>点击「启动」；因为没有启动设备，VirtualBox 会让你选择启动设备；</p>
+<p class='item-img' data-src='https://pic3.zhimg.com/80/v2-9aa70cd4e4211b45b0af7b1600776896_720w.webp'><img src="https://pic3.zhimg.com/80/v2-9aa70cd4e4211b45b0af7b1600776896_720w.webp" alt="img"></p>
+<p>点击</p>
+<p class='item-img' data-src='https://pic2.zhimg.com/80/v2-b168ca01e9bca83caa36e55e03fef045_720w.webp'><img src="https://pic2.zhimg.com/80/v2-b168ca01e9bca83caa36e55e03fef045_720w.webp" alt="img"></p>
+<p>选择先前下载的镜像文件，进入以下界面；</p>
+<p class='item-img' data-src='https://pic3.zhimg.com/80/v2-8764a9b61e6c271c903aca2bf7012c62_720w.webp'><img src="https://pic3.zhimg.com/80/v2-8764a9b61e6c271c903aca2bf7012c62_720w.webp" alt="img"></p>
+<p>直接按回车，等待片刻，进入以下界面；</p>
+<p class='item-img' data-src='https://pic1.zhimg.com/80/v2-86d09115e255480ef3e43f17165f2490_720w.webp'><img src="https://pic1.zhimg.com/80/v2-86d09115e255480ef3e43f17165f2490_720w.webp" alt="img"></p>
+<h2 id="五、为安装做准备"><a href="#五、为安装做准备" class="headerlink" title="五、为安装做准备"></a>五、为安装做准备</h2><p>我们先确认网络连接。执行</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">ip link<br></code></pre></td></tr></table></figure>
+
+<p>然后</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">ping baidu.com<br></code></pre></td></tr></table></figure>
+
+<p>如果我们能看到数据正常获取（如下图），就可以 Ctrl + C 结束连接，看到「0% packet loss」就行；</p>
+<p class='item-img' data-src='https://pic3.zhimg.com/80/v2-191b062259cd77f0840f0df96627035e_720w.webp'><img src="https://pic3.zhimg.com/80/v2-191b062259cd77f0840f0df96627035e_720w.webp" alt="img"></p>
+<p>之前提到了清华开源软件源，我们在装系统的过程中也要装不少软件，为了保证速度可以先在系统配置文件中加入清华源：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">vim /etc/pacman.d/mirrorlist<br></code></pre></td></tr></table></figure>
+
+<p>按 i 进入插入模式，然后加入这么几行字：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">## China<br>Server = https://mirrors.tuna.tsinghua.edu.cn/archlinux/$repo/os/$arch<br></code></pre></td></tr></table></figure>
+
+<p class='item-img' data-src='https://pic4.zhimg.com/80/v2-ae447d2dbf947130cf7274540d276c03_720w.webp'><img src="https://pic4.zhimg.com/80/v2-ae447d2dbf947130cf7274540d276c03_720w.webp" alt="img"></p>
+<p>之后按 Esc，然后输入</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">:wq<br></code></pre></td></tr></table></figure>
+
+<p>后按回车，即保存并退出 Vim 编辑器。执行</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">pacman -Syy<br></code></pre></td></tr></table></figure>
+
+<p>更新缓存。</p>
+<p>我们需要确保准确的系统时间：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">timedatectl set-ntp true<br></code></pre></td></tr></table></figure>
+
+<p>然后可以执行</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">timedatectl status<br></code></pre></td></tr></table></figure>
+
+<p>检查状态，如果像下图这样就没问题了。</p>
+<p class='item-img' data-src='https://pic3.zhimg.com/80/v2-a78f5bc78cb1b1ffc3221b15cb5ad1f2_720w.webp'><img src="https://pic3.zhimg.com/80/v2-a78f5bc78cb1b1ffc3221b15cb5ad1f2_720w.webp" alt="img"></p>
+<p>现在开始准备磁盘。执行</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">fdisk -l<br><br></code></pre></td></tr></table></figure>
+
+<p>查看磁盘状态。</p>
+<p class='item-img' data-src='https://pic1.zhimg.com/80/v2-07a4c32fd0e0743da21d6ff1f3fc150c_720w.webp'><img src="https://pic1.zhimg.com/80/v2-07a4c32fd0e0743da21d6ff1f3fc150c_720w.webp" alt="img"></p>
+<p>「loop0」结尾的可以忽略，一般来说只用考虑 &#x2F;dev&#x2F;sda。在这个块设备上新建一个分区：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">fdisk /dev/sda<br><br></code></pre></td></tr></table></figure>
+
+<p class='item-img' data-src='https://pic1.zhimg.com/80/v2-74af97a6049574eaceba4f1ad0481720_720w.webp'><img src="https://pic1.zhimg.com/80/v2-74af97a6049574eaceba4f1ad0481720_720w.webp" alt="img"></p>
+<p>在 Command 后执行</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">n<br><br></code></pre></td></tr></table></figure>
+
+<p>来新建分区，然后按照默认（default）配置，一路回车，直到 Command 再次出现，</p>
+<p class='item-img' data-src='https://pic3.zhimg.com/80/v2-cbe69963cf9876053a5505aece92dabe_720w.webp'><img src="https://pic3.zhimg.com/80/v2-cbe69963cf9876053a5505aece92dabe_720w.webp" alt="img"></p>
+<p>这时执行</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">w<br><br></code></pre></td></tr></table></figure>
+
+<p>退出分区设置。此时再次执行</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">fdisk -l<br><br></code></pre></td></tr></table></figure>
+
+<p>可以看到新的分区为 &#x2F;dev&#x2F;sda1</p>
+<p class='item-img' data-src='https://pic1.zhimg.com/80/v2-db71e78312b2d9d1eed4ba0712f97958_720w.webp'><img src="https://pic1.zhimg.com/80/v2-db71e78312b2d9d1eed4ba0712f97958_720w.webp" alt="img"></p>
+<p>这时执行</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">mkfs.ext4 /dev/sda1<br><br></code></pre></td></tr></table></figure>
+
+<p>来格式化分区，然后执行</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">mount /dev/sda1 /mnt<br><br></code></pre></td></tr></table></figure>
+
+<p>来挂载分区。</p>
+<p class='item-img' data-src='https://pic2.zhimg.com/80/v2-a01875fad3d6ee07a15c1745db1e5245_720w.webp'><img src="https://pic2.zhimg.com/80/v2-a01875fad3d6ee07a15c1745db1e5245_720w.webp" alt="img"></p>
+<h2 id="六、安装"><a href="#六、安装" class="headerlink" title="六、安装"></a>六、安装</h2><p>执行</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">pacstrap /mnt base linux linux-firmware<br><br></code></pre></td></tr></table></figure>
+
+<p>来安装 base 软件包、Linux 内核和固件。这一步会花费较多时间，耐心等待即可，保证网络连接的稳定。</p>
+<p class='item-img' data-src='https://pic2.zhimg.com/80/v2-b8be52a90d6164efda4b76f6d46afd11_720w.webp'><img src="https://pic2.zhimg.com/80/v2-b8be52a90d6164efda4b76f6d46afd11_720w.webp" alt="img">正在安装各种软件包……</p>
+<p>结束后执行</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">genfstab -U /mnt &gt;&gt; /mnt/etc/fstab<br><br></code></pre></td></tr></table></figure>
+
+<p>来生成 fstab 文件。这个文件规定了文件系统之间的挂载。之后执行</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">arch-chroot /mnt<br><br></code></pre></td></tr></table></figure>
+
+<p>进入安装好的系统。</p>
+<p class='item-img' data-src='https://pic2.zhimg.com/80/v2-2cfd2fd86b4bc965fa98b129ff8695c9_720w.webp'><img src="https://pic2.zhimg.com/80/v2-2cfd2fd86b4bc965fa98b129ff8695c9_720w.webp" alt="img"></p>
+<h2 id="七、配置系统"><a href="#七、配置系统" class="headerlink" title="七、配置系统"></a>七、配置系统</h2><p>设置时区：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime<br><br></code></pre></td></tr></table></figure>
+
+<p>和</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">hwclock --systohc<br><br></code></pre></td></tr></table></figure>
+
+<p>之后进行本地化，以明确规定地域、货币、时区日期的格式、字符排列方式和其他本地化标准。由于设置中文本地化会出现乱码，我们首先设置 en_GB（英国英语）。先安装 Vim 文本编辑器：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">pacman -S vim<br><br></code></pre></td></tr></table></figure>
+
+<p>需要确认继续时按 y 后回车；</p>
+<p class='item-img' data-src='https://pic4.zhimg.com/80/v2-26a1256c17ab6ce9d561e1b0529f4feb_720w.webp'><img src="https://pic4.zhimg.com/80/v2-26a1256c17ab6ce9d561e1b0529f4feb_720w.webp" alt="img"></p>
+<p>然后用 Vim 打开 &#x2F;etc&#x2F;locale.gen：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">vim /etc/locale.gen<br><br></code></pre></td></tr></table></figure>
+
+<p>和之前一样，按 i 进入插入模式，找到</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">#en_GB.UTF-8 UTF-8<br><br></code></pre></td></tr></table></figure>
+
+<p>这一行，把前面的「#」去掉，然后按 Esc，执行</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">:wq<br><br></code></pre></td></tr></table></figure>
+
+<p>保存并退出。之后：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">vim /etc/locale.conf<br><br></code></pre></td></tr></table></figure>
+
+<p>在这个文件中加入</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">LANG=en_GB.UTF-8<br><br></code></pre></td></tr></table></figure>
+
+<p>这一行字，然后保存退出。编辑完两个文件之后：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">locale-gen<br><br></code></pre></td></tr></table></figure>
+
+<p>看到 Generation complete 即说明本地化生成完成。</p>
+<p class='item-img' data-src='https://pic1.zhimg.com/80/v2-f802dc78440d01507b9b67e74b570070_720w.webp'><img src="https://pic1.zhimg.com/80/v2-f802dc78440d01507b9b67e74b570070_720w.webp" alt="img"></p>
+<p>这时可以执行</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">passwd<br><br></code></pre></td></tr></table></figure>
+
+<p>来设置 root （即管理员用户）的密码，需要输入两次以确认（输的时候不会明文显示出来）。</p>
+<p class='item-img' data-src='https://pic3.zhimg.com/80/v2-d1421d8e7cdf42fb83afdd7a0626edc2_720w.webp'><img src="https://pic3.zhimg.com/80/v2-d1421d8e7cdf42fb83afdd7a0626edc2_720w.webp" alt="img"></p>
+<p>接下来，关键的一步，安装 dhcpcd：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">pacman -S dhcpcd<br><br></code></pre></td></tr></table></figure>
+
+<p>否则重启后无法连接到网络。</p>
+<p class='item-img' data-src='https://pic3.zhimg.com/80/v2-0c383bbb93e59d3ad1e69e2d6c14938a_720w.webp'><img src="https://pic3.zhimg.com/80/v2-0c383bbb93e59d3ad1e69e2d6c14938a_720w.webp" alt="img"></p>
+<p>配置的最后一步，安装系统引导程序 grub：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">pacman -S grub<br><br></code></pre></td></tr></table></figure>
+
+<p>和</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">grub-install /dev/sda<br><br></code></pre></td></tr></table></figure>
+
+<p>以及</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">grub-mkconfig -o /boot/grub/grub.cfg<br><br></code></pre></td></tr></table></figure>
+
+<p class='item-img' data-src='https://pic1.zhimg.com/80/v2-67a01d4c55b52f9a43104c42739fdb10_720w.webp'><img src="https://pic1.zhimg.com/80/v2-67a01d4c55b52f9a43104c42739fdb10_720w.webp" alt="img"></p>
+<p>这样我们的系统就配置好了，此时重启。执行</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">exit<br><br></code></pre></td></tr></table></figure>
+
+<p>来退出 chroot，然后执行</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">poweroff<br><br></code></pre></td></tr></table></figure>
+
+<p>来关机，虚拟机窗口随后关闭。</p>
+<h2 id="八、第一次启动-Arch-Linux"><a href="#八、第一次启动-Arch-Linux" class="headerlink" title="八、第一次启动 Arch Linux"></a>八、第一次启动 Arch Linux</h2><p>再次启动前，进入虚拟机的「设置」&#x3D;&gt;「存储」，如图移除用以安装的虚拟盘，点击「OK」应用设置。</p>
+<p class='item-img' data-src='https://pic2.zhimg.com/80/v2-8c45a859175d23f4dba59a323331848d_720w.webp'><img src="https://pic2.zhimg.com/80/v2-8c45a859175d23f4dba59a323331848d_720w.webp" alt="img"></p>
+<p>然后点击「启动」，进入 grub</p>
+<p class='item-img' data-src='https://pic3.zhimg.com/80/v2-936f22b762d84a31c594ba71d2387426_720w.webp'><img src="https://pic3.zhimg.com/80/v2-936f22b762d84a31c594ba71d2387426_720w.webp" alt="img"></p>
+<p>按回车启动 Arch Linux，进入系统，输入 root（用户名）和密码（先前设置的）；</p>
+<p class='item-img' data-src='https://pic3.zhimg.com/80/v2-6ad471f69b5ce532735275b06a784612_720w.webp'><img src="https://pic3.zhimg.com/80/v2-6ad471f69b5ce532735275b06a784612_720w.webp" alt="img"></p>
+<p>执行</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">systemctl enable dhcpcd<br><br></code></pre></td></tr></table></figure>
+
+<p>和</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">dhcpcd<br><br></code></pre></td></tr></table></figure>
+
+<p>启用网络连接，</p>
+<p class='item-img' data-src='https://pic4.zhimg.com/80/v2-5459dc8e080ce393d2d2b44497a0413b_720w.webp'><img src="https://pic4.zhimg.com/80/v2-5459dc8e080ce393d2d2b44497a0413b_720w.webp" alt="img"></p>
+<p>之后用<strong>第五步</strong>中的方法测试网络。</p>
+<p>一个基本的 Arch Linux 的安装至此结束。</p>
+<h2 id="九、安装后配置"><a href="#九、安装后配置" class="headerlink" title="九、安装后配置"></a>九、安装后配置</h2><p>root 用户的权限过高，造成对系统灾难性的损坏的风险因此较高，我们因此新建一个用户：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">useradd -m -G wheel username<br><br></code></pre></td></tr></table></figure>
+
+<p>将其中的 username 改为你要的名字，比如</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">useradd -m -G wheel jiewei<br><br></code></pre></td></tr></table></figure>
+
+<p>执行</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">passwd username<br><br></code></pre></td></tr></table></figure>
+
+<p>来设置密码，与先前设置 root 密码一样。</p>
+<p>不使用 root 时如何获得 root 权限呢？需要在命令前加上 sudo，而 sudo 也需要先安装：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">pacman -S sudo<br><br></code></pre></td></tr></table></figure>
+
+<p>之后来配置 sudo 使所有用户都能使用；执行</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">ln -s /usr/bin/vim /usr/bin/vi<br><br></code></pre></td></tr></table></figure>
+
+<p>和</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">visudo<br><br></code></pre></td></tr></table></figure>
+
+<p>进入 Vim 编辑器，找到</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text"># %wheel ALL=(ALL) ALL<br><br></code></pre></td></tr></table></figure>
+
+<p>一行，把「#」去掉，保存退出。</p>
+<p>配置好之后执行</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">reboot<br><br></code></pre></td></tr></table></figure>
+
+<p>来重启。重启之后我们就可以使用新创建的用户；输入用户名和密码，进入系统。</p>
+<p class='item-img' data-src='https://pic3.zhimg.com/80/v2-434ece92b6d2be60de229781b71ddb1e_720w.webp'><img src="https://pic3.zhimg.com/80/v2-434ece92b6d2be60de229781b71ddb1e_720w.webp" alt="img"></p>
+<h2 id="十、图形界面"><a href="#十、图形界面" class="headerlink" title="十、图形界面"></a>十、图形界面</h2><p>没有图形界面的系统对于大多数人还是陌生的，在安装图形界面之前，我们需要安装显卡驱动：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">sudo pacman -S xf86-video-intel<br><br></code></pre></td></tr></table></figure>
+
+<p>sudo 命令一段时间内需要输入密码确认，注意是用户密码而非 root 密码。</p>
+<p>接下来安装开源窗口系统服务 Xorg：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">sudo pacman -S xorg<br><br></code></pre></td></tr></table></figure>
+
+<p>然后按回车走默认（即安装所有需要安装的）。之后安装桌面环境 Xfce：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">sudo pacman -S xfce4 xfce4-goodies<br><br></code></pre></td></tr></table></figure>
+
+<p>也是按回车走默认。最后安装桌面管理器 sddm：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">sudo pacman -S sddm<br><br></code></pre></td></tr></table></figure>
+
+<p>然后设置开机启动：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">sudo systemctl enable sddm<br><br></code></pre></td></tr></table></figure>
+
+<p>最后需要安装管理网络连接的程序 network-manager-applet：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">sudo pacman -S network-manager-applet<br><br></code></pre></td></tr></table></figure>
+
+<p>重启：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">reboot<br><br></code></pre></td></tr></table></figure>
+
+<p>之后就能看到熟悉而友好的图形界面了。</p>
+<p class='item-img' data-src='https://pic3.zhimg.com/80/v2-29e19bf2f309076555bd0cc501d1ac66_720w.webp'><img src="https://pic3.zhimg.com/80/v2-29e19bf2f309076555bd0cc501d1ac66_720w.webp" alt="img">图形界面！（我们可以进入 Settings &#x3D;&amp;amp;amp;amp;amp;amp;gt; Display 调整分辨率）</p>
+<p>这时我们需要重新配置网络。输入密码进入系统后打开终端</p>
+<p class='item-img' data-src='https://pic4.zhimg.com/80/v2-2ddf9a2fbb6800854db20c60478f7073_720w.webp'><img src="https://pic4.zhimg.com/80/v2-2ddf9a2fbb6800854db20c60478f7073_720w.webp" alt="img">图标长这样，就在 Dock（任务栏）里</p>
+<p>然后启用 NetworkManager（桌面环境使用的网络服务）：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">sudo systemctl enable NetworkManager<br><br></code></pre></td></tr></table></figure>
+
+<p>然后重启，成功联网。</p>
+<p class='item-img' data-src='https://pic1.zhimg.com/80/v2-a02b899bbc94376db32ee74fecf984e0_720w.webp'><img src="https://pic1.zhimg.com/80/v2-a02b899bbc94376db32ee74fecf984e0_720w.webp" alt="img"></p>
+<p>之后配置声音；执行以下命令：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs text">sudo pacman -S pavucontrol pulseaudio<br>pulseaudio --check<br>pulseaudio -D<br><br></code></pre></td></tr></table></figure>
+
+<p>这样就能播放音频了。</p>
+<h2 id="十一、有用的软件包及本地化"><a href="#十一、有用的软件包及本地化" class="headerlink" title="十一、有用的软件包及本地化"></a>十一、有用的软件包及本地化</h2><p>目前用的文本编辑器都是命令行工具 Vim，比起 gedit 这一图形界面工具来说显得不怎么友好：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">sudo pacman -S gedit<br><br></code></pre></td></tr></table></figure>
+
+<p>我们可以给 pacman 添加中文社区仓库。用新装的 gedit 打开 &#x2F;etc&#x2F;pacman.conf：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">sudo gedit /etc/pacman.conf<br><br></code></pre></td></tr></table></figure>
+
+<p>然后在末尾添加两行：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs text">[archlinuxcn]<br>Server = https://repo.archlinuxcn.org/$arch<br><br></code></pre></td></tr></table></figure>
+
+<p>之后更新缓存：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">sudo pacman -Sy<br><br></code></pre></td></tr></table></figure>
+
+<p>目前我们都使用 pacman 安装软件，而另一个工具 yay 则可以用来安装 AUR（Arch User Repository，Arch 用户库）中的大量软件。先安装需要用到的 git 和 base-devel：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">sudo pacman -S git base-devel<br><br></code></pre></td></tr></table></figure>
+
+<p>然后：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs text">git clone https://aur.archlinux.org/yay.git<br>cd yay<br>makepkg -si<br><br></code></pre></td></tr></table></figure>
+
+<p>我们大概还需要一个浏览器，安装火狐是最方便的：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">sudo pacman -S firefox<br><br></code></pre></td></tr></table></figure>
+
+<p>这样点击 Dock 中的地球图标就能上网了。打开网页，发现中文内容是乱码；</p>
+<p class='item-img' data-src='https://pic1.zhimg.com/80/v2-ac8669dddef497fd8842cc03caf1b208_720w.webp'><img src="https://pic1.zhimg.com/80/v2-ac8669dddef497fd8842cc03caf1b208_720w.webp" alt="img"></p>
+<p>我们需要安装中文字体：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">sudo pacman -S noto-fonts-cjk<br><br></code></pre></td></tr></table></figure>
+
+<p class='item-img' data-src='https://pic3.zhimg.com/80/v2-a2ee3039af95936fa5f4a7cffd33fcee_720w.webp'><img src="https://pic3.zhimg.com/80/v2-a2ee3039af95936fa5f4a7cffd33fcee_720w.webp" alt="img"></p>
+<p>这下是大家都看得懂的中文字了。</p>
+<p>我们还需要安装中文输入法，使用 fcitx 框架：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">sudo pacman -S fcitx fcitx-im fcitx-configtool fcitx-sunpinyin<br><br></code></pre></td></tr></table></figure>
+
+<p>设置环境变量：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">sudo gedit ~/.xprofile<br><br></code></pre></td></tr></table></figure>
+
+<p>在编辑器中加入</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs text">export GTK_IM_MODULE=fcitx<br>export QT_IM_MODULE=fcitx<br>export XMODIFIERS=&quot;@im=fcitx&quot;<br><br></code></pre></td></tr></table></figure>
+
+<p>然后执行：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">fcitx-configtool<br><br></code></pre></td></tr></table></figure>
+
+<p>如下图所示，点击「+」，然后取消勾选「Only Show Current Language」，找到安装的「Sunpinyin」，点击「OK」。（如果没有出现这些可能需要重启）</p>
+<p class='item-img' data-src='https://pic1.zhimg.com/80/v2-d66f4dcc6881ef84afa73c6e8f9cc4d0_720w.webp'><img src="https://pic1.zhimg.com/80/v2-d66f4dcc6881ef84afa73c6e8f9cc4d0_720w.webp" alt="img"></p>
+<p>重启后中文输入法便出现了。</p>
+<p class='item-img' data-src='https://pic4.zhimg.com/80/v2-06130af6340a2608df9a8be183d199d3_720w.webp'><img src="https://pic4.zhimg.com/80/v2-06130af6340a2608df9a8be183d199d3_720w.webp" alt="img"></p>
+<h2 id="十二、真正开始使用"><a href="#十二、真正开始使用" class="headerlink" title="十二、真正开始使用"></a>十二、真正开始使用</h2><p>对于 Windows 或 macOS 用户来说，「自由软件」这一概念大概是陌生的。事实上，如 Microsoft Office 和 Adobe Photoshop 这样的商业软件几乎都有它们的自由软件替代品（比如 LibreOffice 和 GIMP）。事实上，整个 Linux 系统便是一个自由软件的最佳例子：任何人都可以自由地使用、复制、研究、修改和分发 Linux 的所有底层源代码。所以，在 Linux 中使用自由软件是被鼓励的，我们从安装 LibreOffice 开始：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">sudo pacman -S libreoffice-still libreoffice-still-en-gb libreoffice-still-zh-cn<br><br></code></pre></td></tr></table></figure>
+
+<p>安装 LibreOffice 需要同时安装语言包，我们先安装英国英语和简体中文。安装完成之后点击左上角（类似 Windows 的开始），就可以看到安装好的套件了。</p>
+<p class='item-img' data-src='https://pic2.zhimg.com/80/v2-c8053de6a4f0b7bfd086910816038585_720w.webp'><img src="https://pic2.zhimg.com/80/v2-c8053de6a4f0b7bfd086910816038585_720w.webp" alt="img"></p>
+<p class='item-img' data-src='https://pic1.zhimg.com/80/v2-bc7ca5127e07838e95578850cae7bb88_720w.webp'><img src="https://pic1.zhimg.com/80/v2-bc7ca5127e07838e95578850cae7bb88_720w.webp" alt="img">测试</p>
+<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>Arch Linux 的安装（即使作为 Linux distro 也）并不简单，这与 Arch 的原则有关：每个人的需求都不同，于是用户被允许从最底层开始搭建自己想要的系统。同时，Arch Linux 也有着 Archer 引以为傲的 Arch Wiki，在那里有着最靠谱的关于 Arch 的问题的解答。事实上，这篇教程只是万千可能性中的一种，你可以设置更复杂的分区，可以不使用 Xfce 桌面环境，可以不用 Vim 而是用 Emacs；当然，我们的 Linux 旅程也远没有结束。</p>
+<p>祝安装 Arch Linux 顺利，祝使用 Arch Linux 愉快！</p>
+<div id="paginator"></div></div><div id="post-footer"><div id="pages"><div class="footer-link" style="width: 50%;text-align:right;border-right:1px #fe2 solid"><a href="/2023/05/21/2021-Archlinux%E5%8F%8C%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85%E6%95%99%E7%A8%8B%EF%BC%88%E8%B6%85%E8%AF%A6%E7%BB%86%EF%BC%89/">← Next 2021 Archlinux双系统安装教程（超详细）</a></div><div class="footer-link" style="width: 50%;right:1px;border-left:1px #fe2 solid"><a href="/2023/05/21/Druid%E9%85%8D%E7%BD%AE%E5%8F%82%E6%95%B0%E8%AF%A6%E8%A7%A3/">Druid配置参数详解 Prev →</a></div></div></div></div><div class="bottom-btn"><div><a id="to-top" onClick="scrolls.scrolltop();" title="To Top" style="opacity: 0; display: none;">∧</a><a id="to-index" href="#toc-div" title="To Catalog">≡</a><a id="color-mode" onClick="colorMode.change()" title="Change Theme"></a></div></div></article><aside><div id="about"><a href="/" id="logo"><img src="https://ak.hypergryph.com/assets/index/images/ak/pc/faction/1.png" alt="Logo"></a><h1 id="Dr"><a href="/">John Doe</a></h1><div id="description"><p></p></div></div><div id="aside-block"><div id="toc-div"><h1>Catalog</h1><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E4%B8%8B%E8%BD%BD-Arch-Linux-%E9%95%9C%E5%83%8F"><span class="toc-number">1.</span> <span class="toc-text">一、下载 Arch Linux 镜像</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E5%AE%89%E8%A3%85-VirtualBox"><span class="toc-number">2.</span> <span class="toc-text">二、安装 VirtualBox</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E6%96%B0%E5%BB%BA%E8%99%9A%E6%8B%9F%E6%9C%BA"><span class="toc-number">3.</span> <span class="toc-text">三、新建虚拟机</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%90%AF%E5%8A%A8%E8%99%9A%E6%8B%9F%E6%9C%BA"><span class="toc-number">4.</span> <span class="toc-text">四、启动虚拟机</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E4%B8%BA%E5%AE%89%E8%A3%85%E5%81%9A%E5%87%86%E5%A4%87"><span class="toc-number">5.</span> <span class="toc-text">五、为安装做准备</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E5%AE%89%E8%A3%85"><span class="toc-number">6.</span> <span class="toc-text">六、安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%83%E3%80%81%E9%85%8D%E7%BD%AE%E7%B3%BB%E7%BB%9F"><span class="toc-number">7.</span> <span class="toc-text">七、配置系统</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AB%E3%80%81%E7%AC%AC%E4%B8%80%E6%AC%A1%E5%90%AF%E5%8A%A8-Arch-Linux"><span class="toc-number">8.</span> <span class="toc-text">八、第一次启动 Arch Linux</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B9%9D%E3%80%81%E5%AE%89%E8%A3%85%E5%90%8E%E9%85%8D%E7%BD%AE"><span class="toc-number">9.</span> <span class="toc-text">九、安装后配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%81%E3%80%81%E5%9B%BE%E5%BD%A2%E7%95%8C%E9%9D%A2"><span class="toc-number">10.</span> <span class="toc-text">十、图形界面</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%81%E4%B8%80%E3%80%81%E6%9C%89%E7%94%A8%E7%9A%84%E8%BD%AF%E4%BB%B6%E5%8C%85%E5%8F%8A%E6%9C%AC%E5%9C%B0%E5%8C%96"><span class="toc-number">11.</span> <span class="toc-text">十一、有用的软件包及本地化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%81%E4%BA%8C%E3%80%81%E7%9C%9F%E6%AD%A3%E5%BC%80%E5%A7%8B%E4%BD%BF%E7%94%A8"><span class="toc-number">12.</span> <span class="toc-text">十二、真正开始使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%90%8E%E8%AE%B0"><span class="toc-number">13.</span> <span class="toc-text">后记</span></a></li></ol></div></div><footer><nobr>Published with <a target="_blank" rel="noopener" href="http://hexo.io">Hexo</a></nobr><wbr><nobr> Theme <a target="_blank" rel="noopener" href="https://github.com/Yue-plus/hexo-theme-arknights">Arknights</a></nobr><wbr><nobr>by <a target="_blank" rel="noopener" href="https://github.com/Yue-plus">Yue_plus</a></nobr></footer></aside></main><canvas id="canvas-dust"></canvas><script src="/js/search.js"></script><script src="/js/arknights.js"></script><script src="//unpkg.com/lightgallery@2.7.1/lightgallery.min.js"></script><script src="//unpkg.com/lightgallery@2.7.1/plugins/zoom/lg-zoom.min.js"></script><script src="//unpkg.com/lightgallery@2.7.1/plugins/thumbnail/lg-thumbnail.min.js"></script><script src="/js/pjax.js"></script><script class="pjax-js">reset= () => {code.findCode();
+document.querySelector('.lg-container')?.remove()
+lightGallery(document.getElementById('post-bg'), {
+  plugins: [lgZoom,lgThumbnail],
+  selector: '.item-img'})}</script><script>window.addEventListener("load",() => {pjax = new Pjax({
+ cacheBust: false,
+ selectors: ['title','article','#aside-block','.pjax-js'],
+ switches: {'article': Pjax.switches.sideBySide},
+ switchesOptions: {
+   'article': {
+     classNames: {
+       remove: "pjax-out",
+       add: "pjax-in"
+     }
+   }
+ }
+});
+document.addEventListener("pjax:complete", reset);reset()})</script></body></html>

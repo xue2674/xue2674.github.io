@@ -1,0 +1,109 @@
+<!DOCTYPE html><html lang="en" theme-mode="dark"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Docker+Clash 部署透明“网关”的实现 | xue的个人博客</title><link rel="icon" type="image/x-icon" href="/favicon.ico"><script>var config = {"root":"/","search":{"preload":false,"activeHolder":"Enter here","blurHolder":"Search","noResult":"Data \"$0\" not found"},"code":{"codeInfo":"$0 - $1 lines","copy":"copy","copyFinish":"copied","expand":"expand"}}</script><script src="//unpkg.com/mermaid@9.2.2/dist/mermaid.min.js"></script><link type="text/css" rel="stylesheet" href="//unpkg.com/lightgallery@2.7.1/css/lightgallery.css"><link type="text/css" rel="stylesheet" href="//unpkg.com/lightgallery@2.7.1/css/lg-zoom.css"><link type="text/css" rel="stylesheet" href="//unpkg.com/lightgallery@2.7.1/css/lg-thumbnail.css"><link type="text/css" rel="stylesheet" href="/lib/fontawesome/brands.min.css"><link type="text/css" rel="stylesheet" href="/lib/fontawesome/fontawesome.min.css"><link rel="stylesheet" href="/css/arknights.css"><script>if (window.localStorage.getItem('theme-mode') === 'light') document.documentElement.setAttribute('theme-mode', 'light')
+if (window.localStorage.getItem('theme-mode') === 'dark') document.documentElement.setAttribute('theme-mode', 'dark')</script><style>@font-face {
+ font-family: BenderLight;
+ src: local('Bender'), url("/font/BenderLight.ttf");
+}
+@font-face {
+ font-family: 'JetBrains Mono';
+ src: local('JetBrains Mono'), url('/font/JetBrainsMono-Regular.woff2') format('woff2');
+}
+@font-face {
+ font-family: 'Font Awesome 6 Brands';
+ src: local('Font Awesome 6 Brands'), url('/lib/fontawesome/fa-brands.woff2') format('woff2');
+}
+@font-face {
+ font-family: 'Font Awesome 6 Free';
+ src: local('Font Awesome 6 Free'), url('/lib/fontawesome/fa-regular.woff2') format('woff2');
+}</style><style>:root {
+  --dark-background: url('https://ak.hypergryph.com/assets/index/images/ak/pc/bk.jpg');
+  --light-background: url('/img/bk.jpg');
+}</style><meta name="generator" content="Hexo 7.0.0-rc2"></head><body><div class="loading" style="opacity: 0"><div class="loadingBar left"></div><div class="loadingBar right"></div></div><main><header class="closed"><nav><div class="navBtn hide"><i class="navBtnIcon"><span class="navBtnIconBar"></span><span class="navBtnIconBar"></span><span class="navBtnIconBar"></span></i></div><div class="navItem" id="search-header"><span class="navItemTitle"><input autocomplete="off" autocorrect="off" autocapitalize="none" placeholder="Search" spellcheck="false" maxlength="50" type="text" id="search-input"></span></div><div class="navItem" id="search-holder"></div><div class="search-popup"><div id="search-result"></div></div><ol class="navContent"><li class="navItem"><a class="navBlock" href="/"><span class="navItemTitle">Home</span></a></li><li class="navItem" matchdata="categories,tags"><a class="navBlock" href="/archives/"><span class="navItemTitle">Archives</span></a></li><li class="navItem"><a class="navBlock" href="/categories/"><span class="navItemTitle">About</span></a></li></ol></nav></header><article><div id="post-bg"><div id="post-title"><h1>Docker+Clash 部署透明“网关”的实现</h1><div id="post-info"><span>First Post: <div class="control"><time datetime="2023-05-20T16:35:05.000Z" id="date"> 2023-05-21</time></div></span><br><span>Last Update: <div class="control"><time datetime="2023-09-18T07:55:46.379Z" id="updated"> 2023-09-18</time></div></span><br><span>Word Count: <div class="control">1.7k</div></span><br><span>Read Time: <div class="control">7 min</div></span></div></div><hr><div id="post-content"><h2 id="前言："><a href="#前言：" class="headerlink" title="前言："></a>前言：</h2><p>偶然发现原来Docker里面的Clash也能进行全局网络接管，研究了一下，目前网络上的相关文章较少，且有些在实现上有错误。</p>
+<p>故而整理出来这篇文章，仅供学习交流使用。</p>
+<p>我会详细的解释一些设置和步骤，即便是基础知识薄弱也应该可以看懂。</p>
+<hr>
+ <span id="more"></span>
+<h2 id="1-Clash在Docker中的部署"><a href="#1-Clash在Docker中的部署" class="headerlink" title="1. Clash在Docker中的部署"></a>1. Clash在Docker中的部署</h2><h3 id="1-1-部署可视化clash-dashboard容器"><a href="#1-1-部署可视化clash-dashboard容器" class="headerlink" title="1.1 部署可视化clash dashboard容器"></a>1.1 部署可视化clash dashboard容器</h3><p>首先将dashboard的image pull下来。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">docker pull haishanh/yacd<br></code></pre></td></tr></table></figure>
+
+<p>然后直接跑起来就行，注意映射一个没在使用的端口就行</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">docker run -p 1234:80 -d haishanh/yacd<br></code></pre></td></tr></table></figure>
+
+<p>在浏览器键入服务器地址跟端口号，我这里是输入192.168.199.10:1234，就可以打开dashboard页面</p>
+<p class='item-img' data-src='https://pic2.zhimg.com/80/v2-17ad411de1ff187a51c55574a5a731d9_720w.webp'><img src="https://pic2.zhimg.com/80/v2-17ad411de1ff187a51c55574a5a731d9_720w.webp" alt="img"></p>
+<h3 id="1-2-部署clash容器"><a href="#1-2-部署clash容器" class="headerlink" title="1.2 部署clash容器"></a>1.2 部署clash容器</h3><p>准备好你的配置文件config.yaml，节点和订阅得自己想办法，这里不提供，而且我也不认识毒药是谁。</p>
+<p>将下边的代码覆盖入你原有的基础配置</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><code class="hljs yaml"><span class="hljs-attr">port:</span> <span class="hljs-number">7890</span><br><span class="hljs-attr">socks-port:</span> <span class="hljs-number">7891</span><br><span class="hljs-comment">#转发端口一定要配置</span><br><span class="hljs-attr">redir-port:</span> <span class="hljs-number">7892</span><br><span class="hljs-comment">#允许接管局域网流量</span><br><span class="hljs-attr">allow-lan:</span> <span class="hljs-literal">true</span><br><span class="hljs-comment">#默认代理模式</span><br><span class="hljs-attr">mode:</span> <span class="hljs-string">Rule</span><br><span class="hljs-attr">log-level:</span> <span class="hljs-string">warning</span><br><span class="hljs-comment">#接口控制端口你可以自己设置，默认是9090</span><br><span class="hljs-attr">external-controller:</span> <span class="hljs-number">0.0</span><span class="hljs-number">.0</span><span class="hljs-number">.0</span><span class="hljs-string">:7070</span><br><span class="hljs-comment">#如果服务器对公网开放可以设置密码</span><br><span class="hljs-attr">secret:</span> <span class="hljs-string">&quot;&quot;</span><br><span class="hljs-comment">#external-ui: dashboard</span><br><span class="hljs-comment">#配置由clash接管的dns解析</span><br><span class="hljs-attr">dns:</span><br>  <span class="hljs-attr">enable:</span> <span class="hljs-literal">true</span><br><span class="hljs-comment">#主要监听定向转发来的数据，后续会在路由表里配置转发端口为1053</span><br>  <span class="hljs-attr">listen:</span> <span class="hljs-number">0.0</span><span class="hljs-number">.0</span><span class="hljs-number">.0</span><span class="hljs-string">:1053</span><br>  <span class="hljs-attr">enhanced-mode:</span> <span class="hljs-string">redir-host</span><br><span class="hljs-comment">#见下方链接</span><br>  <span class="hljs-attr">nameserver:</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-string">&#x27;114.114.114.114&#x27;</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-string">&#x27;223.5.5.5&#x27;</span><br>  <span class="hljs-attr">fallback:</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-string">&#x27;tls://1.1.1.1:853&#x27;</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-string">&#x27;tcp://1.1.1.1:53&#x27;</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-string">&#x27;tcp://208.67.222.222:443&#x27;</span><br>    <span class="hljs-bullet">-</span> <span class="hljs-string">&#x27;tls://dns.google&#x27;</span><br></code></pre></td></tr></table></figure>
+
+<p>关于配置文件中的nameserver与fallback的运行与解析机制，详见下方链接。</p>
+<p><a href="https://link.zhihu.com/?target=https://github.com/Fndroid/clash_for_windows_pkg/wiki/DNS%E6%B1%A1%E6%9F%93%E5%AF%B9Clash%EF%BC%88for-Windows%EF%BC%89%E7%9A%84%E5%BD%B1%E5%93%8D">DNS污染对Clash（for Windows）的影响 · Fndroid&#x2F;clash_for_windows_pkg Wiki (github.com)github.com&#x2F;Fndroid&#x2F;clash_for_windows_pkg&#x2F;wiki&#x2F;DNS%E6%B1%A1%E6%9F%93%E5%AF%B9Clash%EF%BC%88for-Windows%EF%BC%89%E7%9A%84%E5%BD%B1%E5%93%8D</a></p>
+<p>准备好配置文件之后 ，运行如下命令启动clash容器</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">docker pull dreamacro/clash<br>docker run --name Clash -d -v ~/clash/config.yaml:/root/.config/clash/config.yaml --network=<span class="hljs-string">&quot;host&quot;</span> --privileged dreamacro/clash<br></code></pre></td></tr></table></figure>
+
+<p>其中 -v 命令之后的挂载卷映射的左侧原始路径要改成你自己的config.yaml的位置。</p>
+<p>如果配置文件设置无误的话，可以在dashboard页面输入服务器地址与端口，链接到clash进行设置了。</p>
+<p class='item-img' data-src='https://pic1.zhimg.com/80/v2-766c3e6f0474efc3ad5157fbdc8c39c8_720w.webp'><img src="https://pic1.zhimg.com/80/v2-766c3e6f0474efc3ad5157fbdc8c39c8_720w.webp" alt="img"></p>
+<hr>
+<h2 id="2-配置路由表"><a href="#2-配置路由表" class="headerlink" title="2. 配置路由表"></a>2. 配置路由表</h2><h3 id="2-1-配置服务器路由表转发规则"><a href="#2-1-配置服务器路由表转发规则" class="headerlink" title="2.1. 配置服务器路由表转发规则"></a>2.1. 配置服务器路由表转发规则</h3><p>可以终端中输入以下命令，也可以写进.sh脚本，chmod +x 之后执行.&#x2F;xxx.sh。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#在nat表中新建一个clash规则链</span><br>iptables -t nat -N CLASH<br><span class="hljs-comment">#排除环形地址与保留地址，匹配之后直接RETURN</span><br>iptables -t nat -A CLASH -d 0.0.0.0/8 -j RETURN<br>iptables -t nat -A CLASH -d 10.0.0.0/8 -j RETURN<br>iptables -t nat -A CLASH -d 127.0.0.0/8 -j RETURN<br>iptables -t nat -A CLASH -d 169.254.0.0/16 -j RETURN<br>iptables -t nat -A CLASH -d 172.16.0.0/12 -j RETURN<br>iptables -t nat -A CLASH -d 192.168.0.0/16 -j RETURN<br>iptables -t nat -A CLASH -d 224.0.0.0/4 -j RETURN<br>iptables -t nat -A CLASH -d 240.0.0.0/4 -j RETURN<br><span class="hljs-comment">#重定向tcp流量到本机7892端口</span><br>iptables -t nat -A CLASH -p tcp -j REDIRECT --to-port 7892<br><span class="hljs-comment">#拦截外部tcp数据并交给clash规则链处理</span><br>iptables -t nat -A PREROUTING -p tcp -j CLASH<br><br><span class="hljs-comment">#在nat表中新建一个clash_dns规则链</span><br>iptables -t nat -N CLASH_DNS<br><span class="hljs-comment">#清空clash_dns规则链</span><br>iptables -t nat -F CLASH_DNS<br><span class="hljs-comment">#重定向udp流量到本机1053端口</span><br>iptables -t nat -A CLASH_DNS -p udp -j REDIRECT --to-port 1053<br><span class="hljs-comment">#抓取本机产生的53端口流量交给clash_dns规则链处理</span><br>iptables -t nat -I OUTPUT -p udp --dport 53 -j CLASH_DNS<br><span class="hljs-comment">#拦截外部upd的53端口流量交给clash_dns规则链处理</span><br>iptables -t nat -I PREROUTING -p udp --dport 53 -j CLASH_DNS<br></code></pre></td></tr></table></figure>
+
+<p>执行之后可以先采取设置非侵入式网关来测试一下服务器上的clash代理与dns解析是否成功。</p>
+<h3 id="2-2-路由表持久化"><a href="#2-2-路由表持久化" class="headerlink" title="2.2 路由表持久化"></a>2.2 路由表持久化</h3><p>路由表每次重新开机之后都会回复为默认值，如果想要将更改的内容持久化，需要借助一个软件包 iptables-persistent 实现。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">sudo apt install iptables-persistent<br></code></pre></td></tr></table></figure>
+
+<p>第一次安装时会问询是否保存当前路由表配置，保存之后每次重启就都可以恢复为保存时的配置。</p>
+<p>如果对路由表有所修改，需要重新保存，则运行如下命令。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">sudo dpkg-reconfigure iptables-persistent<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-3-路由表复原"><a href="#2-3-路由表复原" class="headerlink" title="2.3 路由表复原"></a>2.3 路由表复原</h3><p>如果需要删除上述的路由表配置，执行以下命令</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs text">iptables -t nat -D PREROUTING -p tcp -j CLASH<br>iptables -t nat -D OUTPUT -p udp --dport 53 -j CLASH_DNS<br>iptables -t nat -D PREROUTING -p udp --dport 53 -j CLASH_DNS<br>iptables -t nat -F CLASH<br>iptables -t nat -X CLASH<br>iptables -t nat -F CLASH<br>iptables -t nat -X CLASH_DNS<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="3-两种流量接管方式"><a href="#3-两种流量接管方式" class="headerlink" title="3. 两种流量接管方式"></a>3. 两种流量接管方式</h2><h3 id="3-1-非侵入式"><a href="#3-1-非侵入式" class="headerlink" title="3.1 非侵入式"></a>3.1 非侵入式</h3><p>手动设置需要被接管流量的终端设备的IP地址，将网关地址与DNS服务器地址设置为你部署clash的服务器地址。</p>
+<p class='item-img' data-src='https://pic1.zhimg.com/80/v2-e0a153f76ee270966544bfe1cb882e24_720w.webp'><img src="https://pic1.zhimg.com/80/v2-e0a153f76ee270966544bfe1cb882e24_720w.webp" alt="img"></p>
+<p>此种方式为终端设备主动寻求流量接管。</p>
+<p>优点是如果服务器宕机，局域网里的其他联网设备不受影响。</p>
+<p>缺点是每一个需要接管的设备都需要手动设置，较为麻烦。</p>
+<h3 id="3-2-侵入式"><a href="#3-2-侵入式" class="headerlink" title="3.2 侵入式"></a>3.2 侵入式</h3><p>手动设置服务器的网关地址为主路由器</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">vim /etc/network/interfaces<br><br></code></pre></td></tr></table></figure>
+
+<p>在interfaces里追加下边的参数</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs text">auto eth0<br>iface eth0 inet static<br>  address 192.168.199.10<br>  netmask 255.255.255.0<br>  gateway 192.168.199.1<br><br></code></pre></td></tr></table></figure>
+
+<p>其中address填写你为clash服务器手动设置的地址, gateway填写主路由器地址, reboot。</p>
+<p>登录路由器后台，在内网DHCP配置页面，将网关与DNS服务器都设置为clash服务器的IP地址。</p>
+<p class='item-img' data-src='https://pic3.zhimg.com/80/v2-5246c9dad2c88ab165b0b674144a9582_720w.webp'><img src="https://pic3.zhimg.com/80/v2-5246c9dad2c88ab165b0b674144a9582_720w.webp" alt="img"></p>
+<p>这样设置下，由主路由器分发给所有终端设备clash服务器的地址作为网关与dns解析接口</p>
+<p>clash服务器处理完数据包之后发送回主路由器，并由主路由器向上送至光猫。</p>
+<p>此时网络才是通的，实现的是旁路由的原理。</p>
+<p>这种方法将由clash服务器全权接管局域网内的所有流量。</p>
+<p>好处是在局域网覆盖范围内只要接入，直接走代理，不需要进行任何设置。</p>
+<p>缺点是一旦服务器宕机，整个局域网就瘫痪了。</p>
+<hr>
+<h2 id="Tips："><a href="#Tips：" class="headerlink" title="Tips："></a>Tips：</h2><p>打通整个网络，除了配置要没有错误之外，以下三点要反复确认</p>
+<ol>
+<li>docker里的clash在运行状态</li>
+<li>路由表配置完毕</li>
+<li>clash服务器网关地址指向主路由器</li>
+</ol>
+<hr>
+<h2 id="附录："><a href="#附录：" class="headerlink" title="附录："></a>附录：</h2><p>我是在Friendlyarm NanoPi M4V2 开发板上刷写armbian操作系统进行的上述操作。</p>
+<p>故而理论上所有包括开发板，电视盒之内的能运行Linux系统的设备都可以拿来用。</p>
+<p>至于在Docker之外直接在操作系统上部署Clash的文章有很多，不过透明代理的部分依旧可以参考我这篇文章。</p>
+<div id="paginator"></div></div><div id="post-footer"><div id="pages"><div class="footer-link" style="width: 50%;text-align:right;border-right:1px #fe2 solid"><a href="/2023/05/21/MySQL-%E5%AE%89%E8%A3%85/">← Next MySQL 安装</a></div><div class="footer-link" style="width: 50%;right:1px;border-left:1px #fe2 solid"><a href="/2023/05/21/MySQL%E9%85%8D%E7%BD%AE%E8%BF%9C%E7%A8%8B%E8%BF%9E%E6%8E%A5/">MySQL配置远程连接 Prev →</a></div></div></div></div><div class="bottom-btn"><div><a id="to-top" onClick="scrolls.scrolltop();" title="To Top" style="opacity: 0; display: none;">∧</a><a id="to-index" href="#toc-div" title="To Catalog">≡</a><a id="color-mode" onClick="colorMode.change()" title="Change Theme"></a></div></div></article><aside><div id="about"><a href="/" id="logo"><img src="https://ak.hypergryph.com/assets/index/images/ak/pc/faction/1.png" alt="Logo"></a><h1 id="Dr"><a href="/">John Doe</a></h1><div id="description"><p></p></div></div><div id="aside-block"><div id="toc-div"><h1>Catalog</h1><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E8%A8%80%EF%BC%9A"><span class="toc-number">1.</span> <span class="toc-text">前言：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Clash%E5%9C%A8Docker%E4%B8%AD%E7%9A%84%E9%83%A8%E7%BD%B2"><span class="toc-number">2.</span> <span class="toc-text">1. Clash在Docker中的部署</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E9%83%A8%E7%BD%B2%E5%8F%AF%E8%A7%86%E5%8C%96clash-dashboard%E5%AE%B9%E5%99%A8"><span class="toc-number">2.1.</span> <span class="toc-text">1.1 部署可视化clash dashboard容器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-%E9%83%A8%E7%BD%B2clash%E5%AE%B9%E5%99%A8"><span class="toc-number">2.2.</span> <span class="toc-text">1.2 部署clash容器</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E9%85%8D%E7%BD%AE%E8%B7%AF%E7%94%B1%E8%A1%A8"><span class="toc-number">3.</span> <span class="toc-text">2. 配置路由表</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E9%85%8D%E7%BD%AE%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%B7%AF%E7%94%B1%E8%A1%A8%E8%BD%AC%E5%8F%91%E8%A7%84%E5%88%99"><span class="toc-number">3.1.</span> <span class="toc-text">2.1. 配置服务器路由表转发规则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E8%B7%AF%E7%94%B1%E8%A1%A8%E6%8C%81%E4%B9%85%E5%8C%96"><span class="toc-number">3.2.</span> <span class="toc-text">2.2 路由表持久化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E8%B7%AF%E7%94%B1%E8%A1%A8%E5%A4%8D%E5%8E%9F"><span class="toc-number">3.3.</span> <span class="toc-text">2.3 路由表复原</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E4%B8%A4%E7%A7%8D%E6%B5%81%E9%87%8F%E6%8E%A5%E7%AE%A1%E6%96%B9%E5%BC%8F"><span class="toc-number">4.</span> <span class="toc-text">3. 两种流量接管方式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E9%9D%9E%E4%BE%B5%E5%85%A5%E5%BC%8F"><span class="toc-number">4.1.</span> <span class="toc-text">3.1 非侵入式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E4%BE%B5%E5%85%A5%E5%BC%8F"><span class="toc-number">4.2.</span> <span class="toc-text">3.2 侵入式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Tips%EF%BC%9A"><span class="toc-number">5.</span> <span class="toc-text">Tips：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%99%84%E5%BD%95%EF%BC%9A"><span class="toc-number">6.</span> <span class="toc-text">附录：</span></a></li></ol></div></div><footer><nobr>Published with <a target="_blank" rel="noopener" href="http://hexo.io">Hexo</a></nobr><wbr><nobr> Theme <a target="_blank" rel="noopener" href="https://github.com/Yue-plus/hexo-theme-arknights">Arknights</a></nobr><wbr><nobr>by <a target="_blank" rel="noopener" href="https://github.com/Yue-plus">Yue_plus</a></nobr></footer></aside></main><canvas id="canvas-dust"></canvas><script src="/js/search.js"></script><script src="/js/arknights.js"></script><script src="//unpkg.com/lightgallery@2.7.1/lightgallery.min.js"></script><script src="//unpkg.com/lightgallery@2.7.1/plugins/zoom/lg-zoom.min.js"></script><script src="//unpkg.com/lightgallery@2.7.1/plugins/thumbnail/lg-thumbnail.min.js"></script><script src="/js/pjax.js"></script><script class="pjax-js">reset= () => {code.findCode();
+document.querySelector('.lg-container')?.remove()
+lightGallery(document.getElementById('post-bg'), {
+  plugins: [lgZoom,lgThumbnail],
+  selector: '.item-img'})}</script><script>window.addEventListener("load",() => {pjax = new Pjax({
+ cacheBust: false,
+ selectors: ['title','article','#aside-block','.pjax-js'],
+ switches: {'article': Pjax.switches.sideBySide},
+ switchesOptions: {
+   'article': {
+     classNames: {
+       remove: "pjax-out",
+       add: "pjax-in"
+     }
+   }
+ }
+});
+document.addEventListener("pjax:complete", reset);reset()})</script></body></html>

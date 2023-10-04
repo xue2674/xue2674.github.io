@@ -1,0 +1,108 @@
+<!DOCTYPE html><html lang="en" theme-mode="dark"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>实现MySQL主从复制 | xue的个人博客</title><link rel="icon" type="image/x-icon" href="/favicon.ico"><script>var config = {"root":"/","search":{"preload":false,"activeHolder":"Enter here","blurHolder":"Search","noResult":"Data \"$0\" not found"},"code":{"codeInfo":"$0 - $1 lines","copy":"copy","copyFinish":"copied","expand":"expand"}}</script><script src="//unpkg.com/mermaid@9.2.2/dist/mermaid.min.js"></script><link type="text/css" rel="stylesheet" href="//unpkg.com/lightgallery@2.7.1/css/lightgallery.css"><link type="text/css" rel="stylesheet" href="//unpkg.com/lightgallery@2.7.1/css/lg-zoom.css"><link type="text/css" rel="stylesheet" href="//unpkg.com/lightgallery@2.7.1/css/lg-thumbnail.css"><link type="text/css" rel="stylesheet" href="/lib/fontawesome/brands.min.css"><link type="text/css" rel="stylesheet" href="/lib/fontawesome/fontawesome.min.css"><link rel="stylesheet" href="/css/arknights.css"><script>if (window.localStorage.getItem('theme-mode') === 'light') document.documentElement.setAttribute('theme-mode', 'light')
+if (window.localStorage.getItem('theme-mode') === 'dark') document.documentElement.setAttribute('theme-mode', 'dark')</script><style>@font-face {
+ font-family: BenderLight;
+ src: local('Bender'), url("/font/BenderLight.ttf");
+}
+@font-face {
+ font-family: 'JetBrains Mono';
+ src: local('JetBrains Mono'), url('/font/JetBrainsMono-Regular.woff2') format('woff2');
+}
+@font-face {
+ font-family: 'Font Awesome 6 Brands';
+ src: local('Font Awesome 6 Brands'), url('/lib/fontawesome/fa-brands.woff2') format('woff2');
+}
+@font-face {
+ font-family: 'Font Awesome 6 Free';
+ src: local('Font Awesome 6 Free'), url('/lib/fontawesome/fa-regular.woff2') format('woff2');
+}</style><style>:root {
+  --dark-background: url('https://ak.hypergryph.com/assets/index/images/ak/pc/bk.jpg');
+  --light-background: url('/img/bk.jpg');
+}</style><meta name="generator" content="Hexo 7.0.0-rc2"></head><body><div class="loading" style="opacity: 0"><div class="loadingBar left"></div><div class="loadingBar right"></div></div><main><header class="closed"><nav><div class="navBtn hide"><i class="navBtnIcon"><span class="navBtnIconBar"></span><span class="navBtnIconBar"></span><span class="navBtnIconBar"></span></i></div><div class="navItem" id="search-header"><span class="navItemTitle"><input autocomplete="off" autocorrect="off" autocapitalize="none" placeholder="Search" spellcheck="false" maxlength="50" type="text" id="search-input"></span></div><div class="navItem" id="search-holder"></div><div class="search-popup"><div id="search-result"></div></div><ol class="navContent"><li class="navItem"><a class="navBlock" href="/"><span class="navItemTitle">Home</span></a></li><li class="navItem" matchdata="categories,tags"><a class="navBlock" href="/archives/"><span class="navItemTitle">Archives</span></a></li><li class="navItem"><a class="navBlock" href="/categories/"><span class="navItemTitle">About</span></a></li></ol></nav></header><article><div id="post-bg"><div id="post-title"><h1>实现MySQL主从复制</h1><div id="post-info"><span>First Post: <div class="control"><time datetime="2023-07-26T08:34:15.000Z" id="date"> 2023-07-26</time></div></span><br><span>Last Update: <div class="control"><time datetime="2023-09-18T07:55:46.404Z" id="updated"> 2023-09-18</time></div></span><br><span>Word Count: <div class="control">1.5k</div></span><br><span>Read Time: <div class="control">6 min</div></span></div></div><hr><div id="post-content"><h2 id="一、开启MySQL的binlog"><a href="#一、开启MySQL的binlog" class="headerlink" title="一、开启MySQL的binlog"></a>一、开启MySQL的binlog</h2><p><strong>判断MySQL是否已经开启binlog</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">SHOW VARIABLES LIKE &#x27;log_bin&#x27;;<br></code></pre></td></tr></table></figure>
+
+<p><strong>查看MySQL的binlog模式</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">show global variables like &quot;binlog%&quot;; #查看binlog_format字段<br></code></pre></td></tr></table></figure>
+
+<p>binlog常用的命令</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">#查看日志开启状态 <br>show variables like &#x27;log_%&#x27;;<br>#查看所有binlog日志列表<br>show master logs;<br>#查看最新一个binlog日志的编号名称，及其最后一个操作事件结束点 <br>show master status;<br>#刷新log日志，立刻产生一个新编号的binlog日志文件，跟重启一个效果 <br>flush logs;<br>#清空所有binlog日志 <br>reset master;<br>#可以将二进制文件转为可阅读的sql语句。<br>mysqlbinlog mysql-bin.000005<br>恢复命令的语法格式：<br>mysqlbinlog mysql-bin.0000xx | mysql -u用户名 -p密码 数据库名<br>常用参数选项解释：<br>    –start-position=875 起始pos点<br>    –stop-position=954 结束pos点<br>    –start-datetime=“2016-9-25 22:01:08” 起始时间点<br>    –stop-datetime=“2019-9-25 22:09:46” 结束时间点<br>    –database=xxx指定只恢复xxx数据库(一台主机上往往有多个数据库，只限本地log日志)<br>	实际是将读出的binlog日志内容，通过管道符传递给mysql命令。这些命令、文件尽量写成绝对路径；<br></code></pre></td></tr></table></figure>
+
+<p><strong>修改<code>mysql</code>的<code>my.cnf</code>配置文件</strong><br><strong>一般默认是在<code>/etc/my.cnf</code>路径下</strong></p>
+<p><strong>在<code>mysqld</code>下添加</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">#第一种方式:<br>#开启binlog日志<br>log_bin=ON<br>#binlog日志的基本文件名<br>log_bin_basename=/var/lib/mysql/mysql-bin<br>#binlog文件的索引文件，管理所有binlog文件<br>log_bin_index=/var/lib/mysql/mysql-bin.index<br>#配置serverid<br>server-id=1<br><br>#第二种方式:<br>#此一行等同于上面log_bin三行,这里可以写绝对路径,也可以直接写mysql-bin(后者默认就是在/var/lib/mysql目录下)<br>log-bin=/var/lib/mysql/mysql-bin<br>#配置serverid<br>server-id=1<br></code></pre></td></tr></table></figure>
+
+<p>修改完配置后，重启<code>mysql</code>。执行<code>SHOW VARIABLES LIKE &#39;log_bin&#39;;</code> <code>Value</code> 值为 <code>ON</code>即可。</p>
+<p><strong>详细binlog的配置简介</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">[mysqld]<br>#设置日志三种格式：STATEMENT、ROW、MIXED 。<br>binlog_format = mixed<br>#设置日志路径，注意路经需要mysql用户有权限写,这里可以写绝对路径,也可以直接写mysql-bin(后者默认就是在/var/lib/mysql目录下)<br>log-bin = /data/mysql/logs/mysql-bin.log<br>#设置binlog清理时间<br>expire_logs_days = 7<br>#binlog每个日志文件大小<br>max_binlog_size = 100m<br>#binlog缓存大小<br>binlog_cache_size = 4m<br>#最大binlog缓存大小<br>max_binlog_cache_size = 512m<br>#配置serverid<br>server-id=1<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><p>STATMENT模式(默认)：基于SQL语句的复制(statement-based replication, SBR)，每一条会修改数据的sql语句会记录到binlog中。<br>优点：不需要记录每一条SQL语句与每行的数据变化，这样子binlog的日志也会比较少，减少了磁盘IO，提高性能。</p>
+</li>
+<li><p>缺点：在某些情况下会导致master-slave中的数据不一致(比如：delete from t where a&gt;&#x3D;4 and t_modified&lt;&#x3D;’2018-11-10’ limit 1;在主库执行这个语句的时候，如果使用的是a索引，会删除(4,4,’2018-11-10’)这条记录，如果使用的是t_modified的索引则会删除(5,5,’2018-11-09’);所以在执行这条sql语句的时候提示： Unsafe statement written to the binary log using statement format since BINLOG_FORMAT &#x3D; STATEMENT. The statement is unsafe because it uses a LIMIT clause. This is unsafe because the set of rows included cannot be predicted.<br>由于 statement 格式下，记录到 binlog 里的是语句原文，因此可能会出现这样一种情况：在主库执行这条 SQL 语句的时候，用的是索引 a；而在备库执行这条 SQL 语句的时候，却使用了索引 t_modified。因此，MySQL<br>认为这样写是有风险的。 sleep()函数， last_insert_id()，以及user-defined<br>functions(udf)等也会出现问题)；</p>
+</li>
+<li><p>ROW:&#96;&#96;基于行的复制(row-based replication, RBR)格式：不记录每一条SQL语句的上下文信息，仅需记录哪条数据被修改了，修改成了什么样子了。<br>优点：不会出现某些特定情况下的存储过程、或function、或trigger的调用和触发无法被正确复制的问题。<br>缺点：会产生大量的日志，尤其是alter table的时候会让日志暴涨。</p>
+</li>
+<li><p>MIXED:&#96;&#96;混合模式复制(mixed-based replication, MBR)：以上两种模式的混合使用，一般的复制使用STATEMENT模式保存binlog，对于STATEMENT模式无法复制的操作使用ROW模式保存binlog，MySQL会根据执行的SQL语句选择日志保存方式。</p>
+</li>
+</ul>
+<h2 id="二、配置主库"><a href="#二、配置主库" class="headerlink" title="二、配置主库"></a>二、配置主库</h2><p><strong>更改&#x2F;etc&#x2F;my.cnf，在[mysqld]下加入</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">#mysql服务id，取值在1到2的32次方减一，默认为1<br>server-id=1<br>#表示是否只读，1为只读，0为读写<br>read-only=0<br></code></pre></td></tr></table></figure>
+
+<p><strong>创建拥有主从复制权限的账户</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs plaintext"># &#x27;%&#x27;表示允许任意主机连接，mysql_native_password为mysql的一个身份认证插件<br>create user &#x27;用户名&#x27;@&#x27;%&#x27; identified with mysql_native_password by &#x27;密码&#x27;<br>#分配主从复制权限,ON *.*子句表示MySQL中的所有数据库和所有对象。<br>grant replication slave on *.* to &#x27;用户名&#x27;@&#x27;%&#x27;<br></code></pre></td></tr></table></figure>
+
+<p>然后重启mysql</p>
+<p><strong>查看binlog文件坐标</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">show master status<br></code></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Position</th>
+<th>Binlog_Do_DB</th>
+<th>Binlog_Ignore_DB</th>
+<th>Executed_Gtid_Set</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>mysql-bin.000001</td>
+<td>1361</td>
+<td></td>
+<td>mysql</td>
+<td></td>
+</tr>
+</tbody></table>
+<h2 id="三、配置从库"><a href="#三、配置从库" class="headerlink" title="三、配置从库"></a>三、配置从库</h2><p><strong>更改从库&#x2F;etc&#x2F;my.cnf，在[mysqld]下加入</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">#mysql服务id，取值在1到2的32次方减一，默认为1<br>server-id=2<br>#表示是否只读，1为只读，0为读写<br>read-only=1<br>#super-read-only=1表示超级管理员是否读写<br></code></pre></td></tr></table></figure>
+
+<p>重启mysql</p>
+<p><strong>登入从库mysql，执行命令</strong></p>
+<p>mysql8.0.23语法</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">change replication source to SOURCE_HOST=&#x27;主库IP地址&#x27;,SOURCE_PORT=主库端口号,SOURCE_USER=&#x27;主库开启主从复制权限的用户&#x27;,SOURCE_PASSWORD=&#x27;密码&#x27;,SOURCE_LOG_FILE=&#x27;binlog文件名&#x27;,SOURCE_LOG_POS=1361<br></code></pre></td></tr></table></figure>
+
+<p>mysql8.0.23之前的版本</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">change master to master_host=&#x27;主库IP地址&#x27;,master_port=主库端口号,master_user =&#x27;主库开启主从复制权限的用户&#x27;,master_password =&#x27;密码&#x27;,master_log_file =&#x27;binlog文件名&#x27;,master_log_pos = 1361<br></code></pre></td></tr></table></figure>
+
+<p>_log_file和_log_pos通过show master status命令查看</p>
+<h2 id="四、开启同步"><a href="#四、开启同步" class="headerlink" title="四、开启同步"></a>四、开启同步</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">start replica; #8.0.22之后<br>start slave; #8.0.22之前<br></code></pre></td></tr></table></figure>
+
+<h2 id="五、查看主从同步状态"><a href="#五、查看主从同步状态" class="headerlink" title="五、查看主从同步状态"></a>五、查看主从同步状态</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">show replica status; #8.0.22之后<br>show slave status; #8.0.22之前<br></code></pre></td></tr></table></figure>
+
+<div id="paginator"></div></div><div id="post-footer"><div id="pages"><div class="footer-link" style="width: 50%;text-align:right;border-right:1px #fe2 solid"><a href="/2023/09/13/mybatis%E4%BB%A3%E7%A0%81%E7%94%9F%E6%88%90%E5%99%A8/">← Next mybatis代码生成器</a></div><div class="footer-link" style="width: 50%;right:1px;border-left:1px #fe2 solid"><a href="/2023/07/24/Test%E5%B7%A5%E5%85%B7%E7%B1%BB/">Test工具类 Prev →</a></div></div></div></div><div class="bottom-btn"><div><a id="to-top" onClick="scrolls.scrolltop();" title="To Top" style="opacity: 0; display: none;">∧</a><a id="to-index" href="#toc-div" title="To Catalog">≡</a><a id="color-mode" onClick="colorMode.change()" title="Change Theme"></a></div></div></article><aside><div id="about"><a href="/" id="logo"><img src="https://ak.hypergryph.com/assets/index/images/ak/pc/faction/1.png" alt="Logo"></a><h1 id="Dr"><a href="/">John Doe</a></h1><div id="description"><p></p></div></div><div id="aside-block"><div id="toc-div"><h1>Catalog</h1><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%BC%80%E5%90%AFMySQL%E7%9A%84binlog"><span class="toc-number">1.</span> <span class="toc-text">一、开启MySQL的binlog</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E9%85%8D%E7%BD%AE%E4%B8%BB%E5%BA%93"><span class="toc-number">2.</span> <span class="toc-text">二、配置主库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E9%85%8D%E7%BD%AE%E4%BB%8E%E5%BA%93"><span class="toc-number">3.</span> <span class="toc-text">三、配置从库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%BC%80%E5%90%AF%E5%90%8C%E6%AD%A5"><span class="toc-number">4.</span> <span class="toc-text">四、开启同步</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E6%9F%A5%E7%9C%8B%E4%B8%BB%E4%BB%8E%E5%90%8C%E6%AD%A5%E7%8A%B6%E6%80%81"><span class="toc-number">5.</span> <span class="toc-text">五、查看主从同步状态</span></a></li></ol></div></div><footer><nobr>Published with <a target="_blank" rel="noopener" href="http://hexo.io">Hexo</a></nobr><wbr><nobr> Theme <a target="_blank" rel="noopener" href="https://github.com/Yue-plus/hexo-theme-arknights">Arknights</a></nobr><wbr><nobr>by <a target="_blank" rel="noopener" href="https://github.com/Yue-plus">Yue_plus</a></nobr></footer></aside></main><canvas id="canvas-dust"></canvas><script src="/js/search.js"></script><script src="/js/arknights.js"></script><script src="//unpkg.com/lightgallery@2.7.1/lightgallery.min.js"></script><script src="//unpkg.com/lightgallery@2.7.1/plugins/zoom/lg-zoom.min.js"></script><script src="//unpkg.com/lightgallery@2.7.1/plugins/thumbnail/lg-thumbnail.min.js"></script><script src="/js/pjax.js"></script><script class="pjax-js">reset= () => {code.findCode();
+document.querySelector('.lg-container')?.remove()
+lightGallery(document.getElementById('post-bg'), {
+  plugins: [lgZoom,lgThumbnail],
+  selector: '.item-img'})}</script><script>window.addEventListener("load",() => {pjax = new Pjax({
+ cacheBust: false,
+ selectors: ['title','article','#aside-block','.pjax-js'],
+ switches: {'article': Pjax.switches.sideBySide},
+ switchesOptions: {
+   'article': {
+     classNames: {
+       remove: "pjax-out",
+       add: "pjax-in"
+     }
+   }
+ }
+});
+document.addEventListener("pjax:complete", reset);reset()})</script></body></html>

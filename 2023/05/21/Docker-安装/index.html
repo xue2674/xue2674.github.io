@@ -1,0 +1,362 @@
+<!DOCTYPE html><html lang="en" theme-mode="dark"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Docker 安装 | xue的个人博客</title><link rel="icon" type="image/x-icon" href="/favicon.ico"><script>var config = {"root":"/","search":{"preload":false,"activeHolder":"Enter here","blurHolder":"Search","noResult":"Data \"$0\" not found"},"code":{"codeInfo":"$0 - $1 lines","copy":"copy","copyFinish":"copied","expand":"expand"}}</script><script src="//unpkg.com/mermaid@9.2.2/dist/mermaid.min.js"></script><link type="text/css" rel="stylesheet" href="//unpkg.com/lightgallery@2.7.1/css/lightgallery.css"><link type="text/css" rel="stylesheet" href="//unpkg.com/lightgallery@2.7.1/css/lg-zoom.css"><link type="text/css" rel="stylesheet" href="//unpkg.com/lightgallery@2.7.1/css/lg-thumbnail.css"><link type="text/css" rel="stylesheet" href="/lib/fontawesome/brands.min.css"><link type="text/css" rel="stylesheet" href="/lib/fontawesome/fontawesome.min.css"><link rel="stylesheet" href="/css/arknights.css"><script>if (window.localStorage.getItem('theme-mode') === 'light') document.documentElement.setAttribute('theme-mode', 'light')
+if (window.localStorage.getItem('theme-mode') === 'dark') document.documentElement.setAttribute('theme-mode', 'dark')</script><style>@font-face {
+ font-family: BenderLight;
+ src: local('Bender'), url("/font/BenderLight.ttf");
+}
+@font-face {
+ font-family: 'JetBrains Mono';
+ src: local('JetBrains Mono'), url('/font/JetBrainsMono-Regular.woff2') format('woff2');
+}
+@font-face {
+ font-family: 'Font Awesome 6 Brands';
+ src: local('Font Awesome 6 Brands'), url('/lib/fontawesome/fa-brands.woff2') format('woff2');
+}
+@font-face {
+ font-family: 'Font Awesome 6 Free';
+ src: local('Font Awesome 6 Free'), url('/lib/fontawesome/fa-regular.woff2') format('woff2');
+}</style><style>:root {
+  --dark-background: url('https://ak.hypergryph.com/assets/index/images/ak/pc/bk.jpg');
+  --light-background: url('/img/bk.jpg');
+}</style><meta name="generator" content="Hexo 7.0.0-rc2"></head><body><div class="loading" style="opacity: 0"><div class="loadingBar left"></div><div class="loadingBar right"></div></div><main><header class="closed"><nav><div class="navBtn hide"><i class="navBtnIcon"><span class="navBtnIconBar"></span><span class="navBtnIconBar"></span><span class="navBtnIconBar"></span></i></div><div class="navItem" id="search-header"><span class="navItemTitle"><input autocomplete="off" autocorrect="off" autocapitalize="none" placeholder="Search" spellcheck="false" maxlength="50" type="text" id="search-input"></span></div><div class="navItem" id="search-holder"></div><div class="search-popup"><div id="search-result"></div></div><ol class="navContent"><li class="navItem"><a class="navBlock" href="/"><span class="navItemTitle">Home</span></a></li><li class="navItem" matchdata="categories,tags"><a class="navBlock" href="/archives/"><span class="navItemTitle">Archives</span></a></li><li class="navItem"><a class="navBlock" href="/categories/"><span class="navItemTitle">About</span></a></li></ol></nav></header><article><div id="post-bg"><div id="post-title"><h1>Docker 安装</h1><div id="post-info"><span>First Post: <div class="control"><time datetime="2023-05-20T16:26:31.000Z" id="date"> 2023-05-21</time></div></span><br><span>Last Update: <div class="control"><time datetime="2023-09-18T07:55:46.380Z" id="updated"> 2023-09-18</time></div></span><br><span>Word Count: <div class="control">5.2k</div></span><br><span>Read Time: <div class="control">23 min</div></span></div></div><hr><div id="post-content"><h1 id="CentOS-Docker-安装"><a href="#CentOS-Docker-安装" class="headerlink" title="CentOS Docker 安装"></a>CentOS Docker 安装</h1><p>Docker 支持以下的 64 位 CentOS 版本：</p>
+<ul>
+<li>CentOS 7</li>
+<li>CentOS 8</li>
+<li>更高版本…</li>
+</ul>
+<hr>
+<h2 id="使用官方安装脚本自动安装"><a href="#使用官方安装脚本自动安装" class="headerlink" title="使用官方安装脚本自动安装"></a>使用官方安装脚本自动安装</h2><p>安装命令如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">curl -fsSL https://get.docker.com | bash -s docker --mirror Aliyun<br></code></pre></td></tr></table></figure>
+
+<p>也可以使用国内 daocloud 一键安装命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">curl -sSL https://get.daocloud.io/docker | sh<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="手动安装"><a href="#手动安装" class="headerlink" title="手动安装"></a>手动安装</h2><h3 id="卸载旧版本"><a href="#卸载旧版本" class="headerlink" title="卸载旧版本"></a>卸载旧版本</h3><p>较旧的 Docker 版本称为 docker 或 docker-engine 。如果已安装这些程序，请卸载它们以及相关的依赖项。</p>
+<p>$ <strong>sudo</strong> <strong>yum remove</strong> docker <br>                  docker-client <br>                  docker-client-latest <br>                  docker-common <br>                  docker-latest <br>                  docker-latest-logrotate <br>                  docker-logrotate <br>                  docker-engine</p>
+<h3 id="安装-Docker-Engine-Community"><a href="#安装-Docker-Engine-Community" class="headerlink" title="安装 Docker Engine-Community"></a>安装 Docker Engine-Community</h3><h3 id="使用-Docker-仓库进行安装"><a href="#使用-Docker-仓库进行安装" class="headerlink" title="使用 Docker 仓库进行安装"></a>使用 Docker 仓库进行安装</h3><p>在新主机上首次安装 Docker Engine-Community 之前，需要设置 Docker 仓库。之后，您可以从仓库安装和更新 Docker。</p>
+<p><strong>设置仓库</strong></p>
+<p>安装所需的软件包。yum-utils 提供了 yum-config-manager ，并且 device mapper 存储驱动程序需要 device-mapper-persistent-data 和 lvm2。</p>
+<p>$ <strong>sudo</strong> <strong>yum install</strong> -y yum-utils <br>  device-mapper-persistent-data <br>  lvm2</p>
+<p>使用以下命令来设置稳定的仓库。</p>
+<h2 id="使用官方源地址（比较慢）"><a href="#使用官方源地址（比较慢）" class="headerlink" title="使用官方源地址（比较慢）"></a>使用官方源地址（比较慢）</h2><p>$ <strong>sudo</strong> yum-config-manager <br>    –add-repo <br>    https:**&#x2F;&#x2F;<strong>download.docker.com</strong>&#x2F;<strong>linux</strong>&#x2F;<strong>centos</strong>&#x2F;**docker-ce.repo</p>
+<p>可以选择国内的一些源地址：</p>
+<h2 id="阿里云"><a href="#阿里云" class="headerlink" title="阿里云"></a>阿里云</h2><p>$ <strong>sudo</strong> yum-config-manager <br>    –add-repo <br>    http:**&#x2F;&#x2F;<strong>mirrors.aliyun.com</strong>&#x2F;<strong>docker-ce</strong>&#x2F;<strong>linux</strong>&#x2F;<strong>centos</strong>&#x2F;**docker-ce.repo</p>
+<h2 id="清华大学源"><a href="#清华大学源" class="headerlink" title="清华大学源"></a>清华大学源</h2><p>$ <strong>sudo</strong> yum-config-manager <br>    –add-repo <br>    https:**&#x2F;&#x2F;<strong>mirrors.tuna.tsinghua.edu.cn</strong>&#x2F;<strong>docker-ce</strong>&#x2F;<strong>linux</strong>&#x2F;<strong>centos</strong>&#x2F;**docker-ce.repo</p>
+<h3 id="安装-Docker-Engine-Community-1"><a href="#安装-Docker-Engine-Community-1" class="headerlink" title="安装 Docker Engine-Community"></a>安装 Docker Engine-Community</h3><p>安装最新版本的 Docker Engine-Community 和 containerd，或者转到下一步安装特定版本：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">$ sudo yum install docker-ce docker-ce-cli containerd.io<br></code></pre></td></tr></table></figure>
+
+<p>如果提示您接受 GPG 密钥，请选是。</p>
+<blockquote>
+<p><strong>有多个 Docker 仓库吗？</strong></p>
+<p>如果启用了多个 Docker 仓库，则在未在 yum install 或 yum update 命令中指定版本的情况下，进行的安装或更新将始终安装最高版本，这可能不适合您的稳定性需求。</p>
+</blockquote>
+<p>Docker 安装完默认未启动。并且已经创建好 docker 用户组，但该用户组下没有用户。</p>
+<p><strong>要安装特定版本的 Docker Engine-Community，请在存储库中列出可用版本，然后选择并安装：</strong></p>
+<p>1、列出并排序您存储库中可用的版本。此示例按版本号（从高到低）对结果进行排序。</p>
+<p>$ <strong>yum list</strong> docker-ce –showduplicates <strong>|</strong> <strong>sort</strong> -r</p>
+<p>docker-ce.x86_64  3:18.09.1-3.el7                     docker-ce-stable<br>docker-ce.x86_64  3:18.09.0-3.el7                     docker-ce-stable<br>docker-ce.x86_64  18.06.1.ce-3.el7                    docker-ce-stable<br>docker-ce.x86_64  18.06.0.ce-3.el7                    docker-ce-stable</p>
+<p>2、通过其完整的软件包名称安装特定版本，该软件包名称是软件包名称（docker-ce）加上版本字符串（第二列），从第一个冒号（:）一直到第一个连字符，并用连字符（-）分隔。例如：docker-ce-18.09.1。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">$ sudo yum install docker-ce-&lt;VERSION_STRING&gt; docker-ce-cli-&lt;VERSION_STRING&gt; containerd.io<br></code></pre></td></tr></table></figure>
+
+<p>启动 Docker。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">$ sudo systemctl start docker<br></code></pre></td></tr></table></figure>
+
+<p>通过运行 hello-world 镜像来验证是否正确安装了 Docker Engine-Community 。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">$ sudo docker run hello-world<br></code></pre></td></tr></table></figure>
+
+<h3 id="卸载-docker"><a href="#卸载-docker" class="headerlink" title="卸载 docker"></a>卸载 docker</h3><p>删除安装包：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">yum remove docker-ce<br></code></pre></td></tr></table></figure>
+
+<p>删除镜像、容器、配置文件等内容：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">rm -rf /var/lib/docker<br></code></pre></td></tr></table></figure>
+
+
+
+<h1 id="Ubuntu-Docker-安装"><a href="#Ubuntu-Docker-安装" class="headerlink" title="Ubuntu Docker 安装"></a>Ubuntu Docker 安装</h1><p>Docker Engine-Community 支持以下的 Ubuntu 版本：</p>
+<ul>
+<li>Xenial 16.04 (LTS)</li>
+<li>Bionic 18.04 (LTS)</li>
+<li>Cosmic 18.10</li>
+<li>Disco 19.04</li>
+<li>其他更新的版本……</li>
+</ul>
+<p>Docker Engine - Community 支持上 x86_64（或 amd64）armhf，arm64，s390x （IBM Z），和 ppc64le（IBM的Power）架构。</p>
+<hr>
+<h2 id="使用官方安装脚本自动安装-1"><a href="#使用官方安装脚本自动安装-1" class="headerlink" title="使用官方安装脚本自动安装"></a>使用官方安装脚本自动安装</h2><p>安装命令如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">curl -fsSL https://get.docker.com | bash -s docker --mirror Aliyun<br></code></pre></td></tr></table></figure>
+
+<p>也可以使用国内 daocloud 一键安装命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">curl -sSL https://get.daocloud.io/docker | sh<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="手动安装-1"><a href="#手动安装-1" class="headerlink" title="手动安装"></a>手动安装</h2><h3 id="卸载旧版本-1"><a href="#卸载旧版本-1" class="headerlink" title="卸载旧版本"></a>卸载旧版本</h3><p>Docker 的旧版本被称为 docker，docker.io 或 docker-engine 。如果已安装，请卸载它们：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">$ sudo apt-get remove docker docker-engine docker.io containerd runc<br></code></pre></td></tr></table></figure>
+
+<p>当前称为 Docker Engine-Community 软件包 docker-ce 。</p>
+<p>安装 Docker Engine-Community，以下介绍两种方式。</p>
+<h3 id="使用-Docker-仓库进行安装-1"><a href="#使用-Docker-仓库进行安装-1" class="headerlink" title="使用 Docker 仓库进行安装"></a>使用 Docker 仓库进行安装</h3><p>在新主机上首次安装 Docker Engine-Community 之前，需要设置 Docker 仓库。之后，您可以从仓库安装和更新 Docker 。</p>
+<h3 id="设置仓库"><a href="#设置仓库" class="headerlink" title="设置仓库"></a>设置仓库</h3><p>更新 apt 包索引。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">$ sudo apt-get update<br></code></pre></td></tr></table></figure>
+
+<p>安装 apt 依赖包，用于通过HTTPS来获取仓库:</p>
+<p>$ <strong>sudo</strong> <strong>apt-get install</strong> <br>    apt-transport-https <br>    ca-certificates <br>    curl <br>    gnupg-agent <br>    software-properties-common</p>
+<p>添加 Docker 的官方 GPG 密钥：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">$ curl -fsSL https://mirrors.ustc.edu.cn/docker-ce/linux/ubuntu/gpg | sudo apt-key add -<br></code></pre></td></tr></table></figure>
+
+<p>9DC8 5822 9FC7 DD38 854A E2D8 8D81 803C 0EBF CD88 通过搜索指纹的后8个字符，验证您现在是否拥有带有指纹的密钥。</p>
+<p>$ <strong>sudo</strong> <strong>apt-key</strong> fingerprint 0EBFCD88</p>
+<p>pub   rsa4096 2017-02-22 <strong>[<strong>SCEA</strong>]</strong><br>      9DC8 5822 9FC7 DD38 854A  E2D8 8D81 803C 0EBF CD88<br>uid           <strong>[</strong> unknown**]** Docker Release <strong>(<strong>CE deb</strong>)</strong> <strong>&lt;**docker**@**docker.com**&gt;</strong><br>sub   rsa4096 2017-02-22 <strong>[<strong>S</strong>]</strong></p>
+<p>使用以下指令设置稳定版仓库</p>
+<p>$ <strong>sudo</strong> add-apt-repository <br>   “deb [arch&#x3D;amd64] <a target="_blank" rel="noopener" href="https://mirrors.ustc.edu.cn/docker-ce/linux/ubuntu/">https://mirrors.ustc.edu.cn/docker-ce/linux/ubuntu/</a> *<em>*</em>  $(lsb_release -cs) *<em>*</em>  stable”</p>
+<h3 id="安装-Docker-Engine-Community-2"><a href="#安装-Docker-Engine-Community-2" class="headerlink" title="安装 Docker Engine-Community"></a>安装 Docker Engine-Community</h3><p>更新 apt 包索引。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">$ sudo apt-get update<br></code></pre></td></tr></table></figure>
+
+<p>安装最新版本的 Docker Engine-Community 和 containerd ，或者转到下一步安装特定版本：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">$ sudo apt-get install docker-ce docker-ce-cli containerd.io<br></code></pre></td></tr></table></figure>
+
+<p>要安装特定版本的 Docker Engine-Community，请在仓库中列出可用版本，然后选择一种安装。列出您的仓库中可用的版本：</p>
+<p>$ <strong>apt-cache</strong> madison docker-ce</p>
+<p>  docker-ce <strong>|</strong> 5:18.09.1<del>3-0</del>ubuntu-xenial <strong>|</strong> https:**&#x2F;&#x2F;<strong>mirrors.ustc.edu.cn</strong>&#x2F;<strong>docker-ce</strong>&#x2F;<strong>linux</strong>&#x2F;<strong>ubuntu  xenial</strong>&#x2F;<strong>stable amd64 Packages<br>  docker-ce <strong>|</strong> 5:18.09.0<del>3-0</del>ubuntu-xenial <strong>|</strong> https:</strong>&#x2F;&#x2F;<strong>mirrors.ustc.edu.cn</strong>&#x2F;<strong>docker-ce</strong>&#x2F;<strong>linux</strong>&#x2F;<strong>ubuntu  xenial</strong>&#x2F;<strong>stable amd64 Packages<br>  docker-ce <strong>|</strong> 18.06.1<del>ce</del>3-0~ubuntu       <strong>|</strong> https:</strong>&#x2F;&#x2F;<strong>mirrors.ustc.edu.cn</strong>&#x2F;<strong>docker-ce</strong>&#x2F;<strong>linux</strong>&#x2F;<strong>ubuntu  xenial</strong>&#x2F;<strong>stable amd64 Packages<br>  docker-ce <strong>|</strong> 18.06.0<del>ce</del>3-0~ubuntu       <strong>|</strong> https:</strong>&#x2F;&#x2F;<strong>mirrors.ustc.edu.cn</strong>&#x2F;<strong>docker-ce</strong>&#x2F;<strong>linux</strong>&#x2F;<strong>ubuntu  xenial</strong>&#x2F;**stable amd64 Packages<br>  …</p>
+<p>使用第二列中的版本字符串安装特定版本，例如 5:18.09.1<del>3-0</del>ubuntu-xenial。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">$ sudo apt-get install docker-ce=&lt;VERSION_STRING&gt; docker-ce-cli=&lt;VERSION_STRING&gt; containerd.io<br></code></pre></td></tr></table></figure>
+
+<p>测试 Docker 是否安装成功，输入以下指令，打印出以下信息则安装成功:</p>
+<p>$ sudo docker run hello-world</p>
+<p>Unable to find image ‘hello-world:latest’ locally<br>latest: Pulling from library&#x2F;hello-world<br>1b930d010525: Pull complete                                                                                                                                  Digest: sha256:c3b4ada4687bbaa170745b3e4dd8ac3f194ca95b2d0518b417fb47e5879d9b5f<br>Status: Downloaded newer image for hello-world:latest</p>
+<p>Hello from Docker!<br>This message shows that your installation appears to be working correctly.</p>
+<p>To generate this message, Docker took the following steps:</p>
+<ol>
+<li>The Docker client contacted the Docker daemon.</li>
+<li>The Docker daemon pulled the “hello-world” image from the Docker Hub.<br>   (amd64)</li>
+<li>The Docker daemon created a new container from that image which runs the<br>   executable that produces the output you are currently reading.</li>
+<li>The Docker daemon streamed that output to the Docker client, which sent it<br>   to your terminal.</li>
+</ol>
+<p>To try something more ambitious, you can run an Ubuntu container with:<br> $ docker run -it ubuntu bash</p>
+<p>Share images, automate workflows, and more with a free Docker ID:<br> <a target="_blank" rel="noopener" href="https://hub.docker.com/">https://hub.docker.com/</a></p>
+<p>For more examples and ideas, visit:<br> <a target="_blank" rel="noopener" href="https://docs.docker.com/get-started/">https://docs.docker.com/get-started/</a></p>
+<hr>
+<h2 id="使用-Shell-脚本进行安装"><a href="#使用-Shell-脚本进行安装" class="headerlink" title="使用 Shell 脚本进行安装"></a>使用 Shell 脚本进行安装</h2><p>Docker 在 <a target="_blank" rel="noopener" href="https://get.docker.com/">get.docker.com </a>和 <a target="_blank" rel="noopener" href="https://test.docker.com/">test.docker.com</a> 上提供了方便脚本，用于将快速安装 Docker Engine-Community 的边缘版本和测试版本。脚本的源代码在 docker-install 仓库中。 不建议在生产环境中使用这些脚本，在使用它们之前，您应该了解潜在的风险：</p>
+<ul>
+<li>脚本需要运行 root 或具有 sudo 特权。因此，在运行脚本之前，应仔细检查和审核脚本。</li>
+<li>这些脚本尝试检测 Linux 发行版和版本，并为您配置软件包管理系统。此外，脚本不允许您自定义任何安装参数。从 Docker 的角度或您自己组织的准则和标准的角度来看，这可能导致不支持的配置。</li>
+<li>这些脚本将安装软件包管理器的所有依赖项和建议，而无需进行确认。这可能会安装大量软件包，具体取决于主机的当前配置。</li>
+<li>该脚本未提供用于指定要安装哪个版本的 Docker 的选项，而是安装了在 edge 通道中发布的最新版本。</li>
+<li>如果已使用其他机制将 Docker 安装在主机上，请不要使用便捷脚本。</li>
+</ul>
+<p>本示例使用 <a target="_blank" rel="noopener" href="https://get.docker.com/">get.docker.com </a>上的脚本在 Linux 上安装最新版本的Docker Engine-Community。要安装最新的测试版本，请改用 test.docker.com。在下面的每个命令，取代每次出现 get 用 test。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">$ curl -fsSL https://get.docker.com -o get-docker.sh<br>$ sudo sh get-docker.sh<br></code></pre></td></tr></table></figure>
+
+<p>如果要使用 Docker 作为非 root 用户，则应考虑使用类似以下方式将用户添加到 docker 组：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">$ sudo usermod -aG docker your-user<br></code></pre></td></tr></table></figure>
+
+<h3 id="卸载-docker-1"><a href="#卸载-docker-1" class="headerlink" title="卸载 docker"></a>卸载 docker</h3><p>删除安装包：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">sudo apt-get purge docker-ce<br></code></pre></td></tr></table></figure>
+
+<p>删除镜像、容器、配置文件等内容：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">sudo rm -rf /var/lib/docker<br></code></pre></td></tr></table></figure>
+
+
+
+<h1 id="Debian-Docker-安装"><a href="#Debian-Docker-安装" class="headerlink" title="Debian Docker 安装"></a>Debian Docker 安装</h1><p>Docker 支持以下的 Debian 版本：</p>
+<ul>
+<li>Buster 10</li>
+<li>Stretch 9 (stable) &#x2F; Raspbian Stretch</li>
+</ul>
+<p>Docker Engine-Community 在 x86_64（或 amd64 ）armhf，和 arm64 体系结构上受支持。</p>
+<hr>
+<h2 id="使用官方安装脚本自动安装-2"><a href="#使用官方安装脚本自动安装-2" class="headerlink" title="使用官方安装脚本自动安装"></a>使用官方安装脚本自动安装</h2><p>安装命令如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">curl -fsSL https://get.docker.com | bash -s docker --mirror Aliyun<br></code></pre></td></tr></table></figure>
+
+<p>也可以使用国内 daocloud 一键安装命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">curl -sSL https://get.daocloud.io/docker | sh<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="手动安装-2"><a href="#手动安装-2" class="headerlink" title="手动安装"></a>手动安装</h2><h3 id="卸载旧版本-2"><a href="#卸载旧版本-2" class="headerlink" title="卸载旧版本"></a>卸载旧版本</h3><p>Docker 的旧版本被称为 docker，docker.io 或 docker-engine，如果已安装，请卸载它们：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">$ sudo apt-get remove docker docker-engine docker.io containerd runc<br></code></pre></td></tr></table></figure>
+
+<h3 id="安装-Docker-Engine-Community-3"><a href="#安装-Docker-Engine-Community-3" class="headerlink" title="安装 Docker Engine-Community"></a>安装 Docker Engine-Community</h3><h3 id="使用-Docker-仓库进行安装-2"><a href="#使用-Docker-仓库进行安装-2" class="headerlink" title="使用 Docker 仓库进行安装"></a>使用 Docker 仓库进行安装</h3><p>在新主机上首次安装 Docker Engine-Community 之前，需要设置 Docker 仓库。之后，您可以从仓库安装和更新 Docker。</p>
+<p>Raspbian 用户不能使用此方法！</p>
+<p>对于 Raspbian，尚不支持使用仓库进行安装。您必须改为使用 shell 脚本方式。</p>
+<h3 id="设置仓库-1"><a href="#设置仓库-1" class="headerlink" title="设置仓库"></a>设置仓库</h3><p>更新 apt 包索引。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">$ sudo apt-get update<br></code></pre></td></tr></table></figure>
+
+<p>安装 apt 依赖包，用于通过 HTTPS 来获取仓库。</p>
+<p>$ <strong>sudo</strong> <strong>apt-get install</strong> <br>    apt-transport-https <br>    ca-certificates <br>    curl <br>    gnupg2 <br>    software-properties-common</p>
+<p>添加 Docker 的官方 GPG 密钥：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">$ curl -fsSL https://mirrors.ustc.edu.cn/docker-ce/linux/debian/gpg | sudo apt-key add -<br></code></pre></td></tr></table></figure>
+
+<p>9DC8 5822 9FC7 DD38 854A E2D8 8D81 803C 0EBF CD88 通过搜索指纹的后8个字符，验证您现在是否拥有带有指纹的密钥。</p>
+<p>$ <strong>sudo</strong> <strong>apt-key</strong> fingerprint 0EBFCD88</p>
+<p>pub   4096R**&#x2F;<strong>0EBFCD88 2017-02-22<br>      Key fingerprint &#x3D; 9DC8 5822 9FC7 DD38 854A  E2D8 8D81 803C 0EBF CD88<br>uid                  Docker Release <strong>(<strong>CE deb</strong>)</strong> <strong>&lt;**docker**@**docker.com**&gt;</strong><br>sub   4096R</strong>&#x2F;**F273FCD8 2017-02-22</p>
+<p>使用以下指令设置稳定版仓库：</p>
+<p>$ <strong>sudo</strong> add-apt-repository <br>   “deb [arch&#x3D;amd64] <a target="_blank" rel="noopener" href="https://mirrors.ustc.edu.cn/docker-ce/linux/debian">https://mirrors.ustc.edu.cn/docker-ce/linux/debian</a> *<em>*</em>  $(lsb_release -cs) *<em>*</em>  stable”</p>
+<h3 id="安装-Docker-Engine-Community-4"><a href="#安装-Docker-Engine-Community-4" class="headerlink" title="安装 Docker Engine-Community"></a>安装 Docker Engine-Community</h3><p>更新 apt 包索引：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">$ sudo apt-get update<br></code></pre></td></tr></table></figure>
+
+<p>安装最新版本的 Docker Engine-Community 和 containerd ，或者转到下一步安装特定版本：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">$ sudo apt-get install docker-ce docker-ce-cli containerd.io<br></code></pre></td></tr></table></figure>
+
+<p>要安装特定版本的 Docker Engine-Community，请在仓库中列出可用版本，然后选择一种安装。列出您的仓库中可用的版本：</p>
+<p>$ <strong>apt-cache</strong> madison docker-ce</p>
+<p>  docker-ce <strong>|</strong> 5:18.09.1<del>3-0</del>debian-stretch <strong>|</strong> https:**&#x2F;&#x2F;<strong>mirrors.ustc.edu.cn</strong>&#x2F;<strong>docker-ce</strong>&#x2F;<strong>linux</strong>&#x2F;<strong>debian stretch</strong>&#x2F;<strong>stable amd64 Packages<br>  docker-ce <strong>|</strong> 5:18.09.0<del>3-0</del>debian-stretch <strong>|</strong> https:</strong>&#x2F;&#x2F;<strong>mirrors.ustc.edu.cn</strong>&#x2F;<strong>docker-ce</strong>&#x2F;<strong>linux</strong>&#x2F;<strong>debian stretch</strong>&#x2F;<strong>stable amd64 Packages<br>  docker-ce <strong>|</strong> 18.06.1<del>ce</del>3-0~debian        <strong>|</strong> https:</strong>&#x2F;&#x2F;<strong>mirrors.ustc.edu.cn</strong>&#x2F;<strong>docker-ce</strong>&#x2F;<strong>linux</strong>&#x2F;<strong>debian stretch</strong>&#x2F;<strong>stable amd64 Packages<br>  docker-ce <strong>|</strong> 18.06.0<del>ce</del>3-0~debian        <strong>|</strong> https:</strong>&#x2F;&#x2F;<strong>mirrors.ustc.edu.cn</strong>&#x2F;<strong>docker-ce</strong>&#x2F;<strong>linux</strong>&#x2F;<strong>debian stretch</strong>&#x2F;**stable amd64 Packages<br>  …</p>
+<p>使用第二列中的版本字符串安装特定版本，例如 5:18.09.1<del>3-0</del>debian-stretch 。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">$ sudo apt-get install docker-ce=&lt;VERSION_STRING&gt; docker-ce-cli=&lt;VERSION_STRING&gt; containerd.io<br></code></pre></td></tr></table></figure>
+
+<p>测试 Docker 是否安装成功，输入以下指令，打印出以下信息则安装成功：</p>
+<p>$ sudo docker run hello-world</p>
+<p>Unable to find image ‘hello-world:latest’ locally<br>latest: Pulling from library&#x2F;hello-world<br>1b930d010525: Pull complete                                                                                                                                  Digest: sha256:c3b4ada4687bbaa170745b3e4dd8ac3f194ca95b2d0518b417fb47e5879d9b5f<br>Status: Downloaded newer image for hello-world:latest</p>
+<p>Hello from Docker!<br>This message shows that your installation appears to be working correctly.</p>
+<p>To generate this message, Docker took the following steps:</p>
+<ol>
+<li>The Docker client contacted the Docker daemon.</li>
+<li>The Docker daemon pulled the “hello-world” image from the Docker Hub.<br>   (amd64)</li>
+<li>The Docker daemon created a new container from that image which runs the<br>   executable that produces the output you are currently reading.</li>
+<li>The Docker daemon streamed that output to the Docker client, which sent it<br>   to your terminal.</li>
+</ol>
+<p>To try something more ambitious, you can run an Ubuntu container with:<br> $ docker run -it ubuntu bash</p>
+<p>Share images, automate workflows, and more with a free Docker ID:<br> <a target="_blank" rel="noopener" href="https://hub.docker.com/">https://hub.docker.com/</a></p>
+<p>For more examples and ideas, visit:<br> <a target="_blank" rel="noopener" href="https://docs.docker.com/get-started/">https://docs.docker.com/get-started/</a></p>
+<h3 id="卸载-docker-2"><a href="#卸载-docker-2" class="headerlink" title="卸载 docker"></a>卸载 docker</h3><p>删除安装包：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">sudo apt-get purge docker-ce<br></code></pre></td></tr></table></figure>
+
+<p>删除镜像、容器、配置文件等内容：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">sudo rm -rf /var/lib/docker<br></code></pre></td></tr></table></figure>
+
+
+
+<h1 id="Windows-Docker-安装"><a href="#Windows-Docker-安装" class="headerlink" title="Windows Docker 安装"></a>Windows Docker 安装</h1><p>Docker 并非是一个通用的容器工具，它依赖于已存在并运行的 Linux 内核环境。</p>
+<p>Docker 实质上是在已经运行的 Linux 下制造了一个隔离的文件环境，因此它执行的效率几乎等同于所部署的 Linux 主机。</p>
+<p>因此，Docker 必须部署在 Linux 内核的系统上。如果其他系统想部署 Docker 就必须安装一个虚拟 Linux 环境。</p>
+<p class='item-img' data-src='https://www.runoob.com/wp-content/uploads/2016/05/CV09QJMI2fb7L2k0.png'><img src="https://www.runoob.com/wp-content/uploads/2016/05/CV09QJMI2fb7L2k0.png" alt="img"></p>
+<p>在 Windows 上部署 Docker 的方法都是先安装一个虚拟机，并在安装 Linux 系统的的虚拟机中运行 Docker。</p>
+<h2 id="Win10-系统"><a href="#Win10-系统" class="headerlink" title="Win10 系统"></a>Win10 系统</h2><p>Docker Desktop 是 Docker 在 Windows 10 和 macOS 操作系统上的官方安装方式，这个方法依然属于先在虚拟机中安装 Linux 然后再安装 Docker 的方法。</p>
+<p>Docker Desktop 官方下载地址： <a target="_blank" rel="noopener" href="https://docs.docker.com/desktop/install/windows-install/">https://docs.docker.com/desktop/install/windows-install/</a></p>
+<p><strong>注意：</strong>此方法仅适用于 Windows 10 操作系统专业版、企业版、教育版和部分家庭版！</p>
+<h3 id="安装-Hyper-V"><a href="#安装-Hyper-V" class="headerlink" title="安装 Hyper-V"></a>安装 Hyper-V</h3><p>Hyper-V 是微软开发的虚拟机，类似于 VMWare 或 VirtualBox，仅适用于 Windows 10。这是 Docker Desktop for Windows 所使用的虚拟机。</p>
+<p>但是，这个虚拟机一旦启用，QEMU、VirtualBox 或 VMWare Workstation 15 及以下版本将无法使用！如果你必须在电脑上使用其他虚拟机（例如开发 Android 应用必须使用的模拟器），请不要使用 Hyper-V！</p>
+<h3 id="开启-Hyper-V"><a href="#开启-Hyper-V" class="headerlink" title="开启 Hyper-V"></a>开启 Hyper-V</h3><p class='item-img' data-src='https://www.runoob.com/wp-content/uploads/2017/12/1513668234-4363-20171206211136409-1609350099.png'><img src="https://www.runoob.com/wp-content/uploads/2017/12/1513668234-4363-20171206211136409-1609350099.png" alt="img"></p>
+<p>程序和功能</p>
+<p class='item-img' data-src='https://www.runoob.com/wp-content/uploads/2017/12/1513668234-4368-20171206211345066-1430601107.png'><img src="https://www.runoob.com/wp-content/uploads/2017/12/1513668234-4368-20171206211345066-1430601107.png" alt="img"></p>
+<p>启用或关闭Windows功能</p>
+<p class='item-img' data-src='https://www.runoob.com/wp-content/uploads/2017/12/1513668234-9748-20171206211435534-1499766232.png'><img src="https://www.runoob.com/wp-content/uploads/2017/12/1513668234-9748-20171206211435534-1499766232.png" alt="img"></p>
+<p>选中Hyper-V</p>
+<p class='item-img' data-src='https://www.runoob.com/wp-content/uploads/2017/12/1513668234-6433-20171206211858191-1177002365.png'><img src="https://www.runoob.com/wp-content/uploads/2017/12/1513668234-6433-20171206211858191-1177002365.png" alt="img"></p>
+<p>也可以通过命令来启用 Hyper-V ，请右键开始菜单并以管理员身份运行 PowerShell，执行以下命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All<br></code></pre></td></tr></table></figure>
+
+<h3 id="安装-Docker-Desktop-for-Windows"><a href="#安装-Docker-Desktop-for-Windows" class="headerlink" title="安装 Docker Desktop for Windows"></a>安装 Docker Desktop for Windows</h3><p>点击 <a target="_blank" rel="noopener" href="https://hub.docker.com/?overlay=onboarding">Get started with Docker Desktop</a>，并下载 Windows 的版本，如果你还没有登录，会要求注册登录：</p>
+<p class='item-img' data-src='https://www.runoob.com/wp-content/uploads/2016/05/5AEB69DA-6912-4B08-BE79-293FBE659894.png'><img src="https://www.runoob.com/wp-content/uploads/2016/05/5AEB69DA-6912-4B08-BE79-293FBE659894.png" alt="img"></p>
+<h3 id="运行安装文件"><a href="#运行安装文件" class="headerlink" title="运行安装文件"></a>运行安装文件</h3><p>双击下载的 Docker for Windows Installer 安装文件，一路 Next，点击 Finish 完成安装。</p>
+<p class='item-img' data-src='https://www.runoob.com/wp-content/uploads/2017/12/1513669129-6146-20171206214940331-1428569749.png'><img src="https://www.runoob.com/wp-content/uploads/2017/12/1513669129-6146-20171206214940331-1428569749.png" alt="img"></p>
+<p class='item-img' data-src='https://www.runoob.com/wp-content/uploads/2017/12/1513668903-9668-20171206220321613-1349447293.png'><img src="https://www.runoob.com/wp-content/uploads/2017/12/1513668903-9668-20171206220321613-1349447293.png" alt="img"></p>
+<p>安装完成后，Docker 会自动启动。通知栏上会出现个小鲸鱼的图标<img src="https://www.runoob.com/wp-content/uploads/2017/12/1513582421-4552-whale-x-win.png" alt="img">，这表示 Docker 正在运行。</p>
+<p>桌边也会出现三个图标，如下图所示：</p>
+<p>我们可以在命令行执行 docker version 来查看版本号，docker run hello-world 来载入测试镜像测试。</p>
+<p>如果没启动，你可以在 Windows 搜索 Docker 来启动：</p>
+<p class='item-img' data-src='https://www.runoob.com/wp-content/uploads/2017/12/1513585082-6751-docker-app-search.png'><img src="https://www.runoob.com/wp-content/uploads/2017/12/1513585082-6751-docker-app-search.png" alt="img"></p>
+<p>启动后，也可以在通知栏上看到小鲸鱼图标：</p>
+<p class='item-img' data-src='https://www.runoob.com/wp-content/uploads/2017/12/1513585123-3777-whale-taskbar-circle.png'><img src="https://www.runoob.com/wp-content/uploads/2017/12/1513585123-3777-whale-taskbar-circle.png" alt="img"></p>
+<blockquote>
+<p>如果启动中遇到因 WSL 2 导致地错误，请安装 <a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/windows/wsl/install-win10">WSL 2</a>。</p>
+</blockquote>
+<p>安装之后，可以打开 PowerShell 并运行以下命令检测是否运行成功：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">docker run hello-world<br></code></pre></td></tr></table></figure>
+
+<p>在成功运行之后应该会出现以下信息：</p>
+<p class='item-img' data-src='https://www.runoob.com/wp-content/uploads/2016/05/EmkOezweLQVIwA1T__original.png'><img src="https://www.runoob.com/wp-content/uploads/2016/05/EmkOezweLQVIwA1T__original.png" alt="img"></p>
+<hr>
+<h2 id="win7、win8-系统"><a href="#win7、win8-系统" class="headerlink" title="win7、win8 系统"></a>win7、win8 系统</h2><p>win7、win8 等需要利用 docker toolbox 来安装，国内可以使用阿里云的镜像来下载，下载地址：<a target="_blank" rel="noopener" href="http://mirrors.aliyun.com/docker-toolbox/windows/docker-toolbox/">http://mirrors.aliyun.com/docker-toolbox/windows/docker-toolbox/</a></p>
+<p>安装比较简单，双击运行，点下一步即可，可以勾选自己需要的组件：</p>
+<p class='item-img' data-src='https://www.runoob.com/wp-content/uploads/2016/05/691999-20180512142142130-1831870973.png'><img src="https://www.runoob.com/wp-content/uploads/2016/05/691999-20180512142142130-1831870973.png" alt="img"></p>
+<p>docker toolbox 是一个工具集，它主要包含以下一些内容：</p>
+<ul>
+<li>Docker CLI - 客户端，用来运行 docker 引擎创建镜像和容器。</li>
+<li>Docker Machine - 可以让你在 Windows 的命令行中运行 docker 引擎命令。</li>
+<li>Docker Compose - 用来运行 docker-compose 命令。</li>
+<li>Kitematic - 这是 Docker 的 GUI 版本。</li>
+<li>Docker QuickStart shell - 这是一个已经配置好Docker的命令行环境。</li>
+<li>Oracle VM Virtualbox - 虚拟机。</li>
+</ul>
+<p>下载完成之后直接点击安装，安装成功后，桌边会出现三个图标，如下图所示：</p>
+<p class='item-img' data-src='https://www.runoob.com/wp-content/uploads/2017/12/icon-set.png'><img src="https://www.runoob.com/wp-content/uploads/2017/12/icon-set.png" alt="img"></p>
+<p>点击 Docker QuickStart 图标来启动 Docker Toolbox 终端。</p>
+<p>如果系统显示 User Account Control 窗口来运行 VirtualBox 修改你的电脑，选择 Yes。</p>
+<p class='item-img' data-src='https://www.runoob.com/wp-content/uploads/2017/12/1513667960-3359-b2d-shell.png'><img src="https://www.runoob.com/wp-content/uploads/2017/12/1513667960-3359-b2d-shell.png" alt="img"></p>
+<p><strong>$</strong> 符号那里可以输入以下命令来执行。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">$ docker run hello-world<br> Unable to find image &#x27;hello-world:latest&#x27; locally<br> Pulling repository hello-world<br> 91c95931e552: Download complete<br> a8219747be10: Download complete<br> Status: Downloaded newer image for hello-world:latest<br> Hello from Docker.<br> This message shows that your installation appears to be working correctly.<br><br> To generate this message, Docker took the following steps:<br>  1. The Docker Engine CLI client contacted the Docker Engine daemon.<br>  2. The Docker Engine daemon pulled the &quot;hello-world&quot; image from the Docker Hub.<br>     (Assuming it was not already locally available.)<br>  3. The Docker Engine daemon created a new container from that image which runs the<br>     executable that produces the output you are currently reading.<br>  4. The Docker Engine daemon streamed that output to the Docker Engine CLI client, which sent it<br>     to your terminal.<br><br> To try something more ambitious, you can run an Ubuntu container with:<br>  $ docker run -it ubuntu bash<br><br> For more examples and ideas, visit:<br>  https://docs.docker.com/userguide/<br></code></pre></td></tr></table></figure>
+
+
+
+<h1 id="MacOS-Docker-安装"><a href="#MacOS-Docker-安装" class="headerlink" title="MacOS Docker 安装"></a>MacOS Docker 安装</h1><h2 id="使用-Homebrew-安装"><a href="#使用-Homebrew-安装" class="headerlink" title="使用 Homebrew 安装"></a>使用 Homebrew 安装</h2><p>macOS 我们可以使用 Homebrew 来安装 Docker。</p>
+<p>Homebrew 的 Cask 已经支持 Docker for Mac，因此可以很方便的使用 Homebrew Cask 来进行安装：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">$ brew install --cask --appdir=/Applications docker<br><br>==&gt; Creating Caskroom at /usr/local/Caskroom<br>==&gt; We&#x27;ll set permissions properly so we won&#x27;t need sudo in the future<br>Password:          # 输入 macOS 密码<br>==&gt; Satisfying dependencies<br>==&gt; Downloading https://download.docker.com/mac/stable/21090/Docker.dmg<br>######################################################################## 100.0%<br>==&gt; Verifying checksum for Cask docker<br>==&gt; Installing Cask docker<br>==&gt; Moving App &#x27;Docker.app&#x27; to &#x27;/Applications/Docker.app&#x27;.<br>&amp;#x1f37a;  docker was successfully installed!<br></code></pre></td></tr></table></figure>
+
+<p>在载入 Docker app 后，点击 Next，可能会询问你的 macOS 登陆密码，你输入即可。之后会弹出一个 Docker 运行的提示窗口，状态栏上也有有个小鲸鱼的图标（<img src="https://www.runoob.com/wp-content/uploads/2018/01/1515480613-2248-whale-x.png" alt="img">）。</p>
+<hr>
+<h2 id="手动下载安装"><a href="#手动下载安装" class="headerlink" title="手动下载安装"></a>手动下载安装</h2><p>如果需要手动下载，请点击以下链接下载 <a target="_blank" rel="noopener" href="https://docs.docker.com/docker-for-mac/install/">Install Docker Desktop on Mac</a> 。</p>
+<p class='item-img' data-src='https://www.runoob.com/wp-content/uploads/2018/01/1E045CE6-D504-4E7D-8C57-EEFB8AC83BF1.jpg'><img src="https://www.runoob.com/wp-content/uploads/2018/01/1E045CE6-D504-4E7D-8C57-EEFB8AC83BF1.jpg" alt="img"></p>
+<p>如同 macOS 其它软件一样，安装也非常简单，双击下载的 .dmg 文件，然后将鲸鱼图标拖拽到 Application 文件夹即可。</p>
+<p class='item-img' data-src='https://www.runoob.com/wp-content/uploads/2018/01/1515480386-7270-1293367-9516b2edf79deee7.png'><img src="https://www.runoob.com/wp-content/uploads/2018/01/1515480386-7270-1293367-9516b2edf79deee7.png" alt="img"></p>
+<p>从应用中找到 Docker 图标并点击运行。可能会询问 macOS 的登陆密码，输入即可。</p>
+<p class='item-img' data-src='https://www.runoob.com/wp-content/uploads/2018/01/1515480613-7638-docker-app-in-apps.png'><img src="https://www.runoob.com/wp-content/uploads/2018/01/1515480613-7638-docker-app-in-apps.png" alt="img"></p>
+<p>点击顶部状态栏中的鲸鱼图标会弹出操作菜单。</p>
+<p class='item-img' data-src='https://www.runoob.com/wp-content/uploads/2018/01/1515480612-6026-whale-in-menu-bar.png'><img src="https://www.runoob.com/wp-content/uploads/2018/01/1515480612-6026-whale-in-menu-bar.png" alt="img"></p>
+<p class='item-img' data-src='https://www.runoob.com/wp-content/uploads/2018/01/1515480613-8590-menu.png'><img src="https://www.runoob.com/wp-content/uploads/2018/01/1515480613-8590-menu.png" alt="img"></p>
+<p>第一次点击图标，可能会看到这个安装成功的界面，点击 “Got it!” 可以关闭这个窗口。</p>
+<p class='item-img' data-src='https://www.runoob.com/wp-content/uploads/2018/01/1515480614-7648-install-success-docker-cloud.png'><img src="https://www.runoob.com/wp-content/uploads/2018/01/1515480614-7648-install-success-docker-cloud.png" alt="img"></p>
+<p>启动终端后，通过命令可以检查安装后的 Docker 版本。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">$ docker --version<br>Docker version 17.09.1-ce, build 19e2cf6<br></code></pre></td></tr></table></figure>
+
+<h2 id="镜像加速"><a href="#镜像加速" class="headerlink" title="镜像加速"></a>镜像加速</h2><p>鉴于国内网络问题，后续拉取 Docker 镜像十分缓慢，我们可以需要配置加速器来解决，我使用的是网易的镜像地址：<strong><a target="_blank" rel="noopener" href="http://hub-mirror.c.163.com/">http://hub-mirror.c.163.com</a></strong>。</p>
+<p>在任务栏点击 Docker for mac 应用图标 -&gt; Perferences… -&gt; Daemon -&gt; Registry mirrors。在列表中填写加速器地址即可。修改完成之后，点击 Apply &amp; Restart 按钮，Docker 就会重启并应用配置的镜像地址了。</p>
+<p class='item-img' data-src='https://www.runoob.com/wp-content/uploads/2018/01/6B76CF7C-DC88-4DB4-8305-31EEF4323372.png'><img src="https://www.runoob.com/wp-content/uploads/2018/01/6B76CF7C-DC88-4DB4-8305-31EEF4323372.png" alt="img"></p>
+<p>之后我们可以通过 docker info 来查看是否配置成功。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">$ docker info<br>...<br>Registry Mirrors:<br> http://hub-mirror.c.163.com<br>Live Restore Enabled: false<br><br></code></pre></td></tr></table></figure>
+
+
+
+<h1 id="Docker-镜像加速"><a href="#Docker-镜像加速" class="headerlink" title="Docker 镜像加速"></a>Docker 镜像加速</h1><p>国内从 DockerHub 拉取镜像有时会遇到困难，此时可以配置镜像加速器。Docker 官方和国内很多云服务商都提供了国内加速器服务，例如：</p>
+<ul>
+<li>科大镜像：<strong><a target="_blank" rel="noopener" href="https://docker.mirrors.ustc.edu.cn/">https://docker.mirrors.ustc.edu.cn/</a></strong></li>
+<li>网易：<strong><a target="_blank" rel="noopener" href="https://hub-mirror.c.163.com/">https://hub-mirror.c.163.com/</a></strong></li>
+<li>阿里云：<strong>https:&#x2F;&#x2F;&lt;你的ID&gt;.mirror.aliyuncs.com</strong></li>
+<li>七牛云加速器：<strong><a target="_blank" rel="noopener" href="https://reg-mirror.qiniu.com/">https://reg-mirror.qiniu.com</a></strong></li>
+</ul>
+<p>当配置某一个加速器地址之后，若发现拉取不到镜像，请切换到另一个加速器地址。国内各大云服务商均提供了 Docker 镜像加速服务，建议根据运行 Docker 的云平台选择对应的镜像加速服务。</p>
+<p>阿里云镜像获取地址：<a target="_blank" rel="noopener" href="https://cr.console.aliyun.com/cn-hangzhou/instances/mirrors">https://cr.console.aliyun.com/cn-hangzhou/instances/mirrors</a>，登陆后，左侧菜单选中镜像加速器就可以看到你的专属地址了：</p>
+<p class='item-img' data-src='https://www.runoob.com/wp-content/uploads/2019/10/02F3AF04-8203-4E3B-A5AF-96973DBE515F.jpg'><img src="https://www.runoob.com/wp-content/uploads/2019/10/02F3AF04-8203-4E3B-A5AF-96973DBE515F.jpg" alt="img"></p>
+<p>之前还有 Docker 官方加速器 <strong><a target="_blank" rel="noopener" href="https://registry.docker-cn.com/">https://registry.docker-cn.com</a></strong> ，现在好像已经不能使用了，我们可以多添加几个国内的镜像，如果有不能使用的，会切换到可以使用个的镜像来拉取。</p>
+<h3 id="Ubuntu14-04、Debian7Wheezy"><a href="#Ubuntu14-04、Debian7Wheezy" class="headerlink" title="Ubuntu14.04、Debian7Wheezy"></a>Ubuntu14.04、Debian7Wheezy</h3><p>对于使用 upstart 的系统而言，编辑 &#x2F;etc&#x2F;default&#x2F;docker 文件，在其中的 DOCKER_OPTS 中配置加速器地址：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">DOCKER_OPTS=&quot;--registry-mirror=https://registry.docker-cn.com&quot;<br><br></code></pre></td></tr></table></figure>
+
+<p>重新启动服务:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">$ sudo service docker restart<br><br></code></pre></td></tr></table></figure>
+
+<h3 id="Ubuntu16-04-、Debian8-、CentOS7"><a href="#Ubuntu16-04-、Debian8-、CentOS7" class="headerlink" title="Ubuntu16.04+、Debian8+、CentOS7"></a>Ubuntu16.04+、Debian8+、CentOS7</h3><p>对于使用 systemd 的系统，请在 &#x2F;etc&#x2F;docker&#x2F;daemon.json 中写入如下内容（如果文件不存在请新建该文件）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">&#123;&quot;registry-mirrors&quot;:[&quot;https://reg-mirror.qiniu.com/&quot;]&#125;<br><br></code></pre></td></tr></table></figure>
+
+<p>之后重新启动服务：</p>
+<p>$ <strong>sudo</strong> systemctl daemon-reload<br>$ <strong>sudo</strong> systemctl restart docker</p>
+<h3 id="Windows-10"><a href="#Windows-10" class="headerlink" title="Windows 10"></a>Windows 10</h3><p>对于使用 Windows 10 的系统，在系统右下角托盘 Docker 图标内右键菜单选择 Settings，打开配置窗口后左侧导航菜单选择 Daemon。在 Registrymirrors 一栏中填写加速器地址 <strong><a target="_blank" rel="noopener" href="https://docker.mirrors.ustc.edu.cn/">https://docker.mirrors.ustc.edu.cn/</a></strong> ，之后点击 Apply 保存后 Docker 就会重启并应用配置的镜像地址了。</p>
+<p class='item-img' data-src='https://www.runoob.com/wp-content/uploads/2019/10/38507F68-E30F-4CCA-AE9D-9E9EEF60EC83.jpg'><img src="https://www.runoob.com/wp-content/uploads/2019/10/38507F68-E30F-4CCA-AE9D-9E9EEF60EC83.jpg" alt="img"></p>
+<h3 id="Mac-OS-X"><a href="#Mac-OS-X" class="headerlink" title="Mac OS X"></a>Mac OS X</h3><p>对于使用 Mac OS X 的用户，在任务栏点击 Docker for mac 应用图标-&gt; Perferences…-&gt; Daemon-&gt; Registrymirrors。在列表中填写加速器地址 <strong><a target="_blank" rel="noopener" href="https://reg-mirror.qiniu.com/">https://reg-mirror.qiniu.com</a></strong> 。修改完成之后，点击 Apply&amp;Restart 按钮，Docker 就会重启并应用配置的镜像地址了。</p>
+<p class='item-img' data-src='https://www.runoob.com/wp-content/uploads/2019/10/D26C96AF-8EFF-46E5-8618-4C67E72ACBAF.jpg'><img src="https://www.runoob.com/wp-content/uploads/2019/10/D26C96AF-8EFF-46E5-8618-4C67E72ACBAF.jpg" alt="img"></p>
+<h3 id="检查加速器是否生效"><a href="#检查加速器是否生效" class="headerlink" title="检查加速器是否生效"></a>检查加速器是否生效</h3><p>检查加速器是否生效配置加速器之后，如果拉取镜像仍然十分缓慢，请手动检查加速器配置是否生效，在命令行执行 <strong>docker info</strong>，如果从结果中看到了如下内容，说明配置成功。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">$ docker info<br>Registry Mirrors:<br>    https://reg-mirror.qiniu.com<br></code></pre></td></tr></table></figure><div id="paginator"></div></div><div id="post-footer"><div id="pages" style="justify-content: flex-start"><div class="footer-link" style="width: 50%;text-align:right;border-right:1px #fe2 solid"><a href="/2023/05/21/%E6%B5%85%E6%9E%90-JWT/">← Next 浅析 JWT</a></div></div></div></div><div class="bottom-btn"><div><a id="to-top" onClick="scrolls.scrolltop();" title="To Top" style="opacity: 0; display: none;">∧</a><a id="to-index" href="#toc-div" title="To Catalog">≡</a><a id="color-mode" onClick="colorMode.change()" title="Change Theme"></a></div></div></article><aside><div id="about"><a href="/" id="logo"><img src="https://ak.hypergryph.com/assets/index/images/ak/pc/faction/1.png" alt="Logo"></a><h1 id="Dr"><a href="/">John Doe</a></h1><div id="description"><p></p></div></div><div id="aside-block"><div id="toc-div"><h1>Catalog</h1><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#CentOS-Docker-%E5%AE%89%E8%A3%85"><span class="toc-number">1.</span> <span class="toc-text">CentOS Docker 安装</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%AE%98%E6%96%B9%E5%AE%89%E8%A3%85%E8%84%9A%E6%9C%AC%E8%87%AA%E5%8A%A8%E5%AE%89%E8%A3%85"><span class="toc-number">1.1.</span> <span class="toc-text">使用官方安装脚本自动安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%89%8B%E5%8A%A8%E5%AE%89%E8%A3%85"><span class="toc-number">1.2.</span> <span class="toc-text">手动安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%B8%E8%BD%BD%E6%97%A7%E7%89%88%E6%9C%AC"><span class="toc-number">1.2.1.</span> <span class="toc-text">卸载旧版本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85-Docker-Engine-Community"><span class="toc-number">1.2.2.</span> <span class="toc-text">安装 Docker Engine-Community</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-Docker-%E4%BB%93%E5%BA%93%E8%BF%9B%E8%A1%8C%E5%AE%89%E8%A3%85"><span class="toc-number">1.2.3.</span> <span class="toc-text">使用 Docker 仓库进行安装</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%AE%98%E6%96%B9%E6%BA%90%E5%9C%B0%E5%9D%80%EF%BC%88%E6%AF%94%E8%BE%83%E6%85%A2%EF%BC%89"><span class="toc-number">1.3.</span> <span class="toc-text">使用官方源地址（比较慢）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%98%BF%E9%87%8C%E4%BA%91"><span class="toc-number">1.4.</span> <span class="toc-text">阿里云</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B8%85%E5%8D%8E%E5%A4%A7%E5%AD%A6%E6%BA%90"><span class="toc-number">1.5.</span> <span class="toc-text">清华大学源</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85-Docker-Engine-Community-1"><span class="toc-number">1.5.1.</span> <span class="toc-text">安装 Docker Engine-Community</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%B8%E8%BD%BD-docker"><span class="toc-number">1.5.2.</span> <span class="toc-text">卸载 docker</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Ubuntu-Docker-%E5%AE%89%E8%A3%85"><span class="toc-number">2.</span> <span class="toc-text">Ubuntu Docker 安装</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%AE%98%E6%96%B9%E5%AE%89%E8%A3%85%E8%84%9A%E6%9C%AC%E8%87%AA%E5%8A%A8%E5%AE%89%E8%A3%85-1"><span class="toc-number">2.1.</span> <span class="toc-text">使用官方安装脚本自动安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%89%8B%E5%8A%A8%E5%AE%89%E8%A3%85-1"><span class="toc-number">2.2.</span> <span class="toc-text">手动安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%B8%E8%BD%BD%E6%97%A7%E7%89%88%E6%9C%AC-1"><span class="toc-number">2.2.1.</span> <span class="toc-text">卸载旧版本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-Docker-%E4%BB%93%E5%BA%93%E8%BF%9B%E8%A1%8C%E5%AE%89%E8%A3%85-1"><span class="toc-number">2.2.2.</span> <span class="toc-text">使用 Docker 仓库进行安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AE%E4%BB%93%E5%BA%93"><span class="toc-number">2.2.3.</span> <span class="toc-text">设置仓库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85-Docker-Engine-Community-2"><span class="toc-number">2.2.4.</span> <span class="toc-text">安装 Docker Engine-Community</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-Shell-%E8%84%9A%E6%9C%AC%E8%BF%9B%E8%A1%8C%E5%AE%89%E8%A3%85"><span class="toc-number">2.3.</span> <span class="toc-text">使用 Shell 脚本进行安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%B8%E8%BD%BD-docker-1"><span class="toc-number">2.3.1.</span> <span class="toc-text">卸载 docker</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Debian-Docker-%E5%AE%89%E8%A3%85"><span class="toc-number">3.</span> <span class="toc-text">Debian Docker 安装</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%AE%98%E6%96%B9%E5%AE%89%E8%A3%85%E8%84%9A%E6%9C%AC%E8%87%AA%E5%8A%A8%E5%AE%89%E8%A3%85-2"><span class="toc-number">3.1.</span> <span class="toc-text">使用官方安装脚本自动安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%89%8B%E5%8A%A8%E5%AE%89%E8%A3%85-2"><span class="toc-number">3.2.</span> <span class="toc-text">手动安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%B8%E8%BD%BD%E6%97%A7%E7%89%88%E6%9C%AC-2"><span class="toc-number">3.2.1.</span> <span class="toc-text">卸载旧版本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85-Docker-Engine-Community-3"><span class="toc-number">3.2.2.</span> <span class="toc-text">安装 Docker Engine-Community</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-Docker-%E4%BB%93%E5%BA%93%E8%BF%9B%E8%A1%8C%E5%AE%89%E8%A3%85-2"><span class="toc-number">3.2.3.</span> <span class="toc-text">使用 Docker 仓库进行安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%BE%E7%BD%AE%E4%BB%93%E5%BA%93-1"><span class="toc-number">3.2.4.</span> <span class="toc-text">设置仓库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85-Docker-Engine-Community-4"><span class="toc-number">3.2.5.</span> <span class="toc-text">安装 Docker Engine-Community</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%B8%E8%BD%BD-docker-2"><span class="toc-number">3.2.6.</span> <span class="toc-text">卸载 docker</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Windows-Docker-%E5%AE%89%E8%A3%85"><span class="toc-number">4.</span> <span class="toc-text">Windows Docker 安装</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Win10-%E7%B3%BB%E7%BB%9F"><span class="toc-number">4.1.</span> <span class="toc-text">Win10 系统</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85-Hyper-V"><span class="toc-number">4.1.1.</span> <span class="toc-text">安装 Hyper-V</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%80%E5%90%AF-Hyper-V"><span class="toc-number">4.1.2.</span> <span class="toc-text">开启 Hyper-V</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85-Docker-Desktop-for-Windows"><span class="toc-number">4.1.3.</span> <span class="toc-text">安装 Docker Desktop for Windows</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%90%E8%A1%8C%E5%AE%89%E8%A3%85%E6%96%87%E4%BB%B6"><span class="toc-number">4.1.4.</span> <span class="toc-text">运行安装文件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#win7%E3%80%81win8-%E7%B3%BB%E7%BB%9F"><span class="toc-number">4.2.</span> <span class="toc-text">win7、win8 系统</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#MacOS-Docker-%E5%AE%89%E8%A3%85"><span class="toc-number">5.</span> <span class="toc-text">MacOS Docker 安装</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-Homebrew-%E5%AE%89%E8%A3%85"><span class="toc-number">5.1.</span> <span class="toc-text">使用 Homebrew 安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%89%8B%E5%8A%A8%E4%B8%8B%E8%BD%BD%E5%AE%89%E8%A3%85"><span class="toc-number">5.2.</span> <span class="toc-text">手动下载安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%95%9C%E5%83%8F%E5%8A%A0%E9%80%9F"><span class="toc-number">5.3.</span> <span class="toc-text">镜像加速</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Docker-%E9%95%9C%E5%83%8F%E5%8A%A0%E9%80%9F"><span class="toc-number">6.</span> <span class="toc-text">Docker 镜像加速</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Ubuntu14-04%E3%80%81Debian7Wheezy"><span class="toc-number">6.0.1.</span> <span class="toc-text">Ubuntu14.04、Debian7Wheezy</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Ubuntu16-04-%E3%80%81Debian8-%E3%80%81CentOS7"><span class="toc-number">6.0.2.</span> <span class="toc-text">Ubuntu16.04+、Debian8+、CentOS7</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Windows-10"><span class="toc-number">6.0.3.</span> <span class="toc-text">Windows 10</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Mac-OS-X"><span class="toc-number">6.0.4.</span> <span class="toc-text">Mac OS X</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A3%80%E6%9F%A5%E5%8A%A0%E9%80%9F%E5%99%A8%E6%98%AF%E5%90%A6%E7%94%9F%E6%95%88"><span class="toc-number">6.0.5.</span> <span class="toc-text">检查加速器是否生效</span></a></li></ol></li></ol></li></ol></div></div><footer><nobr>Published with <a target="_blank" rel="noopener" href="http://hexo.io">Hexo</a></nobr><wbr><nobr> Theme <a target="_blank" rel="noopener" href="https://github.com/Yue-plus/hexo-theme-arknights">Arknights</a></nobr><wbr><nobr>by <a target="_blank" rel="noopener" href="https://github.com/Yue-plus">Yue_plus</a></nobr></footer></aside></main><canvas id="canvas-dust"></canvas><script src="/js/search.js"></script><script src="/js/arknights.js"></script><script src="//unpkg.com/lightgallery@2.7.1/lightgallery.min.js"></script><script src="//unpkg.com/lightgallery@2.7.1/plugins/zoom/lg-zoom.min.js"></script><script src="//unpkg.com/lightgallery@2.7.1/plugins/thumbnail/lg-thumbnail.min.js"></script><script src="/js/pjax.js"></script><script class="pjax-js">reset= () => {code.findCode();
+document.querySelector('.lg-container')?.remove()
+lightGallery(document.getElementById('post-bg'), {
+  plugins: [lgZoom,lgThumbnail],
+  selector: '.item-img'})}</script><script>window.addEventListener("load",() => {pjax = new Pjax({
+ cacheBust: false,
+ selectors: ['title','article','#aside-block','.pjax-js'],
+ switches: {'article': Pjax.switches.sideBySide},
+ switchesOptions: {
+   'article': {
+     classNames: {
+       remove: "pjax-out",
+       add: "pjax-in"
+     }
+   }
+ }
+});
+document.addEventListener("pjax:complete", reset);reset()})</script></body></html>

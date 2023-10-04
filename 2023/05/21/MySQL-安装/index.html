@@ -1,0 +1,169 @@
+<!DOCTYPE html><html lang="en" theme-mode="dark"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>MySQL 安装 | xue的个人博客</title><link rel="icon" type="image/x-icon" href="/favicon.ico"><script>var config = {"root":"/","search":{"preload":false,"activeHolder":"Enter here","blurHolder":"Search","noResult":"Data \"$0\" not found"},"code":{"codeInfo":"$0 - $1 lines","copy":"copy","copyFinish":"copied","expand":"expand"}}</script><script src="//unpkg.com/mermaid@9.2.2/dist/mermaid.min.js"></script><link type="text/css" rel="stylesheet" href="//unpkg.com/lightgallery@2.7.1/css/lightgallery.css"><link type="text/css" rel="stylesheet" href="//unpkg.com/lightgallery@2.7.1/css/lg-zoom.css"><link type="text/css" rel="stylesheet" href="//unpkg.com/lightgallery@2.7.1/css/lg-thumbnail.css"><link type="text/css" rel="stylesheet" href="/lib/fontawesome/brands.min.css"><link type="text/css" rel="stylesheet" href="/lib/fontawesome/fontawesome.min.css"><link rel="stylesheet" href="/css/arknights.css"><script>if (window.localStorage.getItem('theme-mode') === 'light') document.documentElement.setAttribute('theme-mode', 'light')
+if (window.localStorage.getItem('theme-mode') === 'dark') document.documentElement.setAttribute('theme-mode', 'dark')</script><style>@font-face {
+ font-family: BenderLight;
+ src: local('Bender'), url("/font/BenderLight.ttf");
+}
+@font-face {
+ font-family: 'JetBrains Mono';
+ src: local('JetBrains Mono'), url('/font/JetBrainsMono-Regular.woff2') format('woff2');
+}
+@font-face {
+ font-family: 'Font Awesome 6 Brands';
+ src: local('Font Awesome 6 Brands'), url('/lib/fontawesome/fa-brands.woff2') format('woff2');
+}
+@font-face {
+ font-family: 'Font Awesome 6 Free';
+ src: local('Font Awesome 6 Free'), url('/lib/fontawesome/fa-regular.woff2') format('woff2');
+}</style><style>:root {
+  --dark-background: url('https://ak.hypergryph.com/assets/index/images/ak/pc/bk.jpg');
+  --light-background: url('/img/bk.jpg');
+}</style><meta name="generator" content="Hexo 7.0.0-rc2"></head><body><div class="loading" style="opacity: 0"><div class="loadingBar left"></div><div class="loadingBar right"></div></div><main><header class="closed"><nav><div class="navBtn hide"><i class="navBtnIcon"><span class="navBtnIconBar"></span><span class="navBtnIconBar"></span><span class="navBtnIconBar"></span></i></div><div class="navItem" id="search-header"><span class="navItemTitle"><input autocomplete="off" autocorrect="off" autocapitalize="none" placeholder="Search" spellcheck="false" maxlength="50" type="text" id="search-input"></span></div><div class="navItem" id="search-holder"></div><div class="search-popup"><div id="search-result"></div></div><ol class="navContent"><li class="navItem"><a class="navBlock" href="/"><span class="navItemTitle">Home</span></a></li><li class="navItem" matchdata="categories,tags"><a class="navBlock" href="/archives/"><span class="navItemTitle">Archives</span></a></li><li class="navItem"><a class="navBlock" href="/categories/"><span class="navItemTitle">About</span></a></li></ol></nav></header><article><div id="post-bg"><div id="post-title"><h1>MySQL 安装</h1><div id="post-info"><span>First Post: <div class="control"><time datetime="2023-05-20T16:37:25.000Z" id="date"> 2023-05-21</time></div></span><br><span>Last Update: <div class="control"><time datetime="2023-08-11T15:46:11.992Z" id="updated"> 2023-08-11</time></div></span><br><span>Word Count: <div class="control">1.9k</div></span><br><span>Read Time: <div class="control">7 min</div></span></div></div><hr><div id="post-content"><p>所有平台的 MySQL 下载地址为： <a target="_blank" rel="noopener" href="https://dev.mysql.com/downloads/mysql/">MySQL 下载</a> 。 挑选你需要的 <em>MySQL Community Server</em> 版本及对应的平台。</p>
+<blockquote>
+<p><strong>注意：</strong>安装过程我们需要通过开启管理员权限来安装，否则会由于权限不足导致无法安装。</p>
+</blockquote>
+<hr>
+ <span id="more"></span>
+<h2 id="Linux-x2F-UNIX-上安装-MySQL"><a href="#Linux-x2F-UNIX-上安装-MySQL" class="headerlink" title="Linux&#x2F;UNIX 上安装 MySQL"></a>Linux&#x2F;UNIX 上安装 MySQL</h2><p>Linux平台上推荐使用RPM包来安装Mysql,MySQL AB提供了以下RPM包的下载地址：</p>
+<ul>
+<li><strong>MySQL</strong> - MySQL服务器。你需要该选项，除非你只想连接运行在另一台机器上的MySQL服务器。</li>
+<li><strong>MySQL-client</strong> - MySQL 客户端程序，用于连接并操作Mysql服务器。</li>
+<li><strong>MySQL-devel</strong> - 库和包含文件，如果你想要编译其它MySQL客户端，例如Perl模块，则需要安装该RPM包。</li>
+<li><strong>MySQL-shared</strong> - 该软件包包含某些语言和应用程序需要动态装载的共享库(libmysqlclient.so*)，使用MySQL。</li>
+<li><strong>MySQL-bench</strong> - MySQL数据库服务器的基准和性能测试工具。</li>
+</ul>
+<p>安装前，我们可以检测系统是否自带安装 MySQL:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">rpm -qa | grep mysql<br></code></pre></td></tr></table></figure>
+
+<p>如果你系统有安装，那可以选择进行卸载:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">rpm -e mysql　　// 普通删除模式<br>rpm -e --nodeps mysql　　// 强力删除模式，如果使用上面命令删除时，提示有依赖的其它文件，则用该命令可以对其进行强力删除<br></code></pre></td></tr></table></figure>
+
+<p><strong>安装 MySQL：</strong></p>
+<p>接下来我们在 Centos7 系统下使用 yum 命令安装 MySQL，需要注意的是 CentOS 7 版本中 MySQL数据库已从默认的程序列表中移除，所以在安装前我们需要先去官网下载 Yum 资源包，下载地址为：<a target="_blank" rel="noopener" href="https://dev.mysql.com/downloads/repo/yum/">https://dev.mysql.com/downloads/repo/yum/</a></p>
+<p class='item-img' data-src='https://www.runoob.com/wp-content/uploads/2014/03/repo-name-small.png'><img src="https://www.runoob.com/wp-content/uploads/2014/03/repo-name-small.png" alt="img"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">wget http://repo.mysql.com/mysql-community-release-el7-5.noarch.rpm<br>rpm -ivh mysql-community-release-el7-5.noarch.rpm<br>yum update<br>yum install mysql-server<br></code></pre></td></tr></table></figure>
+
+<p>权限设置：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">chown -R mysql:mysql /var/lib/mysql/<br></code></pre></td></tr></table></figure>
+
+<p>初始化 MySQL：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">mysqld --initialize<br></code></pre></td></tr></table></figure>
+
+<p>启动 MySQL：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">systemctl start mysqld<br></code></pre></td></tr></table></figure>
+
+<p>查看 MySQL 运行状态：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">systemctl status mysqld<br></code></pre></td></tr></table></figure>
+
+<p><strong>注意：</strong>如果我们是第一次启动 mysql 服务，mysql 服务器首先会进行初始化的配置。</p>
+<blockquote>
+<p>此外,你也可以使用 MariaDB 代替，MariaDB 数据库管理系统是 MySQL 的一个分支，主要由开源社区在维护，采用 GPL 授权许可。开发这个分支的原因之一是：甲骨文公司收购了 MySQL 后，有将 MySQL 闭源的潜在风险，因此社区采用分支的方式来避开这个风险。</p>
+<p>MariaDB的目的是完全兼容MySQL，包括API和命令行，使之能轻松成为MySQL的代替品。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">yum install mariadb-server mariadb <br></code></pre></td></tr></table></figure>
+
+<p>mariadb数据库的相关命令是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">systemctl start mariadb  #启动MariaDB<br>systemctl stop mariadb  #停止MariaDB<br>systemctl restart mariadb  #重启MariaDB<br>systemctl enable mariadb  #设置开机启动<br></code></pre></td></tr></table></figure>
+</blockquote>
+<hr>
+<h2 id="验证-MySQL-安装"><a href="#验证-MySQL-安装" class="headerlink" title="验证 MySQL 安装"></a>验证 MySQL 安装</h2><p>在成功安装 MySQL 后，一些基础表会表初始化，在服务器启动后，你可以通过简单的测试来验证 MySQL 是否工作正常。</p>
+<p>使用 mysqladmin 工具来获取服务器状态：</p>
+<p>使用 mysqladmin 命令来检查服务器的版本, 在 linux 上该二进制文件位于 &#x2F;usr&#x2F;bin 目录，在 Windows 上该二进制文件位于C:\mysql\bin 。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">[root@host]# mysqladmin --version<br></code></pre></td></tr></table></figure>
+
+<p>linux上该命令将输出以下结果，该结果基于你的系统信息：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">mysqladmin  Ver 8.23 Distrib 5.0.9-0, for redhat-linux-gnu on i386<br></code></pre></td></tr></table></figure>
+
+<p>如果以上命令执行后未输出任何信息，说明你的Mysql未安装成功。</p>
+<hr>
+<h2 id="使用-MySQL-Client-Mysql客户端-执行简单的SQL命令"><a href="#使用-MySQL-Client-Mysql客户端-执行简单的SQL命令" class="headerlink" title="使用 MySQL Client(Mysql客户端) 执行简单的SQL命令"></a>使用 MySQL Client(Mysql客户端) 执行简单的SQL命令</h2><p>你可以在 MySQL Client(Mysql客户端) 使用 mysql 命令连接到 MySQL 服务器上，默认情况下 MySQL 服务器的登录密码为空，所以本实例不需要输入密码。</p>
+<p>命令如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">[root@host]# mysql<br></code></pre></td></tr></table></figure>
+
+<p>以上命令执行后会输出 mysql&gt;提示符，这说明你已经成功连接到Mysql服务器上，你可以在 mysql&gt; 提示符执行SQL命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">mysql&gt; SHOW DATABASES;<br>+----------+<br>| Database |<br>+----------+<br>| mysql    |<br>| test     |<br>+----------+<br>2 rows in set (0.13 sec)<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="Mysql安装后需要做的"><a href="#Mysql安装后需要做的" class="headerlink" title="Mysql安装后需要做的"></a>Mysql安装后需要做的</h2><p>Mysql安装成功后，默认的root用户密码为空，你可以使用以下命令来创建root用户的密码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">[root@host]# mysqladmin -u root password &quot;new_password&quot;;<br></code></pre></td></tr></table></figure>
+
+<p>现在你可以通过以下命令来连接到Mysql服务器：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">[root@host]# mysql -u root -p<br>Enter password:*******<br></code></pre></td></tr></table></figure>
+
+<p><strong>注意：</strong>在输入密码时，密码是不会显示了，你正确输入即可。</p>
+<hr>
+<h2 id="Windows-上安装-MySQL"><a href="#Windows-上安装-MySQL" class="headerlink" title="Windows 上安装 MySQL"></a>Windows 上安装 MySQL</h2><p>Windows 上安装 MySQL 相对来说会较为简单，最新版本可以在 <a target="_blank" rel="noopener" href="https://dev.mysql.com/downloads/mysql/">MySQL 下载</a> 中下载中查看(<strong>更详细安装：Windows 上安装 MySQL</strong>)。</p>
+<p class='item-img' data-src='https://www.runoob.com/wp-content/uploads/2014/03/330405-20160709174318905-664331194.png'><img src="https://www.runoob.com/wp-content/uploads/2014/03/330405-20160709174318905-664331194.png" alt="img"></p>
+<p class='item-img' data-src='https://www.runoob.com/wp-content/uploads/2014/03/20DBD7BA-A653-4AE3-887E-2A16E6EBB2E3.png'><img src="https://www.runoob.com/wp-content/uploads/2014/03/20DBD7BA-A653-4AE3-887E-2A16E6EBB2E3.png" alt="img"></p>
+<p>点击 </p>
+<p>Download</p>
+<p> 按钮进入下载页面，点击下图中的 </p>
+<p>No thanks, just start my download.</p>
+<p> 就可立即下载：</p>
+<p class='item-img' data-src='https://www.runoob.com/wp-content/uploads/2014/03/330405-20160709174941374-1821908969.png'><img src="https://www.runoob.com/wp-content/uploads/2014/03/330405-20160709174941374-1821908969.png" alt="img"></p>
+<p>下载完后，我们将 zip 包解压到相应的目录，这里我将解压后的文件夹放在 <strong>C:\web\mysql-8.0.11</strong> 下。</p>
+<p><strong>接下来我们需要配置下 MySQL 的配置文件</strong></p>
+<p>打开刚刚解压的文件夹 <strong>C:\web\mysql-8.0.11</strong> ，在该文件夹下创建 <strong>my.ini</strong> 配置文件，编辑 <strong>my.ini</strong> 配置以下基本信息：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">[client]<br># 设置mysql客户端默认字符集<br>default-character-set=utf8<br> <br>[mysqld]<br># 设置3306端口<br>port = 3306<br># 设置mysql的安装目录<br>basedir=C:\\web\\mysql-8.0.11<br># 设置 mysql数据库的数据的存放目录，MySQL 8+ 不需要以下配置，系统自己生成即可，否则有可能报错<br># datadir=C:\\web\\sqldata<br># 允许最大连接数<br>max_connections=20<br># 服务端使用的字符集默认为8比特编码的latin1字符集<br>character-set-server=utf8<br># 创建新表时将使用的默认存储引擎<br>default-storage-engine=INNODB<br></code></pre></td></tr></table></figure>
+
+<p><strong>接下来我们来启动下 MySQL 数据库：</strong></p>
+<p>以管理员身份打开 cmd 命令行工具，切换目录：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">cd C:\web\mysql-8.0.11\bin<br></code></pre></td></tr></table></figure>
+
+<p>初始化数据库：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">mysqld --initialize --console<br></code></pre></td></tr></table></figure>
+
+<p>执行完成后，会输出 root 用户的初始默认密码，如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">...<br>2018-04-20T02:35:05.464644Z 5 [Note] [MY-010454] [Server] A temporary password is generated for root@localhost: APWCY5ws&amp;hjQ<br>...<br></code></pre></td></tr></table></figure>
+
+<p><strong>APWCY5ws&amp;hjQ</strong> 就是初始密码，后续登录需要用到，你也可以在登陆后修改密码。</p>
+<p>输入以下安装命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">mysqld install<br></code></pre></td></tr></table></figure>
+
+<p>启动输入以下命令即可：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">net start mysql<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注意: 在 5.7 需要初始化 data 目录：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">cd C:\web\mysql-8.0.11\bin <br>mysqld --initialize-insecure <br></code></pre></td></tr></table></figure>
+
+<p>初始化后再运行 net start mysql 即可启动 mysql。</p>
+</blockquote>
+<hr>
+<h2 id="登录-MySQL"><a href="#登录-MySQL" class="headerlink" title="登录 MySQL"></a>登录 MySQL</h2><p>当 MySQL 服务已经运行时, 我们可以通过 MySQL 自带的客户端工具登录到 MySQL 数据库中, 首先打开命令提示符, 输入以下格式的命名:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">mysql -h 主机名 -u 用户名 -p<br></code></pre></td></tr></table></figure>
+
+<p>参数说明：</p>
+<ul>
+<li><strong>-h</strong> : 指定客户端所要登录的 MySQL 主机名, 登录本机(localhost 或 127.0.0.1)该参数可以省略;</li>
+<li><strong>-u</strong> : 登录的用户名;</li>
+<li><strong>-p</strong> : 告诉服务器将会使用一个密码来登录, 如果所要登录的用户名密码为空, 可以忽略此选项。</li>
+</ul>
+<p>如果我们要登录本机的 MySQL 数据库，只需要输入以下命令即可：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">mysql -u root -p<br></code></pre></td></tr></table></figure>
+
+<p>按回车确认, 如果安装正确且 MySQL 正在运行, 会得到以下响应:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">Enter password:<br></code></pre></td></tr></table></figure>
+
+<p>若密码存在, 输入密码登录, 不存在则直接按回车登录。登录成功后你将会看到 Welcome to the MySQL monitor… 的提示语。</p>
+<p>然后命令提示符会一直以 <strong>mysql&gt;</strong> 加一个闪烁的光标等待命令的输入, 输入 <strong>exit</strong> 或 <strong>quit</strong> 退出登录。</p>
+<h2 id="配置MySQL执行日志（重启mysql服务后生效）"><a href="#配置MySQL执行日志（重启mysql服务后生效）" class="headerlink" title="配置MySQL执行日志（重启mysql服务后生效）"></a>配置MySQL执行日志（重启mysql服务后生效）</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">log-output=FILE<br>general-log=1<br>general_log_file=&quot;D:\mysql.log&quot;<br>slow-query-log=1<br>slow_query_log_file=&quot;D:\mysql_slow.log&quot;<br>long_query_time=2<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs javaweb">PreparedStatement预编译功能开启:useServerPrepStmts=true<br></code></pre></td></tr></table></figure>
+
+<div id="paginator"></div></div><div id="post-footer"><div id="pages"><div class="footer-link" style="width: 50%;text-align:right;border-right:1px #fe2 solid"><a href="/2023/05/21/Druid%E9%85%8D%E7%BD%AE%E5%8F%82%E6%95%B0%E8%AF%A6%E8%A7%A3/">← Next Druid配置参数详解</a></div><div class="footer-link" style="width: 50%;right:1px;border-left:1px #fe2 solid"><a href="/2023/05/21/Docker-Clash-%E9%83%A8%E7%BD%B2%E9%80%8F%E6%98%8E%E2%80%9C%E7%BD%91%E5%85%B3%E2%80%9D%E7%9A%84%E5%AE%9E%E7%8E%B0/">Docker+Clash 部署透明“网关”的实现 Prev →</a></div></div></div></div><div class="bottom-btn"><div><a id="to-top" onClick="scrolls.scrolltop();" title="To Top" style="opacity: 0; display: none;">∧</a><a id="to-index" href="#toc-div" title="To Catalog">≡</a><a id="color-mode" onClick="colorMode.change()" title="Change Theme"></a></div></div></article><aside><div id="about"><a href="/" id="logo"><img src="https://ak.hypergryph.com/assets/index/images/ak/pc/faction/1.png" alt="Logo"></a><h1 id="Dr"><a href="/">John Doe</a></h1><div id="description"><p></p></div></div><div id="aside-block"><div id="toc-div"><h1>Catalog</h1><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Linux-x2F-UNIX-%E4%B8%8A%E5%AE%89%E8%A3%85-MySQL"><span class="toc-number">1.</span> <span class="toc-text">Linux&#x2F;UNIX 上安装 MySQL</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%AA%8C%E8%AF%81-MySQL-%E5%AE%89%E8%A3%85"><span class="toc-number">2.</span> <span class="toc-text">验证 MySQL 安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8-MySQL-Client-Mysql%E5%AE%A2%E6%88%B7%E7%AB%AF-%E6%89%A7%E8%A1%8C%E7%AE%80%E5%8D%95%E7%9A%84SQL%E5%91%BD%E4%BB%A4"><span class="toc-number">3.</span> <span class="toc-text">使用 MySQL Client(Mysql客户端) 执行简单的SQL命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Mysql%E5%AE%89%E8%A3%85%E5%90%8E%E9%9C%80%E8%A6%81%E5%81%9A%E7%9A%84"><span class="toc-number">4.</span> <span class="toc-text">Mysql安装后需要做的</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Windows-%E4%B8%8A%E5%AE%89%E8%A3%85-MySQL"><span class="toc-number">5.</span> <span class="toc-text">Windows 上安装 MySQL</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%99%BB%E5%BD%95-MySQL"><span class="toc-number">6.</span> <span class="toc-text">登录 MySQL</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AEMySQL%E6%89%A7%E8%A1%8C%E6%97%A5%E5%BF%97%EF%BC%88%E9%87%8D%E5%90%AFmysql%E6%9C%8D%E5%8A%A1%E5%90%8E%E7%94%9F%E6%95%88%EF%BC%89"><span class="toc-number">7.</span> <span class="toc-text">配置MySQL执行日志（重启mysql服务后生效）</span></a></li></ol></div></div><footer><nobr>Published with <a target="_blank" rel="noopener" href="http://hexo.io">Hexo</a></nobr><wbr><nobr> Theme <a target="_blank" rel="noopener" href="https://github.com/Yue-plus/hexo-theme-arknights">Arknights</a></nobr><wbr><nobr>by <a target="_blank" rel="noopener" href="https://github.com/Yue-plus">Yue_plus</a></nobr></footer></aside></main><canvas id="canvas-dust"></canvas><script src="/js/search.js"></script><script src="/js/arknights.js"></script><script src="//unpkg.com/lightgallery@2.7.1/lightgallery.min.js"></script><script src="//unpkg.com/lightgallery@2.7.1/plugins/zoom/lg-zoom.min.js"></script><script src="//unpkg.com/lightgallery@2.7.1/plugins/thumbnail/lg-thumbnail.min.js"></script><script src="/js/pjax.js"></script><script class="pjax-js">reset= () => {code.findCode();
+document.querySelector('.lg-container')?.remove()
+lightGallery(document.getElementById('post-bg'), {
+  plugins: [lgZoom,lgThumbnail],
+  selector: '.item-img'})}</script><script>window.addEventListener("load",() => {pjax = new Pjax({
+ cacheBust: false,
+ selectors: ['title','article','#aside-block','.pjax-js'],
+ switches: {'article': Pjax.switches.sideBySide},
+ switchesOptions: {
+   'article': {
+     classNames: {
+       remove: "pjax-out",
+       add: "pjax-in"
+     }
+   }
+ }
+});
+document.addEventListener("pjax:complete", reset);reset()})</script></body></html>

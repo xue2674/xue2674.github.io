@@ -1,0 +1,276 @@
+<!DOCTYPE html><html lang="en" theme-mode="dark"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Druid配置参数详解 | xue的个人博客</title><link rel="icon" type="image/x-icon" href="/favicon.ico"><script>var config = {"root":"/","search":{"preload":false,"activeHolder":"Enter here","blurHolder":"Search","noResult":"Data \"$0\" not found"},"code":{"codeInfo":"$0 - $1 lines","copy":"copy","copyFinish":"copied","expand":"expand"}}</script><script src="//unpkg.com/mermaid@9.2.2/dist/mermaid.min.js"></script><link type="text/css" rel="stylesheet" href="//unpkg.com/lightgallery@2.7.1/css/lightgallery.css"><link type="text/css" rel="stylesheet" href="//unpkg.com/lightgallery@2.7.1/css/lg-zoom.css"><link type="text/css" rel="stylesheet" href="//unpkg.com/lightgallery@2.7.1/css/lg-thumbnail.css"><link type="text/css" rel="stylesheet" href="/lib/fontawesome/brands.min.css"><link type="text/css" rel="stylesheet" href="/lib/fontawesome/fontawesome.min.css"><link rel="stylesheet" href="/css/arknights.css"><script>if (window.localStorage.getItem('theme-mode') === 'light') document.documentElement.setAttribute('theme-mode', 'light')
+if (window.localStorage.getItem('theme-mode') === 'dark') document.documentElement.setAttribute('theme-mode', 'dark')</script><style>@font-face {
+ font-family: BenderLight;
+ src: local('Bender'), url("/font/BenderLight.ttf");
+}
+@font-face {
+ font-family: 'JetBrains Mono';
+ src: local('JetBrains Mono'), url('/font/JetBrainsMono-Regular.woff2') format('woff2');
+}
+@font-face {
+ font-family: 'Font Awesome 6 Brands';
+ src: local('Font Awesome 6 Brands'), url('/lib/fontawesome/fa-brands.woff2') format('woff2');
+}
+@font-face {
+ font-family: 'Font Awesome 6 Free';
+ src: local('Font Awesome 6 Free'), url('/lib/fontawesome/fa-regular.woff2') format('woff2');
+}</style><style>:root {
+  --dark-background: url('https://ak.hypergryph.com/assets/index/images/ak/pc/bk.jpg');
+  --light-background: url('/img/bk.jpg');
+}</style><meta name="generator" content="Hexo 7.0.0-rc2"></head><body><div class="loading" style="opacity: 0"><div class="loadingBar left"></div><div class="loadingBar right"></div></div><main><header class="closed"><nav><div class="navBtn hide"><i class="navBtnIcon"><span class="navBtnIconBar"></span><span class="navBtnIconBar"></span><span class="navBtnIconBar"></span></i></div><div class="navItem" id="search-header"><span class="navItemTitle"><input autocomplete="off" autocorrect="off" autocapitalize="none" placeholder="Search" spellcheck="false" maxlength="50" type="text" id="search-input"></span></div><div class="navItem" id="search-holder"></div><div class="search-popup"><div id="search-result"></div></div><ol class="navContent"><li class="navItem"><a class="navBlock" href="/"><span class="navItemTitle">Home</span></a></li><li class="navItem" matchdata="categories,tags"><a class="navBlock" href="/archives/"><span class="navItemTitle">Archives</span></a></li><li class="navItem"><a class="navBlock" href="/categories/"><span class="navItemTitle">About</span></a></li></ol></nav></header><article><div id="post-bg"><div id="post-title"><h1>Druid配置参数详解</h1><div id="post-info"><span>First Post: <div class="control"><time datetime="2023-05-20T16:37:25.000Z" id="date"> 2023-05-21</time></div></span><br><span>Last Update: <div class="control"><time datetime="2023-09-18T07:55:46.381Z" id="updated"> 2023-09-18</time></div></span><br><span>Word Count: <div class="control">1.7k</div></span><br><span>Read Time: <div class="control">7 min</div></span></div></div><hr><div id="post-content"><h2 id="pom引入"><a href="#pom引入" class="headerlink" title="pom引入"></a><strong>pom引入</strong></h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">dependency</span>&gt;</span><br>          <span class="hljs-tag">&lt;<span class="hljs-name">groupId</span>&gt;</span>com.alibaba<span class="hljs-tag">&lt;/<span class="hljs-name">groupId</span>&gt;</span><br>          <span class="hljs-tag">&lt;<span class="hljs-name">artifactId</span>&gt;</span>druid<span class="hljs-tag">&lt;/<span class="hljs-name">artifactId</span>&gt;</span><br>          <span class="hljs-tag">&lt;<span class="hljs-name">version</span>&gt;</span>1.0.18<span class="hljs-tag">&lt;/<span class="hljs-name">version</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">dependency</span>&gt;</span><br></code></pre></td></tr></table></figure>
+ <span id="more"></span>
+<h2 id="初始化连接"><a href="#初始化连接" class="headerlink" title="初始化连接"></a><strong>初始化连接</strong></h2><p>在druid连接数据库的配置文件中,读写datasource的bean中 要有 <em>init-method&#x3D;”init”</em>. 配置,否则在启动连接池时不会执行初始化操作。</p>
+<p>示例:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">bean</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;dataSource&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;com.alibaba.druid.pool.DruidDataSource&quot;</span> <span class="hljs-attr">init-method</span>=<span class="hljs-string">&quot;init&quot;</span> <span class="hljs-attr">destroy-method</span>=<span class="hljs-string">&quot;close&quot;</span>&gt;</span><br>.......<br>  <span class="hljs-tag">&lt;/<span class="hljs-name">bean</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="参数配置及说明"><a href="#参数配置及说明" class="headerlink" title="参数配置及说明"></a><strong>参数配置及说明</strong></h2><p>通过 spring 配置文件application-context.xml中的dataSource配置说明各个参数的配置。</p>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>说明</th>
+<th>建议值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>url</td>
+<td>数据库的jdbc连接地址。一般为连接oracle&#x2F;mysql。示例如下：</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>mysql : jdbc:mysql:&#x2F;&#x2F;ip:port&#x2F;dbname?option1&amp;option2&amp;…</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>oracle : jdbc:oracle:thin:@ip:port:oracle_sid</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>username</td>
+<td>登录数据库的用户名</td>
+<td></td>
+</tr>
+<tr>
+<td>password</td>
+<td>登录数据库的用户密码</td>
+<td></td>
+</tr>
+<tr>
+<td>initialSize</td>
+<td>启动程序时，在连接池中初始化多少个连接</td>
+<td>10-50已足够</td>
+</tr>
+<tr>
+<td>maxActive</td>
+<td>连接池中最多支持多少个活动会话</td>
+<td></td>
+</tr>
+<tr>
+<td>maxWait</td>
+<td>程序向连接池中请求连接时,超过maxWait的值后，认为本次请求失败，即连接池</td>
+<td>100</td>
+</tr>
+<tr>
+<td></td>
+<td>没有可用连接，单位毫秒，设置-1时表示无限等待</td>
+<td></td>
+</tr>
+<tr>
+<td>minEvictableIdleTimeMillis</td>
+<td>池中某个连接的空闲时长达到 N 毫秒后, 连接池在下次检查空闲连接时，将</td>
+<td>见说明部分</td>
+</tr>
+<tr>
+<td></td>
+<td>回收该连接,要小于防火墙超时设置</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>net.netfilter.nf_conntrack_tcp_timeout_established的设置</td>
+<td></td>
+</tr>
+<tr>
+<td>timeBetweenEvictionRunsMillis</td>
+<td>检查空闲连接的频率，单位毫秒, 非正整数时表示不进行检查</td>
+<td></td>
+</tr>
+<tr>
+<td>keepAlive</td>
+<td>程序没有close连接且空闲时长超过 minEvictableIdleTimeMillis,则会执</td>
+<td>true</td>
+</tr>
+<tr>
+<td></td>
+<td>行validationQuery指定的SQL,以保证该程序连接不会池kill掉,其范围不超</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>过minIdle指定的连接个数。</td>
+<td></td>
+</tr>
+<tr>
+<td>minIdle</td>
+<td>回收空闲连接时，将保证至少有minIdle个连接.</td>
+<td>与initialSize相同</td>
+</tr>
+<tr>
+<td>removeAbandoned</td>
+<td>要求程序从池中get到连接后, N 秒后必须close,否则druid 会强制回收该</td>
+<td>false,当发现程序有未</td>
+</tr>
+<tr>
+<td></td>
+<td>连接,不管该连接中是活动还是空闲, 以防止进程不会进行close而霸占连接。</td>
+<td>正常close连接时设置为true</td>
+</tr>
+<tr>
+<td>removeAbandonedTimeout</td>
+<td>设置druid 强制回收连接的时限，当程序从池中get到连接开始算起，超过此</td>
+<td>应大于业务运行最长时间</td>
+</tr>
+<tr>
+<td></td>
+<td>值后，druid将强制回收该连接，单位秒。</td>
+<td></td>
+</tr>
+<tr>
+<td>logAbandoned</td>
+<td>当druid强制回收连接后，是否将stack trace 记录到日志中</td>
+<td>true</td>
+</tr>
+<tr>
+<td>testWhileIdle</td>
+<td>当程序请求连接，池在分配连接时，是否先检查该连接是否有效。(高效)</td>
+<td>true</td>
+</tr>
+<tr>
+<td>validationQuery</td>
+<td>检查池中的连接是否仍可用的 SQL 语句,drui会连接到数据库执行该SQL默认值每种数据库都不相同：Mysql:SELECT 1; SQLSERVER:SELECT 1; ORACLE:SELECT ‘x’ FROM DUAL; PostGresql:SELECT ‘x’;</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>正常返回，则表示连接可用，否则表示连接不可用</td>
+<td></td>
+</tr>
+<tr>
+<td>testOnBorrow</td>
+<td>程序 <strong>申请</strong> 连接时,进行连接有效性检查（低效，影响性能）</td>
+<td>false</td>
+</tr>
+<tr>
+<td>testOnReturn</td>
+<td>程序 <strong>返还</strong> 连接时,进行连接有效性检查（低效，影响性能）</td>
+<td>false</td>
+</tr>
+<tr>
+<td>poolPreparedStatements</td>
+<td>缓存通过以下两个方法发起的SQL:</td>
+<td>true</td>
+</tr>
+<tr>
+<td></td>
+<td>public PreparedStatement prepareStatement(String sql)</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>public PreparedStatement prepareStatement(String sql,</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>int resultSetType, int resultSetConcurrency)</td>
+<td></td>
+</tr>
+<tr>
+<td>maxPoolPrepareStatementPerConnectionSize</td>
+<td>每个连接最多缓存多少个SQL</td>
+<td>20</td>
+</tr>
+<tr>
+<td>filters</td>
+<td>这里配置的是插件,常用的插件有:</td>
+<td>stat,wall,slf4j</td>
+</tr>
+<tr>
+<td></td>
+<td>监控统计: filter:stat</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>日志监控: filter:log4j 或者 slf4j</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>防御SQL注入: filter:wall</td>
+<td></td>
+</tr>
+<tr>
+<td>connectProperties</td>
+<td>连接属性。比如设置一些连接池统计方面的配置。</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>druid.stat.mergeSql&#x3D;true;druid.stat.slowSqlMillis&#x3D;5000</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>比如设置一些数据库连接属性:</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a><strong>注意事项</strong></h2><h3 id="底层连接"><a href="#底层连接" class="headerlink" title="底层连接"></a><strong>底层连接</strong></h3><p><strong>另外还有一个参数 accessToUnderlyingConnectionAllowed. 该参数设置是否允许使用底层连接。 如果设置为true,可以使用下面的方式来获取底层连接:</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-type">Connection</span> <span class="hljs-variable">conn</span> <span class="hljs-operator">=</span> ds.getConnection();<br><br><span class="hljs-type">Connection</span> <span class="hljs-variable">dconn</span> <span class="hljs-operator">=</span> ((DelegatingConnection) conn).getInnermostDelegate();<br><br>...<br><br>conn.close();<br></code></pre></td></tr></table></figure>
+
+<p>默认false不开启, 因为代码逻辑不正确，可能会带来风险。建议需要直接访问驱动的特定功能时再使用,并且经过多次测试, 明确代码每一步可能带来的风险。</p>
+<hr>
+<h3 id="空闲检查问题"><a href="#空闲检查问题" class="headerlink" title="空闲检查问题"></a><strong>空闲检查问题</strong></h3><p><strong>在使用阿里的SLB时，建议将timeBetweenEvictionRunsMillis设置为2秒或者负值(关闭检查机制)。否则，连接进程会报:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">Could not open JDBC Connection for transaction; nested exception is com.mysql.jdbc.exceptions.jdbc4.CommunicaiotnsException: Communications link failure<br></code></pre></td></tr></table></figure>
+
+<h2 id="不同配置文件"><a href="#不同配置文件" class="headerlink" title="不同配置文件"></a><strong>不同配置文件</strong></h2><p><strong>其中 spring boot application.properties 中的配置最为完整，建议参考。</strong></p>
+<hr>
+<h3 id="jdbc中配置连接池"><a href="#jdbc中配置连接池" class="headerlink" title="jdbc中配置连接池"></a><strong>jdbc中配置连接池</strong></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs java">jdbc.properties：<br>jdbc.driverClassName=com.mysql.jdbc.Driver<br>jdbc.url=jdbc:mysql:<span class="hljs-comment">//172.49.15.55:3306/testdb?useUnicode=true&amp;amp;characterEncoding=utf-8</span><br>jdbc.username=test<br>jdbc.password=test<br>jdbc.filters=stat<br>jdbc.maxActive=<span class="hljs-number">300</span><br>jdbc.initialSize=<span class="hljs-number">2</span><br>jdbc.maxWait=<span class="hljs-number">60000</span><br>jdbc.minIdle=<span class="hljs-number">1</span><br>jdbc.timeBetweenEvictionRunsMillis=<span class="hljs-number">60000</span><br>jdbc.minEvictableIdleTimeMillis=<span class="hljs-number">300000</span><br>jdbc.validationQuery=SELECT <span class="hljs-string">&#x27;x&#x27;</span><br>jdbc.testWhileIdle=<span class="hljs-literal">true</span><br>jdbc.testOnBorrow=<span class="hljs-literal">false</span><br>jdbc.testOnReturn=<span class="hljs-literal">false</span><br>jdbc.poolPreparedStatements=<span class="hljs-literal">false</span><br>jdbc.maxPoolPreparedStatementPerConnectionSize=<span class="hljs-number">50</span><br></code></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="spring中配置druid"><a href="#spring中配置druid" class="headerlink" title="spring中配置druid"></a><strong>spring中配置druid</strong></h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-tag">&lt;<span class="hljs-name">bean</span> <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;dataSource&quot;</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;com.alibaba.druid.pool.DruidDataSource&quot;</span> <span class="hljs-attr">init-method</span>=<span class="hljs-string">&quot;init&quot;</span> <span class="hljs-attr">destroy-method</span>=<span class="hljs-string">&quot;close&quot;</span>&gt;</span><br>      <span class="hljs-comment">&lt;!-- ”连接“的基本属性  --&gt;</span><br>      <span class="hljs-tag">&lt;<span class="hljs-name">property</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;url&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;jdbc_url&quot;</span> /&gt;</span><br>      <span class="hljs-tag">&lt;<span class="hljs-name">property</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;username&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;$&#123;jdbc_user&#125;&quot;</span> /&gt;</span><br>      <span class="hljs-tag">&lt;<span class="hljs-name">property</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;password&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;$&#123;jdbc_password&#125;&quot;</span> /&gt;</span><br>      <span class="hljs-comment">&lt;!-- 连接池属性 --&gt;</span><br>      <span class="hljs-tag">&lt;<span class="hljs-name">property</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;initialSize&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;100&quot;</span> /&gt;</span><br>      <span class="hljs-tag">&lt;<span class="hljs-name">property</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;maxActive&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;1000&quot;</span> /&gt;</span><br>      <span class="hljs-tag">&lt;<span class="hljs-name">property</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;maxWait&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;60000&quot;</span> /&gt;</span><br>      <span class="hljs-tag">&lt;<span class="hljs-name">property</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;minEvictableIdleTimeMillis&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">300000</span> /&gt;</span><br>      <span class="hljs-tag">&lt;<span class="hljs-name">property</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;keepAlive&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">true</span> /&gt;</span><br>      <span class="hljs-tag">&lt;<span class="hljs-name">property</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;timeBetweenEvictionRunsMillis&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">-1</span> /&gt;</span><br>      <span class="hljs-tag">&lt;<span class="hljs-name">property</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;minIdle&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;20&quot;</span> /&gt;</span><br>      <span class="hljs-tag">&lt;<span class="hljs-name">property</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;removeAbandoned&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;true&quot;</span>/&gt;</span><br>      <span class="hljs-tag">&lt;<span class="hljs-name">property</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;removeAbandonedTimeout&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;180&quot;</span>/&gt;</span><br>      <span class="hljs-tag">&lt;<span class="hljs-name">property</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;logAbandoned&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;true&quot;</span> /&gt;</span><br>      <span class="hljs-tag">&lt;<span class="hljs-name">property</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;testWhileIdle&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;true&quot;</span> /&gt;</span><br>      <span class="hljs-tag">&lt;<span class="hljs-name">property</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;validationQuery&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;SELECT &#x27;x&#x27;&quot;</span> /&gt;</span><br>      <span class="hljs-tag">&lt;<span class="hljs-name">property</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;testOnBorrow&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;false&quot;</span> /&gt;</span><br>      <span class="hljs-tag">&lt;<span class="hljs-name">property</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;testOnReturn&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;false&quot;</span> /&gt;</span><br>      <span class="hljs-tag">&lt;<span class="hljs-name">property</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;poolPreparedStatements&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;true&quot;</span>/&gt;</span><br>      <span class="hljs-tag">&lt;<span class="hljs-name">property</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;maxPoolPreparedStatementPerConnectionSize&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;20&quot;</span>/&gt;</span><br>      <span class="hljs-tag">&lt;<span class="hljs-name">property</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;filters&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;stat,wall,slf4j&quot;</span>/&gt;</span><br>      <span class="hljs-tag">&lt;<span class="hljs-name">property</span> <span class="hljs-attr">name</span>=<span class="hljs-string">&quot;connectionProperties&quot;</span> <span class="hljs-attr">value</span>=<span class="hljs-string">&quot;druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000&quot;</span> /&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">bean</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="spring-boot-application-properties配置"><a href="#spring-boot-application-properties配置" class="headerlink" title="spring boot application.properties配置"></a><strong>spring boot application.properties配置</strong></h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs java">spring.datasource.type=com.alibaba.druid.pool.DruidDataSource<br>#驱动配置信息<br>spring.datasource.driver-class-name=com.mysql.jdbc.Driver<br>#基本连接信息<br>spring.datasource.username = root<br>spring.datasource.password = root<br>spring.datasource.url=jdbc:mysql:<span class="hljs-comment">//192.168.153.23:3306/mytest?useUnicode=true&amp;characterEncoding=utf-8</span><br><br>#连接池属性<br>spring.datasource.druid.initial-size=<span class="hljs-number">15</span><br>spring.datasource.druid.max-active=<span class="hljs-number">100</span><br>spring.datasource.druid.min-idle=<span class="hljs-number">15</span><br>spring.datasource.druid.max-wait=<span class="hljs-number">60000</span><br>spring.datasource.druid.time-between-eviction-runs-millis=<span class="hljs-number">60000</span><br>spring.datasource.druid.min-evictable-idle-time-millis=<span class="hljs-number">300000</span><br>spring.datasource.druid.test-on-borrow=<span class="hljs-literal">false</span><br>spring.datasource.druid.test-on-<span class="hljs-keyword">return</span>=<span class="hljs-literal">false</span><br>spring.datasource.druid.test-<span class="hljs-keyword">while</span>-idle=<span class="hljs-literal">true</span><br>spring.datasource.druid.validation-query=SELECT <span class="hljs-number">1</span><br>spring.datasource.druid.validation-query-timeout=<span class="hljs-number">1000</span><br>spring.datasource.druid.keep-alive=<span class="hljs-literal">true</span><br>spring.datasource.druid.remove-abandoned=<span class="hljs-literal">true</span><br>spring.datasource.druid.remove-abandoned-timeout=<span class="hljs-number">180</span><br>spring.datasource.druid.log-abandoned=<span class="hljs-literal">true</span><br>spring.datasource.druid.pool-prepared-statements=<span class="hljs-literal">true</span><br>spring.datasource.druid.max-pool-prepared-statement-per-connection-size=<span class="hljs-number">20</span><br>spring.datasource.druid.filters=stat,wall,slf4j<br>spring.datasource.druid.use-global-data-source-stat=<span class="hljs-literal">true</span><br>spring.datasource.druid.preparedStatement=<span class="hljs-literal">true</span><br>spring.datasource.druid.maxOpenPreparedStatements=<span class="hljs-number">100</span><br>spring.datasource.druid.connect-properties.mergeSql=<span class="hljs-literal">true</span><br>spring.datasource.druid.connect-properties.slowSqlMillis=<span class="hljs-number">5000</span><br></code></pre></td></tr></table></figure>
+
+<div id="paginator"></div></div><div id="post-footer"><div id="pages"><div class="footer-link" style="width: 50%;text-align:right;border-right:1px #fe2 solid"><a href="/2023/05/21/VirtualBox-%E5%AE%89%E8%A3%85-Arch-Linux-%E4%BB%8E%E6%96%B0%E5%BB%BA%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%88%B0%E5%9B%BE%E5%BD%A2%E7%95%8C%E9%9D%A2/">← Next VirtualBox 安装 Arch Linux: 从新建虚拟机到图形界面</a></div><div class="footer-link" style="width: 50%;right:1px;border-left:1px #fe2 solid"><a href="/2023/05/21/MySQL-%E5%AE%89%E8%A3%85/">MySQL 安装 Prev →</a></div></div></div></div><div class="bottom-btn"><div><a id="to-top" onClick="scrolls.scrolltop();" title="To Top" style="opacity: 0; display: none;">∧</a><a id="to-index" href="#toc-div" title="To Catalog">≡</a><a id="color-mode" onClick="colorMode.change()" title="Change Theme"></a></div></div></article><aside><div id="about"><a href="/" id="logo"><img src="https://ak.hypergryph.com/assets/index/images/ak/pc/faction/1.png" alt="Logo"></a><h1 id="Dr"><a href="/">John Doe</a></h1><div id="description"><p></p></div></div><div id="aside-block"><div id="toc-div"><h1>Catalog</h1><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#pom%E5%BC%95%E5%85%A5"><span class="toc-number">1.</span> <span class="toc-text">pom引入</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96%E8%BF%9E%E6%8E%A5"><span class="toc-number">2.</span> <span class="toc-text">初始化连接</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E5%8F%8A%E8%AF%B4%E6%98%8E"><span class="toc-number">3.</span> <span class="toc-text">参数配置及说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-number">4.</span> <span class="toc-text">注意事项</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%95%E5%B1%82%E8%BF%9E%E6%8E%A5"><span class="toc-number">4.1.</span> <span class="toc-text">底层连接</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A9%BA%E9%97%B2%E6%A3%80%E6%9F%A5%E9%97%AE%E9%A2%98"><span class="toc-number">4.2.</span> <span class="toc-text">空闲检查问题</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8D%E5%90%8C%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-number">5.</span> <span class="toc-text">不同配置文件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#jdbc%E4%B8%AD%E9%85%8D%E7%BD%AE%E8%BF%9E%E6%8E%A5%E6%B1%A0"><span class="toc-number">5.1.</span> <span class="toc-text">jdbc中配置连接池</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#spring%E4%B8%AD%E9%85%8D%E7%BD%AEdruid"><span class="toc-number">5.2.</span> <span class="toc-text">spring中配置druid</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#spring-boot-application-properties%E9%85%8D%E7%BD%AE"><span class="toc-number">5.3.</span> <span class="toc-text">spring boot application.properties配置</span></a></li></ol></li></ol></div></div><footer><nobr>Published with <a target="_blank" rel="noopener" href="http://hexo.io">Hexo</a></nobr><wbr><nobr> Theme <a target="_blank" rel="noopener" href="https://github.com/Yue-plus/hexo-theme-arknights">Arknights</a></nobr><wbr><nobr>by <a target="_blank" rel="noopener" href="https://github.com/Yue-plus">Yue_plus</a></nobr></footer></aside></main><canvas id="canvas-dust"></canvas><script src="/js/search.js"></script><script src="/js/arknights.js"></script><script src="//unpkg.com/lightgallery@2.7.1/lightgallery.min.js"></script><script src="//unpkg.com/lightgallery@2.7.1/plugins/zoom/lg-zoom.min.js"></script><script src="//unpkg.com/lightgallery@2.7.1/plugins/thumbnail/lg-thumbnail.min.js"></script><script src="/js/pjax.js"></script><script class="pjax-js">reset= () => {code.findCode();
+document.querySelector('.lg-container')?.remove()
+lightGallery(document.getElementById('post-bg'), {
+  plugins: [lgZoom,lgThumbnail],
+  selector: '.item-img'})}</script><script>window.addEventListener("load",() => {pjax = new Pjax({
+ cacheBust: false,
+ selectors: ['title','article','#aside-block','.pjax-js'],
+ switches: {'article': Pjax.switches.sideBySide},
+ switchesOptions: {
+   'article': {
+     classNames: {
+       remove: "pjax-out",
+       add: "pjax-in"
+     }
+   }
+ }
+});
+document.addEventListener("pjax:complete", reset);reset()})</script></body></html>

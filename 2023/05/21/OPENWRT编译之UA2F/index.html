@@ -1,0 +1,130 @@
+<!DOCTYPE html><html lang="en" theme-mode="dark"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>OPENWRT编译之UA2F | xue的个人博客</title><link rel="icon" type="image/x-icon" href="/favicon.ico"><script>var config = {"root":"/","search":{"preload":false,"activeHolder":"Enter here","blurHolder":"Search","noResult":"Data \"$0\" not found"},"code":{"codeInfo":"$0 - $1 lines","copy":"copy","copyFinish":"copied","expand":"expand"}}</script><script src="//unpkg.com/mermaid@9.2.2/dist/mermaid.min.js"></script><link type="text/css" rel="stylesheet" href="//unpkg.com/lightgallery@2.7.1/css/lightgallery.css"><link type="text/css" rel="stylesheet" href="//unpkg.com/lightgallery@2.7.1/css/lg-zoom.css"><link type="text/css" rel="stylesheet" href="//unpkg.com/lightgallery@2.7.1/css/lg-thumbnail.css"><link type="text/css" rel="stylesheet" href="/lib/fontawesome/brands.min.css"><link type="text/css" rel="stylesheet" href="/lib/fontawesome/fontawesome.min.css"><link rel="stylesheet" href="/css/arknights.css"><script>if (window.localStorage.getItem('theme-mode') === 'light') document.documentElement.setAttribute('theme-mode', 'light')
+if (window.localStorage.getItem('theme-mode') === 'dark') document.documentElement.setAttribute('theme-mode', 'dark')</script><style>@font-face {
+ font-family: BenderLight;
+ src: local('Bender'), url("/font/BenderLight.ttf");
+}
+@font-face {
+ font-family: 'JetBrains Mono';
+ src: local('JetBrains Mono'), url('/font/JetBrainsMono-Regular.woff2') format('woff2');
+}
+@font-face {
+ font-family: 'Font Awesome 6 Brands';
+ src: local('Font Awesome 6 Brands'), url('/lib/fontawesome/fa-brands.woff2') format('woff2');
+}
+@font-face {
+ font-family: 'Font Awesome 6 Free';
+ src: local('Font Awesome 6 Free'), url('/lib/fontawesome/fa-regular.woff2') format('woff2');
+}</style><style>:root {
+  --dark-background: url('https://ak.hypergryph.com/assets/index/images/ak/pc/bk.jpg');
+  --light-background: url('/img/bk.jpg');
+}</style><meta name="generator" content="Hexo 7.0.0-rc2"></head><body><div class="loading" style="opacity: 0"><div class="loadingBar left"></div><div class="loadingBar right"></div></div><main><header class="closed"><nav><div class="navBtn hide"><i class="navBtnIcon"><span class="navBtnIconBar"></span><span class="navBtnIconBar"></span><span class="navBtnIconBar"></span></i></div><div class="navItem" id="search-header"><span class="navItemTitle"><input autocomplete="off" autocorrect="off" autocapitalize="none" placeholder="Search" spellcheck="false" maxlength="50" type="text" id="search-input"></span></div><div class="navItem" id="search-holder"></div><div class="search-popup"><div id="search-result"></div></div><ol class="navContent"><li class="navItem"><a class="navBlock" href="/"><span class="navItemTitle">Home</span></a></li><li class="navItem" matchdata="categories,tags"><a class="navBlock" href="/archives/"><span class="navItemTitle">Archives</span></a></li><li class="navItem"><a class="navBlock" href="/categories/"><span class="navItemTitle">About</span></a></li></ol></nav></header><article><div id="post-bg"><div id="post-title"><h1>OPENWRT编译之UA2F</h1><div id="post-info"><span>First Post: <div class="control"><time datetime="2023-05-20T17:10:18.000Z" id="date"> 2023-05-21</time></div></span><br><span>Last Update: <div class="control"><time datetime="2023-09-18T07:55:46.385Z" id="updated"> 2023-09-18</time></div></span><br><span>Word Count: <div class="control">1.8k</div></span><br><span>Read Time: <div class="control">8 min</div></span></div></div><hr><div id="post-content"><p>在阅读这一篇之前，请确保你已经掌握了基本的编译方法和要领，也确保自己已经处于全局魔法的环境下。如果你还不懂如何编译，请阅读这篇<a target="_blank" rel="noopener" href="https://github.com/tonytt0624/GDUF-Web/issues/2">文章</a>。</p>
+<p><strong>温馨提示：</strong></p>
+<p><em>Before continuing to read this article, I hope that you have made sure that the automatic translation feature in your own browser (chrome explorer) has been turned off, as this feature can lead to some misleading and biased tutorial content, thank you.</em></p>
+<span id="more"></span>
+<p><strong>开始编译</strong></p>
+<p>在编译之前，请先更新确保自己的固件处于最新的状态<br>打开终端，输入命令</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs plaintext"># 系统更新<br>sudo apt-get update<br>sudo apt-get upgrade<br></code></pre></td></tr></table></figure>
+
+<p>运行完成后，输入命令</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs plaintext"># 安装依赖关系<br>sudo apt-get -y install build-essential asciidoc binutils bzip2 gawk gettext git libncurses5-dev libz-dev patch python3 python2.7 unzip zlib1g-dev lib32gcc1 libc6-dev-i386 subversion flex uglifyjs git-core gcc-multilib p7zip p7zip-full msmtp libssl-dev texinfo libglib2.0-dev xmlto qemu-utils upx libelf-dev autoconf automake libtool autopoint device-tree-compiler g++-multilib antlr3 gperf wget curl swig rsync<br></code></pre></td></tr></table></figure>
+
+<p>22.04</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">sudo apt-get -y install build-essential asciidoc binutils bzip2 gawk gettext git libncurses5-dev zlib1g-dev patch python3 python2.7 unzip zlib1g-dev lib32gcc-s1 libc6-dev-i386 subversion flex uglifyjs git gcc-multilib p7zip p7zip-full msmtp libssl-dev texinfo libglib2.0-dev xmlto qemu-utils upx-ucl libelf-dev autoconf automake libtool autopoint device-tree-compiler g++-multilib antlr3 gperf wget curl swig rsync<br></code></pre></td></tr></table></figure>
+
+<p>然后进行下一步，输入命令</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs plaintext"># 下载源码<br>git clone https://github.com/coolsnowwolf/lede.git<br></code></pre></td></tr></table></figure>
+
+<p>接下来进行更新软件源，输入命令</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">cd lede<br><br># 更新feeds软件源<br>./scripts/feeds update -a<br><br># 安装feeds软件包<br>./scripts/feeds install -a<br></code></pre></td></tr></table></figure>
+
+<p><strong>开始编译UA2F</strong></p>
+<p>我们需要将<code>lede/package/libs/libnetfilter-queue </code>改为openwrt官方版本，网址为： <code>https://github.com/openwrt/packages/tree/master/libs/libnetfilter-queue</code></p>
+<p>在这一步中，我收到过很多人失败的情况，他们都是用命令进行更换的，所以在这里我个人推荐自己手动更换会最为保险。</p>
+<p>1.直接根据目录的方向将libnetfilter-queue文件夹删除。<br>2.去上面的网址通过<a target="_blank" rel="noopener" href="https://www.6r9.net/1746.html">这里</a>下载下来，通过winscp，百度云，邮箱等方式放回去原目录替换即可。<br>（百度上有很多github下载的网站，随便一搜就可以了。）</p>
+<p>也可以直接尝试输入<br><code>svn checkout https://github.com/openwrt/packages/trunk/libs/libnetfilter-queue package/libs/libnetfilter-queue</code></p>
+<p>完成上一步以后就可以开始进入终端输入命令编译了，输入命令</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">cd lede/package<br>git clone https://github.com/Zxilly/UA2F.git package/UA2F<br></code></pre></td></tr></table></figure>
+
+<p>然后返回lede目录，输入命令 <code>make menuconfig</code>,进入编译菜单</p>
+<p>我们进去第一件事就是选好我们自己的路由器型号，然后我们需要选一些依赖包来保证UA2F的正常运行。<br>我们需要选<code>libmnl</code>, <code>libnetfilter-queue</code>, <code>iptables-mod-nfqueue</code>这三个依赖包。<br>（我们可以按键盘里的&#x2F;键来搜索关键词找到这些依赖包的位置）</p>
+<p>最后我们在Network - Routing and Redirection里找到<code>ua2f</code>，并按Y选中它。</p>
+<p>随后，对于GuangDong University of Finance的伙伴来说，就已经足够了</p>
+<p>按<code>esc</code>退出菜单</p>
+<p>输入命令<br><code>make download V=s</code><br>（这个命令我建议运行2-3次确保无问题）</p>
+<p>随后输入命令<br><code>make -j12 kernel_menuconfig</code>（j几自己判断）</p>
+<p>第一次编译会有点长，请耐心等待，过一会会弹出一个框框需要我们选择。</p>
+<p>弹出来后，我们在菜单寻找</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">Networking support -&gt; <br>Networking options -&gt;<br>Network packet filtering framework (Netfilter) -&gt;<br>Core Netfilter Configuration -&gt;<br>NFQUEUE and NFLOG integration with Connection Tracking<br></code></pre></td></tr></table></figure>
+
+<p>（按顺序选择，要选中的要按Y的就按，不需要的就不用）<br>注意：这里要在Core Netfilter Configuration把下面这些选了之后才会出现那个<code>tracking</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">-*- Netfilter NFNETLINK interface                                                                                                                <br>&lt;*&gt; Netfilter LOG over NFNETLINK interfacer ip_tables)                                                                                           <br>&lt;*&gt; Netfilter connection tracking support <br>&lt;*&gt; Connection tracking netlink interface<br></code></pre></td></tr></table></figure>
+
+<p>当我们都确保选上以后，我们就按保存退出。</p>
+<p>随后输入命令，<br><code>make -j12 V=s</code></p>
+<p>然后就可以慢慢等咯。。。。。。</p>
+<p>完成这一步以后，可以说编译已经完成了，我们需要将刷好的固件刷进我们的路由器中。</p>
+<p>并用ssh的连接方式输入命令<code>ua2f</code>，查看自己有无装好ua2f。<br>ssh的方法可以用<code>cmd</code>的<code>ssh root@192.168.1.1</code>（ip自己看着办），最好用<code>Xshell</code>来输入。</p>
+<p>如果输入命令后，显示的是<code>not support</code>，则说明没有装成功，需要重新编译。</p>
+<p>如果我们确定自己的ua2f已经装好了，就可以进入路由器后台<br>找到系统-启动项，往下滑到最低找到本地启动脚本<br>输入命令<br><code>ipset create nohttp hash:ip,port hashsize 16384 timeout 300</code><br>注意：请确保将此命令输入在<code>exit 0</code>前面。</p>
+<p>随后进入网络-防火墙-自定义规则<br>输入以下命令</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">iptables -t mangle -N ua2f<br>#由于本校局域网是A类网，所以我将这一条注释掉了，具体要不要注释结合你所在得校园网<br>#iptables -t mangle -A ua2f -d 10.0.0.0/8 -j RETURN<br>iptables -t mangle -A ua2f -d 127.0.0.0/8 -j RETURN<br>iptables -t mangle -A ua2f -d 192.168.0.0/16 -j RETURN # 不处理流向保留地址的包<br>iptables -t mangle -A ua2f -p tcp --dport 443 -j RETURN<br>iptables -t mangle -A ua2f -p tcp --dport 22 -j RETURN # 不处理 SSH 和 https<br>iptables -t mangle -A ua2f -p tcp --dport 80 -j CONNMARK --set-mark 24<br>iptables -t mangle -A ua2f -m set --set nohttp dst,dst -j RETURN<br>iptables -t mangle -A ua2f -m connmark --mark 23 -j RETURN # 不处理标记为非 http 的流 (实验性)<br>iptables -t mangle -A ua2f -j NFQUEUE --queue-num 10010<br> <br>iptables -t mangle -A FORWARD -p tcp -m conntrack --ctdir ORIGINAL -j ua2f<br>iptables -t mangle -A FORWARD -p tcp -m conntrack --ctdir REPLY<br><br></code></pre></td></tr></table></figure>
+
+<p>注意：由于GuangDong University of Finance 的校园局域网是A类网，所以需要注释<code>iptables -t mangle -A ua2f -d 10.0.0.0/8 -j RETURN</code><br>接下来，我们只需要用ssh输入命令<code>service ua2f start</code>,即可成功启动ua2f。</p>
+<p>至此，ua2f的编译工作已经基本结束。</p>
+<p><strong>查看效果</strong></p>
+<p>打开<a target="_blank" rel="noopener" href="http://ua.zhezhiyu.xyz/">http://ua.zhezhiyu.xyz/</a>，来验证自己的ua。</p>
+<p><strong>后台输出</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">Sat Mar 13 15:23:09 2021 syslog.info UA2F[1516]: UA2F has handled 512 http, 0 noua http, 15654 tcp, 134 mark and 39 nohttp mark in 19 hours, 36 minutes and 19 seconds<br>Sat Mar 13 16:05:19 2021 syslog.info UA2F[1516]: UA2F has handled 1024 http, 29 noua http, 98264 tcp, 592 mark and 457 nohttp mark in 20 hours, 18 minutes and 29 seconds<br>Sat Mar 13 17:28:49 2021 syslog.info UA2F[1516]: UA2F has handled 2048 http, 1505 noua http, 173784 tcp, 1524 mark and 1265 nohttp mark in 21 hours, 41 minutes and 59 seconds<br>Sat Mar 13 18:49:10 2021 syslog.info UA2F[1516]: UA2F has handled 4096 http, 2782 noua http, 444805 tcp, 3162 mark and 1723 nohttp mark in 23 hours, 2 minutes and 20 seconds<br><br></code></pre></td></tr></table></figure>
+
+
+
+<h4 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h4><p>补充安装</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">sudo apt-get install manpages-pl manpages-fr-extra<br><br></code></pre></td></tr></table></figure>
+
+<p>如果是64位系统的话还需要安装32位兼容包</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">sudo apt-get install libc6:i386 libgcc1:i386 libstdc++5:i386 libstdc++6:i386<br><br></code></pre></td></tr></table></figure>
+
+<p>安装<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=ARM&spm=1001.2101.3001.7020">ARM</a>-Linux-GCC工具链</p>
+<p>只需要一句命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">sudo apt-get install gcc-arm-linux-gnueabi<br><br></code></pre></td></tr></table></figure>
+
+<p>将<code>toolchain</code>加到<code>PATH</code>里面</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">export</span> STAGING_DIR=/home/xue/lede/staging_dir/toolchain-mips_24kc_gcc-8.4.0_musl/bin/<br><span class="hljs-built_in">export</span> PATH=<span class="hljs-variable">$STAGING_DIR</span>/:<span class="hljs-variable">$PATH</span><br><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><p>svn更新了源码</p>
+</li>
+<li><p>源码动了工具链，老的代码导致连接失败</p>
+</li>
+<li><h3 id="清理工具链编译"><a href="#清理工具链编译" class="headerlink" title="清理工具链编译"></a>清理工具链编译</h3><ul>
+<li>根据package的规律，这里用清理来看看运气如何</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">make toolchain/clean V=99 -j<br><br></code></pre></td></tr></table></figure>
+</li>
+<li><p>大约几秒后清理完毕</p>
+</li>
+<li><p>再次重新编译，这里用的都是全速的</p>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">make toolchain/compile V=99 -j<br><br></code></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">make clean &amp;&amp; make dirclean<br><br></code></pre></td></tr></table></figure>
+
+<div id="paginator"></div></div><div id="post-footer"><div id="pages"><div class="footer-link" style="width: 50%;text-align:right;border-right:1px #fe2 solid"><a href="/2023/05/21/%E5%88%A9%E7%94%A8LEDE%E7%BC%96%E8%AF%91%E8%87%AA%E5%B7%B1%E7%9A%84OPENWRT%E5%9B%BA%E4%BB%B6/">← Next 利用LEDE编译自己的OPENWRT固件</a></div><div class="footer-link" style="width: 50%;right:1px;border-left:1px #fe2 solid"><a href="/2023/05/21/openwrt%E7%BC%96%E8%AF%91%E6%95%99%E7%A8%8B/">openwrt编译教程 Prev →</a></div></div></div></div><div class="bottom-btn"><div><a id="to-top" onClick="scrolls.scrolltop();" title="To Top" style="opacity: 0; display: none;">∧</a><a id="to-index" href="#toc-div" title="To Catalog">≡</a><a id="color-mode" onClick="colorMode.change()" title="Change Theme"></a></div></div></article><aside><div id="about"><a href="/" id="logo"><img src="https://ak.hypergryph.com/assets/index/images/ak/pc/faction/1.png" alt="Logo"></a><h1 id="Dr"><a href="/">John Doe</a></h1><div id="description"><p></p></div></div><div id="aside-block"><div id="toc-div"><h1>Catalog</h1><ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-number">1.</span> <span class="toc-text">注意事项</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B8%85%E7%90%86%E5%B7%A5%E5%85%B7%E9%93%BE%E7%BC%96%E8%AF%91"><span class="toc-number"></span> <span class="toc-text">清理工具链编译</span></a></div></div><footer><nobr>Published with <a target="_blank" rel="noopener" href="http://hexo.io">Hexo</a></nobr><wbr><nobr> Theme <a target="_blank" rel="noopener" href="https://github.com/Yue-plus/hexo-theme-arknights">Arknights</a></nobr><wbr><nobr>by <a target="_blank" rel="noopener" href="https://github.com/Yue-plus">Yue_plus</a></nobr></footer></aside></main><canvas id="canvas-dust"></canvas><script src="/js/search.js"></script><script src="/js/arknights.js"></script><script src="//unpkg.com/lightgallery@2.7.1/lightgallery.min.js"></script><script src="//unpkg.com/lightgallery@2.7.1/plugins/zoom/lg-zoom.min.js"></script><script src="//unpkg.com/lightgallery@2.7.1/plugins/thumbnail/lg-thumbnail.min.js"></script><script src="/js/pjax.js"></script><script class="pjax-js">reset= () => {code.findCode();
+document.querySelector('.lg-container')?.remove()
+lightGallery(document.getElementById('post-bg'), {
+  plugins: [lgZoom,lgThumbnail],
+  selector: '.item-img'})}</script><script>window.addEventListener("load",() => {pjax = new Pjax({
+ cacheBust: false,
+ selectors: ['title','article','#aside-block','.pjax-js'],
+ switches: {'article': Pjax.switches.sideBySide},
+ switchesOptions: {
+   'article': {
+     classNames: {
+       remove: "pjax-out",
+       add: "pjax-in"
+     }
+   }
+ }
+});
+document.addEventListener("pjax:complete", reset);reset()})</script></body></html>

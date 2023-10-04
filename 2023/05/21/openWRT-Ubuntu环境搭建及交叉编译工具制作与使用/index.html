@@ -1,0 +1,138 @@
+<!DOCTYPE html><html lang="en" theme-mode="dark"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>openWRT Ubuntu环境搭建及交叉编译工具制作与使用 | xue的个人博客</title><link rel="icon" type="image/x-icon" href="/favicon.ico"><script>var config = {"root":"/","search":{"preload":false,"activeHolder":"Enter here","blurHolder":"Search","noResult":"Data \"$0\" not found"},"code":{"codeInfo":"$0 - $1 lines","copy":"copy","copyFinish":"copied","expand":"expand"}}</script><script src="//unpkg.com/mermaid@9.2.2/dist/mermaid.min.js"></script><link type="text/css" rel="stylesheet" href="//unpkg.com/lightgallery@2.7.1/css/lightgallery.css"><link type="text/css" rel="stylesheet" href="//unpkg.com/lightgallery@2.7.1/css/lg-zoom.css"><link type="text/css" rel="stylesheet" href="//unpkg.com/lightgallery@2.7.1/css/lg-thumbnail.css"><link type="text/css" rel="stylesheet" href="/lib/fontawesome/brands.min.css"><link type="text/css" rel="stylesheet" href="/lib/fontawesome/fontawesome.min.css"><link rel="stylesheet" href="/css/arknights.css"><script>if (window.localStorage.getItem('theme-mode') === 'light') document.documentElement.setAttribute('theme-mode', 'light')
+if (window.localStorage.getItem('theme-mode') === 'dark') document.documentElement.setAttribute('theme-mode', 'dark')</script><style>@font-face {
+ font-family: BenderLight;
+ src: local('Bender'), url("/font/BenderLight.ttf");
+}
+@font-face {
+ font-family: 'JetBrains Mono';
+ src: local('JetBrains Mono'), url('/font/JetBrainsMono-Regular.woff2') format('woff2');
+}
+@font-face {
+ font-family: 'Font Awesome 6 Brands';
+ src: local('Font Awesome 6 Brands'), url('/lib/fontawesome/fa-brands.woff2') format('woff2');
+}
+@font-face {
+ font-family: 'Font Awesome 6 Free';
+ src: local('Font Awesome 6 Free'), url('/lib/fontawesome/fa-regular.woff2') format('woff2');
+}</style><style>:root {
+  --dark-background: url('https://ak.hypergryph.com/assets/index/images/ak/pc/bk.jpg');
+  --light-background: url('/img/bk.jpg');
+}</style><meta name="generator" content="Hexo 7.0.0-rc2"></head><body><div class="loading" style="opacity: 0"><div class="loadingBar left"></div><div class="loadingBar right"></div></div><main><header class="closed"><nav><div class="navBtn hide"><i class="navBtnIcon"><span class="navBtnIconBar"></span><span class="navBtnIconBar"></span><span class="navBtnIconBar"></span></i></div><div class="navItem" id="search-header"><span class="navItemTitle"><input autocomplete="off" autocorrect="off" autocapitalize="none" placeholder="Search" spellcheck="false" maxlength="50" type="text" id="search-input"></span></div><div class="navItem" id="search-holder"></div><div class="search-popup"><div id="search-result"></div></div><ol class="navContent"><li class="navItem"><a class="navBlock" href="/"><span class="navItemTitle">Home</span></a></li><li class="navItem" matchdata="categories,tags"><a class="navBlock" href="/archives/"><span class="navItemTitle">Archives</span></a></li><li class="navItem"><a class="navBlock" href="/categories/"><span class="navItemTitle">About</span></a></li></ol></nav></header><article><div id="post-bg"><div id="post-title"><h1>openWRT Ubuntu环境搭建及交叉编译工具制作与使用</h1><div id="post-info"><span>First Post: <div class="control"><time datetime="2023-05-20T16:35:05.000Z" id="date"> 2023-05-21</time></div></span><br><span>Last Update: <div class="control"><time datetime="2023-08-11T15:46:12.003Z" id="updated"> 2023-08-11</time></div></span><br><span>Word Count: <div class="control">1k</div></span><br><span>Read Time: <div class="control">4 min</div></span></div></div><hr><div id="post-content"><p>Openwrt本身不支持直接编译C语言的，不支持GCC，因此，我们在Ubuntu下写好的代码，通过gcc编译后的可执行文件是不能直接在openWRT上运行的。</p>
+<p> 因此，我们需要制作基于openWRT的交叉编译工具 toolchain。</p>
+ <span id="more"></span>
+
+
+<h2 id="搭建开发环境"><a href="#搭建开发环境" class="headerlink" title="搭建开发环境"></a>搭建开发环境</h2><h3 id="1-1-openWRT下载"><a href="#1-1-openWRT下载" class="headerlink" title="1.1 openWRT下载"></a>1.1 openWRT下载</h3><p> 下载Chaos Calmer (15.05)正式发行版</p>
+<p> git clone -b chaos_calmer <a target="_blank" rel="noopener" href="https://github.com/openwrt/openwrt">https://github.com/openwrt/openwrt</a></p>
+<h3 id="1-2-openWRT依赖安装"><a href="#1-2-openWRT依赖安装" class="headerlink" title="1.2 openWRT依赖安装"></a>1.2 openWRT依赖安装</h3><p> 在编译openWRT之前，需要安装依赖，否则会自动停止进入make menuconfig。</p>
+<p> 一次性安装所需依赖组件，输入：</p>
+<p> sudo apt-get install gcc g++ binutils patch bzip2 flex bison make autoconf gettext texinfo unzip sharutils subversion libncurses5-dev ncurses-term zlib1g-dev subversion git-core gawk asciidoc libz-dev zlib1g-dev libssl-dev openssl</p>
+<p> 分步安装如下：</p>
+<p> sudo apt-get install g++</p>
+<p> sudo apt-get install libncurses5-dev</p>
+<p> sudo apt-get install zlib1g-dev</p>
+<p> sudo apt-get install bison</p>
+<p> sudo apt-get install flex</p>
+<p> sudo apt-get install unzip</p>
+<p> sudo apt-get install autoconf</p>
+<p> sudo apt-get install gawk</p>
+<p> sudo apt-get install make</p>
+<p> sudo apt-get install gettext</p>
+<p> sudo apt-get install gcc</p>
+<p> sudo apt-get install binutils</p>
+<p> sudo apt-get install patch</p>
+<p> sudo apt-get install bzip2</p>
+<p> sudo apt-get install libz-dev</p>
+<p> sudo apt-get install asciidoc</p>
+<p> sudo apt-get install subversion</p>
+<p> sudo apt-get install sphinxsearch</p>
+<p> sudo apt-get install libtool</p>
+<p> sudo apt-get install sphinx-common</p>
+<p> sudo apt-get install openssl (新加的依赖库)</p>
+<p> 安装完成后需要重启终端</p>
+<p> Feeds是OpenWRT环境所需要的软件包套件.比较重要的feeds有：</p>
+<p> pacakges’：一些额外的基础路由器特性软件</p>
+<p> ‘LuCI’：OpenWRT默认的GUI</p>
+<p> ‘Xwrt’：另一种可选的GUI界面</p>
+<p> .&#x2F;scripts&#x2F;feeds update -a</p>
+<p> .&#x2F;scripts&#x2F;feeds install -a</p>
+<h3 id="1-3-openWRT-toolchain编译"><a href="#1-3-openWRT-toolchain编译" class="headerlink" title="1.3 openWRT toolchain编译"></a>1.3 openWRT toolchain编译</h3><p> 1.3.1 配置 menuconfig</p>
+<p> cd openwrt</p>
+<p> make menuconfig</p>
+<p> 进入下图所示的menuconfig配置界面，进行如下配置：</p>
+<p>  1、Target System</p>
+<p>  我手上的路由器CPU芯片是MT7620A，所以配置为 RT288x</p>
+<p>  2、Subtarget</p>
+<p>  配置为MT7620</p>
+<p>  3、Target Profile</p>
+<p>  配置为MT7620a EVB</p>
+<p>  4、Package the OpenWrt-based Toolchain</p>
+<p>  因为我们要制作toolchain交叉编译工具，所以这里通过click 空格键来切换到<br> “*”为选中状态</p>
+<p class='item-img' data-src='https://img-blog.csdn.net/20171009141315797?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMjM0OTY3OQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center'><img src="https://img-blog.csdn.net/20171009141315797?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMjM0OTY3OQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="img"></p>
+<h4 id="1-3-2-编译-Toolchain"><a href="#1-3-2-编译-Toolchain" class="headerlink" title="1.3.2 编译 Toolchain"></a>1.3.2 编译 Toolchain</h4><p> 配置完成后，保存并退出，然后输入命令编译：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">[注意]本次编译过程中需要从国外站点下载所需的依赖文件，因此，编译之前必须挂载VPN来允许访问境外网站，且保证网络稳定，整个编译过程大概为2-4个小时。<br><br>make V=s<br></code></pre></td></tr></table></figure>
+
+<p> 一切无错的情况下,会在<br> openwrt源码目录&#x2F;bin&#x2F;ramips&#x2F;<br> 目录下找到编译好的toolchain<br> OpenWrt-Toolchain-ramips-mt7620_gcc-4.8-linaro_uClibc-0.9.33.2.Linux-x86_64.tar.bz2</p>
+<p> 编译交叉编译工具链，有X86和X64之分，根据系统有关系，因此使用现有的toolchain的时候，注意区分系统。</p>
+<p> 编译成功后如下图所示：</p>
+<p class='item-img' data-src='https://img-blog.csdn.net/20171009141355578?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMjM0OTY3OQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center'><img src="https://img-blog.csdn.net/20171009141355578?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMjM0OTY3OQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="img"></p>
+<h4 id="1-3-3-安装-Toolchain"><a href="#1-3-3-安装-Toolchain" class="headerlink" title="1.3.3 安装 Toolchain"></a>1.3.3 安装 Toolchain</h4><p>  openWRT的交叉编译工具链需要安装到当前系统中，我使用的是Ubuntu 64，然后配置环境变量，才能使用。步骤如下：</p>
+<h5 id="1、解压toolchain"><a href="#1、解压toolchain" class="headerlink" title="1、解压toolchain"></a>1、解压toolchain</h5><p>  将交叉编译工具链解压到Ubuntu的“、opt”目录下，载openWRT的更目录下运行：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">sudo tar jxvf ./bin/ramips/OpenWrt-Toolchain-ramips-mt7620_gcc-4.8-linaro_uClibc-0.9.33.2.Linux-x86_64.tar.bz2 -C /opt/<br></code></pre></td></tr></table></figure>
+
+<h5 id="2、设置环境变量"><a href="#2、设置环境变量" class="headerlink" title="2、设置环境变量"></a>2、设置环境变量</h5><p>  执行 sudo gedit &#x2F;etc&#x2F;bash.bashrc打开文件，在文件最后添加如下配置：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">export PATH=/opt/OpenWrt-Toolchain-ramips-mt7620_gcc-4.8-linaro_uClibc-0.9.33.2.Linux-x86_64/toolchain-mipsel_24kec+dsp_gcc-4.8-linaro_uClibc-0.9.33.2/bin:$PATH<br><br><br><br>export STAGING_DIR=/~/workspace/openwrt/staging_dir<br></code></pre></td></tr></table></figure>
+
+<p>  其中，<br> export STAGING_DIR配置的是STAGING路径，取决于你openWRT源码的路径。</p>
+<p>  保存后，执行如下命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">source /etc/bash.bashrc<br></code></pre></td></tr></table></figure>
+
+<h5 id="3、检查是否安装成功"><a href="#3、检查是否安装成功" class="headerlink" title="3、检查是否安装成功"></a>3、检查是否安装成功</h5><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">执行命令：mipsel-openwrt-linux-gcc -v<br></code></pre></td></tr></table></figure>
+
+<p> 安装toolchain，如下图所示：</p>
+<p class='item-img' data-src='https://img-blog.csdn.net/20171009141432239?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMjM0OTY3OQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center'><img src="https://img-blog.csdn.net/20171009141432239?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMjM0OTY3OQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="img"></p>
+<p> 上图中，Error：ld不用管。</p>
+<h4 id="1-3-4-Toolchain测试"><a href="#1-3-4-Toolchain测试" class="headerlink" title="1.3.4 Toolchain测试"></a>1.3.4 Toolchain测试</h4><h5 id="1、编写hello-c"><a href="#1、编写hello-c" class="headerlink" title="1、编写hello.c"></a>1、编写hello.c</h5><p> 测试程序：hello.c</p>
+<p> 源码：</p>
+<p> #include &lt;stdio.h&gt;</p>
+<p> int main(void)</p>
+<p> {</p>
+<p>  unsigned char i &#x3D; 0;</p>
+<p>  while(1)</p>
+<p>  {</p>
+<p>  printf(“\n hello openWRT! %d\n”, i);</p>
+<p>  sleep(1);</p>
+<p>  }</p>
+<p>  return 0;</p>
+<p> }</p>
+<h5 id="2、交叉编译"><a href="#2、交叉编译" class="headerlink" title="2、交叉编译"></a>2、交叉编译</h5><p> mipsel-openwrt-linux-gcc hello.c -o hello</p>
+<p> 生成可执行文件<br>  hello</p>
+<p>  该可执行文件是试用openWRT的toolchain编译所得，是无法在Ubuntu上直接运行的，需要拷贝到openWRT里运行。</p>
+<h5 id="3、通过winSCP放到openWRT"><a href="#3、通过winSCP放到openWRT" class="headerlink" title="3、通过winSCP放到openWRT"></a>3、通过winSCP放到openWRT</h5><p> 用户名：root</p>
+<p> 密码：root</p>
+<p class='item-img' data-src='https://img-blog.csdn.net/20171009141505509?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMjM0OTY3OQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center'><img src="https://img-blog.csdn.net/20171009141505509?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMjM0OTY3OQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="img"></p>
+<h5 id="4、通过SSH远程登陆后执行"><a href="#4、通过SSH远程登陆后执行" class="headerlink" title="4、通过SSH远程登陆后执行"></a>4、通过SSH远程登陆后执行</h5><p class='item-img' data-src='https://img-blog.csdn.net/20171009141532044?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMjM0OTY3OQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center'><img src="https://img-blog.csdn.net/20171009141532044?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMjM0OTY3OQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="img"></p>
+<p class='item-img' data-src='https://img-blog.csdn.net/20171009141545020?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMjM0OTY3OQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center'><img src="https://img-blog.csdn.net/20171009141545020?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMjM0OTY3OQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="img"></p>
+<p class='item-img' data-src='https://img-blog.csdn.net/20171009141748403?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMjM0OTY3OQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center'><img src="https://img-blog.csdn.net/20171009141748403?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMjM0OTY3OQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="img"></p>
+<p> 添加X可执行权限：</p>
+<p> chmod 777 hello</p>
+<p> 执行.&#x2F;hello</p>
+<p class='item-img' data-src='https://img-blog.csdn.net/20171009141806595?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMjM0OTY3OQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center'><img src="https://img-blog.csdn.net/20171009141806595?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxMjM0OTY3OQ==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="img"></p>
+<div id="paginator"></div></div><div id="post-footer"><div id="pages"><div class="footer-link" style="width: 50%;text-align:right;border-right:1px #fe2 solid"><a href="/2023/05/21/SimpleDateFormat-%E6%A0%BC%E5%BC%8F%E5%8C%96%E6%97%B6%E9%97%B4%E7%94%A8%E6%B3%95%EF%BC%9A/">← Next SimpleDateFormat 格式化时间用法</a></div><div class="footer-link" style="width: 50%;right:1px;border-left:1px #fe2 solid"><a href="/2023/05/21/openwrt-Feeds%E6%BA%90%E4%BF%AE%E6%94%B9/">openwrt-Feeds源修改 Prev →</a></div></div></div></div><div class="bottom-btn"><div><a id="to-top" onClick="scrolls.scrolltop();" title="To Top" style="opacity: 0; display: none;">∧</a><a id="to-index" href="#toc-div" title="To Catalog">≡</a><a id="color-mode" onClick="colorMode.change()" title="Change Theme"></a></div></div></article><aside><div id="about"><a href="/" id="logo"><img src="https://ak.hypergryph.com/assets/index/images/ak/pc/faction/1.png" alt="Logo"></a><h1 id="Dr"><a href="/">John Doe</a></h1><div id="description"><p></p></div></div><div id="aside-block"><div id="toc-div"><h1>Catalog</h1><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%90%AD%E5%BB%BA%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83"><span class="toc-number">1.</span> <span class="toc-text">搭建开发环境</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-openWRT%E4%B8%8B%E8%BD%BD"><span class="toc-number">1.1.</span> <span class="toc-text">1.1 openWRT下载</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-openWRT%E4%BE%9D%E8%B5%96%E5%AE%89%E8%A3%85"><span class="toc-number">1.2.</span> <span class="toc-text">1.2 openWRT依赖安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-openWRT-toolchain%E7%BC%96%E8%AF%91"><span class="toc-number">1.3.</span> <span class="toc-text">1.3 openWRT toolchain编译</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-2-%E7%BC%96%E8%AF%91-Toolchain"><span class="toc-number">1.3.1.</span> <span class="toc-text">1.3.2 编译 Toolchain</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-3-%E5%AE%89%E8%A3%85-Toolchain"><span class="toc-number">1.3.2.</span> <span class="toc-text">1.3.3 安装 Toolchain</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1%E3%80%81%E8%A7%A3%E5%8E%8Btoolchain"><span class="toc-number">1.3.2.1.</span> <span class="toc-text">1、解压toolchain</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2%E3%80%81%E8%AE%BE%E7%BD%AE%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="toc-number">1.3.2.2.</span> <span class="toc-text">2、设置环境变量</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3%E3%80%81%E6%A3%80%E6%9F%A5%E6%98%AF%E5%90%A6%E5%AE%89%E8%A3%85%E6%88%90%E5%8A%9F"><span class="toc-number">1.3.2.3.</span> <span class="toc-text">3、检查是否安装成功</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-4-Toolchain%E6%B5%8B%E8%AF%95"><span class="toc-number">1.3.3.</span> <span class="toc-text">1.3.4 Toolchain测试</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1%E3%80%81%E7%BC%96%E5%86%99hello-c"><span class="toc-number">1.3.3.1.</span> <span class="toc-text">1、编写hello.c</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2%E3%80%81%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91"><span class="toc-number">1.3.3.2.</span> <span class="toc-text">2、交叉编译</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#3%E3%80%81%E9%80%9A%E8%BF%87winSCP%E6%94%BE%E5%88%B0openWRT"><span class="toc-number">1.3.3.3.</span> <span class="toc-text">3、通过winSCP放到openWRT</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#4%E3%80%81%E9%80%9A%E8%BF%87SSH%E8%BF%9C%E7%A8%8B%E7%99%BB%E9%99%86%E5%90%8E%E6%89%A7%E8%A1%8C"><span class="toc-number">1.3.3.4.</span> <span class="toc-text">4、通过SSH远程登陆后执行</span></a></li></ol></li></ol></li></ol></li></ol></div></div><footer><nobr>Published with <a target="_blank" rel="noopener" href="http://hexo.io">Hexo</a></nobr><wbr><nobr> Theme <a target="_blank" rel="noopener" href="https://github.com/Yue-plus/hexo-theme-arknights">Arknights</a></nobr><wbr><nobr>by <a target="_blank" rel="noopener" href="https://github.com/Yue-plus">Yue_plus</a></nobr></footer></aside></main><canvas id="canvas-dust"></canvas><script src="/js/search.js"></script><script src="/js/arknights.js"></script><script src="//unpkg.com/lightgallery@2.7.1/lightgallery.min.js"></script><script src="//unpkg.com/lightgallery@2.7.1/plugins/zoom/lg-zoom.min.js"></script><script src="//unpkg.com/lightgallery@2.7.1/plugins/thumbnail/lg-thumbnail.min.js"></script><script src="/js/pjax.js"></script><script class="pjax-js">reset= () => {code.findCode();
+document.querySelector('.lg-container')?.remove()
+lightGallery(document.getElementById('post-bg'), {
+  plugins: [lgZoom,lgThumbnail],
+  selector: '.item-img'})}</script><script>window.addEventListener("load",() => {pjax = new Pjax({
+ cacheBust: false,
+ selectors: ['title','article','#aside-block','.pjax-js'],
+ switches: {'article': Pjax.switches.sideBySide},
+ switchesOptions: {
+   'article': {
+     classNames: {
+       remove: "pjax-out",
+       add: "pjax-in"
+     }
+   }
+ }
+});
+document.addEventListener("pjax:complete", reset);reset()})</script></body></html>

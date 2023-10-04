@@ -1,0 +1,145 @@
+<!DOCTYPE html><html lang="en" theme-mode="dark"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>浅析 JWT | xue的个人博客</title><link rel="icon" type="image/x-icon" href="/favicon.ico"><script>var config = {"root":"/","search":{"preload":false,"activeHolder":"Enter here","blurHolder":"Search","noResult":"Data \"$0\" not found"},"code":{"codeInfo":"$0 - $1 lines","copy":"copy","copyFinish":"copied","expand":"expand"}}</script><script src="//unpkg.com/mermaid@9.2.2/dist/mermaid.min.js"></script><link type="text/css" rel="stylesheet" href="//unpkg.com/lightgallery@2.7.1/css/lightgallery.css"><link type="text/css" rel="stylesheet" href="//unpkg.com/lightgallery@2.7.1/css/lg-zoom.css"><link type="text/css" rel="stylesheet" href="//unpkg.com/lightgallery@2.7.1/css/lg-thumbnail.css"><link type="text/css" rel="stylesheet" href="/lib/fontawesome/brands.min.css"><link type="text/css" rel="stylesheet" href="/lib/fontawesome/fontawesome.min.css"><link rel="stylesheet" href="/css/arknights.css"><script>if (window.localStorage.getItem('theme-mode') === 'light') document.documentElement.setAttribute('theme-mode', 'light')
+if (window.localStorage.getItem('theme-mode') === 'dark') document.documentElement.setAttribute('theme-mode', 'dark')</script><style>@font-face {
+ font-family: BenderLight;
+ src: local('Bender'), url("/font/BenderLight.ttf");
+}
+@font-face {
+ font-family: 'JetBrains Mono';
+ src: local('JetBrains Mono'), url('/font/JetBrainsMono-Regular.woff2') format('woff2');
+}
+@font-face {
+ font-family: 'Font Awesome 6 Brands';
+ src: local('Font Awesome 6 Brands'), url('/lib/fontawesome/fa-brands.woff2') format('woff2');
+}
+@font-face {
+ font-family: 'Font Awesome 6 Free';
+ src: local('Font Awesome 6 Free'), url('/lib/fontawesome/fa-regular.woff2') format('woff2');
+}</style><style>:root {
+  --dark-background: url('https://ak.hypergryph.com/assets/index/images/ak/pc/bk.jpg');
+  --light-background: url('/img/bk.jpg');
+}</style><meta name="generator" content="Hexo 7.0.0-rc2"></head><body><div class="loading" style="opacity: 0"><div class="loadingBar left"></div><div class="loadingBar right"></div></div><main><header class="closed"><nav><div class="navBtn hide"><i class="navBtnIcon"><span class="navBtnIconBar"></span><span class="navBtnIconBar"></span><span class="navBtnIconBar"></span></i></div><div class="navItem" id="search-header"><span class="navItemTitle"><input autocomplete="off" autocorrect="off" autocapitalize="none" placeholder="Search" spellcheck="false" maxlength="50" type="text" id="search-input"></span></div><div class="navItem" id="search-holder"></div><div class="search-popup"><div id="search-result"></div></div><ol class="navContent"><li class="navItem"><a class="navBlock" href="/"><span class="navItemTitle">Home</span></a></li><li class="navItem" matchdata="categories,tags"><a class="navBlock" href="/archives/"><span class="navItemTitle">Archives</span></a></li><li class="navItem"><a class="navBlock" href="/categories/"><span class="navItemTitle">About</span></a></li></ol></nav></header><article><div id="post-bg"><div id="post-title"><h1>浅析 JWT</h1><div id="post-info"><span>First Post: <div class="control"><time datetime="2023-05-20T16:35:05.000Z" id="date"> 2023-05-21</time></div></span><br><span>Last Update: <div class="control"><time datetime="2023-08-11T15:46:12.008Z" id="updated"> 2023-08-11</time></div></span><br><span>Word Count: <div class="control">2.9k</div></span><br><span>Read Time: <div class="control">10 min</div></span></div></div><hr><div id="post-content"><p>来源：<a target="_blank" rel="noopener" href="https://learnku.com/articles/28909">https://learnku.com/articles/28909</a></p>
+<p>JSON Web Token，简称 JWT，读音是 [dʒɒt]（ jot 的发音），是一种当下比较流行的「跨域认证解决方案」。注意它是一套 RFC 规范，相关的还有 JWE&#x2F;JWS&#x2F;JWK&#x2F;JOSE。它有很多优点，也有局限性，但我们可以配合其他方案做出适合自己业务的一套方案。本篇是对 JWT 做一个简单的介绍和简单实践总结。</p>
+<span id="more"></span>
+
+<blockquote>
+<p>JSON Web Token (JWT) is a compact claims representation format intended for space constrained environments such as HTTP Authorization headers and URI query parameters.</p>
+</blockquote>
+<h2 id="JWT-的组成"><a href="#JWT-的组成" class="headerlink" title="JWT 的组成"></a>JWT 的组成</h2><p>JWT 由三部分组成：头部、数据体、签名 &#x2F; 加密。</p>
+<p>这三部分以 . (英文句号) 连接，注意这三部分顺序是固定的，即 <strong>header.payload.signature</strong> 如下示例：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs php">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c<br></code></pre></td></tr></table></figure>
+
+<h3 id="1-头部-The-Header"><a href="#1-头部-The-Header" class="headerlink" title="1. 头部 The Header"></a>1. 头部 The Header</h3><p>这部分用来描述 JWT 的元数据，比如该 JWT 所使用的签名 &#x2F; 加密算法、媒体类型等。</p>
+<p>这部分原始数据是一个 JSON 对象，经过 Base64Url 编码方式进行编码后得到最终的字符串。其中只有一个属性是必要的：<strong>alg</strong>—— 加密 &#x2F; 签名算法，默认值为 <strong>HS256</strong>。</p>
+<p>最简单的头部可以表示成这样：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;alg&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;none&quot;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p>其他<strong>可选</strong>属性：</p>
+<ul>
+<li><strong>typ</strong>，描述 JWT 的媒体类型，该属性的值只能是 <strong>JWT</strong>，它的作用是与其他 JOSE Header 混合时表明自己身份的一个参数（很少用到）。</li>
+<li><strong>cty</strong>，描述 JWT 的内容类型。只有当需要一个 Nested JWT 时，才需要该属性，且值必须是 <strong>JWT</strong>。</li>
+<li><strong>kid</strong>，KeyID，用于提示是哪个密钥参与加密。</li>
+</ul>
+<blockquote>
+<p>Base64url 编码是 Base64 的一种针对 URL 的特定变种。因为 &#x3D; 、+、&#x2F; 这个三个字符在 URL 中是有特定含义的，所以 Base64url 分别将 &#x3D; 直接忽略，+ 替换成 -，&#x2F; 替换成 _</p>
+</blockquote>
+<h3 id="2-数据体-The-Payload"><a href="#2-数据体-The-Payload" class="headerlink" title="2. 数据体 The Payload"></a>2. 数据体 The Payload</h3><p>这部分用来描述 JWT 的内容数据，即存放些什么。</p>
+<p>原始数据仍是一个 JSON 对象，经过 Base64url 编码方式进行编码后得到最终的 Payload。这里的数据默认是不加密的，所以不应存放重要数据（当然你可以考虑使用嵌套型 JWT）。官方内置了七个属性，<strong>大小写敏感</strong>，且都是可选属性，如下：</p>
+<ul>
+<li><strong>iss (Issuer)</strong> 签发人，即签发该 Token 的主体</li>
+<li><strong>sub (Subject)</strong> 主题，即描述该 Token 的用途，一般就最为用户的唯一标识</li>
+<li><strong>aud (Audience)</strong> 作用域，即描述这个 Token 是给谁用的，多个的情况下该属性值为一个字符串数组，单个则为一个字符串</li>
+<li><strong>exp (Expiration Time)</strong> 过期时间，即描述该 Token 在何时失效</li>
+<li><strong>nbf (Not Before)</strong> 生效时间，即描述该 Token 在何时生效</li>
+<li><strong>iat (Issued At)</strong> 签发时间，即描述该 Token 在何时被签发的</li>
+<li><strong>jti (JWT ID)</strong> 唯一标识</li>
+</ul>
+<p>除了这几个内置属性，我们也可以自定义其他属性，自由度非常大。</p>
+<p>这里对 aud 做一个说明，有如下 Payload：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;iss&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;server1&quot;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;aud&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">&quot;http://www.a.com&quot;</span><span class="hljs-punctuation">,</span><span class="hljs-string">&quot;http://www.b.com&quot;</span><span class="hljs-punctuation">]</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p>那么如果我拿这个 JWT 去 <a target="_blank" rel="noopener" href="http://www.c.com/">http://www.c.com</a> 获取有访问权限的资源，就会被拒绝掉，因为 aud 属性明确了这个 Token 是无权访问 <a target="_blank" rel="noopener" href="http://www.c.com/">www.c.com</a> 的，有同学会说这部分反正不加密，那我本地把 <a target="_blank" rel="noopener" href="http://www.c.com/">www.c.com</a> 加入进去不就完事了。别急，下面这部分看完先。</p>
+<h3 id="3-签名-x2F-加密-The-signature-x2F-encryption-data"><a href="#3-签名-x2F-加密-The-signature-x2F-encryption-data" class="headerlink" title="3. 签名 &#x2F; 加密 The signature&#x2F;encryption data"></a>3. 签名 &#x2F; 加密 The signature&#x2F;encryption data</h3><p>这部分是相对比较复杂的，因为 JWT 必须符合 JWS&#x2F;JWE 这两个规范之一，所以针对这部分的数据如何得来就有两种方式，我们先来看一个简单的例子，有如下 JWT：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs php">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkZW1vIiwibmFtZSI6InhmbHkiLCJhZG1pbiI6dHJ1ZX0.<span class="hljs-number">5</span>SHkLkM4KAHtOCtLhSNHOgkFZhPO419ukot1C5bgyUM<br></code></pre></td></tr></table></figure>
+
+<p>对前两部分用 Base64url 解码后能得出相应原始数据，</p>
+<p>Header 部分：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;alg&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;HS256&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;typ&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;JWT&quot;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p>Payload 部分：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;sub&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;demo&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;xfly&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;admin&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p>根据 Header 部分的 alg 属性我们可以知道该 JWT 符合 JWS 中的规范，且签名算法是 HS256 也就是 <strong>HMAC SHA-256</strong> 算法，那么我们就可以根据如下公式计算最后的签名部分：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs php"><span class="hljs-title function_ invoke__">HMACSHA256</span>(<br>  <span class="hljs-title function_ invoke__">base64UrlEncode</span>(header) + <span class="hljs-string">&quot;.&quot;</span> +<br>  <span class="hljs-title function_ invoke__">base64UrlEncode</span>(payload),<br>  secret<br>)<br></code></pre></td></tr></table></figure>
+
+<p>其中的密钥是保证签名安全性的关键，所以必须保存好，在本例中密钥是 123456。<strong>因为有这个密钥的存在，所以即便调用方偷偷的修改了前两部分的内容，在验证环节就会出现签名不一致的情况，所以保证了安全性。</strong></p>
+<p>在实现过程中，遇到了这样一个问题：如果使用 <strong>RS256</strong> 这类非对称加密算法，加密出来的是一串二进制数据，所以第三部分还是用 Base64 编码了一层，这样最终的 JWT 就是可读的了。</p>
+<h2 id="Why-JWTs"><a href="#Why-JWTs" class="headerlink" title="Why JWTs"></a>Why JWTs</h2><p>JWTs 相比于在内存中使用随机 Token 的会话管理方式，其最大优势在于认证逻辑的可扩展性。举个例子，对于认证逻辑，完全可以单独部署，或者使用第三方的认证服务。</p>
+<p>而相比于使用数据库进行统一存储和管理 Token 的会话管理方式，其最大优势在于消耗小，不需要频繁调用数据库这类 I&#x2F;O 耗时操作。</p>
+<h2 id="安全"><a href="#安全" class="headerlink" title="安全"></a>安全</h2><ol>
+<li>因为 JWT 的前两个部分仅是做了 Base64 编码处理并非加密，所以在存放数据上不能存放敏感数据。</li>
+<li>用来签名 &#x2F; 加密的密钥需要妥善保存。</li>
+<li>尽可能采用 HTTPS，确保不被窃听。</li>
+<li>如果存放在 Cookie 中则强烈建议开启 Http Only，其实官方推荐是放在 LocalStorage 里，然后通过 Header 头进行传递。</li>
+</ol>
+<blockquote>
+<p>Cookie 的 HTTP Only 这个 Flag 和 HTTPS 并不冲突，你会发现其实还有一个 Secure 的 Flag，这个就是指 HTTPS 了，这两个 Flag 互不影响的，开启 HTTP Only 会导致前端 JavaScript 无法读取该 Cookie，更多的是为了防止 类 XSS 攻击。</p>
+</blockquote>
+<h2 id="问题和思考"><a href="#问题和思考" class="headerlink" title="问题和思考"></a>问题和思考</h2><p>JWT 的缺点其实也蛮多的，适不适用得具体看业务场景，哪个优势更大用哪个。（一点感悟：在写这篇文章前一直是 JWT 的坚定拥护者，越写越发现其实传统的 Session-Cookie 方案挺好的，很成熟。它们两者都有优缺点，选型上要多思考斟酌才行。）</p>
+<h3 id="1-数据臃肿"><a href="#1-数据臃肿" class="headerlink" title="1. 数据臃肿"></a>1. 数据臃肿</h3><p>因为 payload 只是用 Base64 编码，所以一旦存放数据大了，编码之后 JWT 会很长，cookie 很可能放不下，所以还是建议放 LocalStorage，但是每次 HTTP 请求都带上这个<strong>臃肿的 Header 开销也随之变大</strong>。</p>
+<h3 id="2-无法废弃和续签"><a href="#2-无法废弃和续签" class="headerlink" title="2. 无法废弃和续签"></a>2. 无法废弃和续签</h3><ol>
+<li>如果有效期设置过长，意味着这个 Token 泄漏后可以被长期利用，危害较大，所以一般我们都会设置一个较短的有效期。由于有效期较短，意味着需要经常进行<strong>重新授权</strong>的操作。</li>
+<li>假设在用户操作过程中升级 &#x2F; 变更了某些权限，势必需要<strong>刷新</strong>以更新数据。</li>
+</ol>
+<p>要解决这个问题，需要在服务端部署额外逻辑，常见的做法是增加刷新机制和黑名单机制，通过 Refresh Token 刷新 JWT，将需要废弃的 Token 加入到黑名单。</p>
+<h3 id="3-Token-丢失"><a href="#3-Token-丢失" class="headerlink" title="3. Token 丢失"></a>3. Token 丢失</h3><p>如果认证逻辑是在自己服务器上做的话，我们的 JWT secret key 一旦丢失或者泄露那只能通过更换 key 这一种办法了，但这样做的话会导致全部用户都需要重新登录，所以 key 的保管很重要。如果我们的认证逻辑放在第三方服务上，那其实我们就完全不用操心这部分了，很贴心吧 <img src="https://cdn.learnku.com/assets/images/twemoji/blush.png" alt=":blush:"></p>
+<p>我觉得 JWT 的最大优势在于可以把认证逻辑完全从应用服务中剥离出来，交给第三方 JWT 认证服务或者自己部署的认证服务器上。这样就把用户的账号密码等敏感信息放在单独的服务器上，更容易管理和维护（相比而言应用服务器更容易出现漏洞）。这样做的好处很明显：</p>
+<ol>
+<li>应用服务器完全不需要关心用户的账号密码，也不需要关心用户的注册登录，只需要校验 JWT 的合法性即可。</li>
+<li>应用服务器不需要存储 JWT 的 key，降低泄露密钥的概率。</li>
+</ol>
+<h2 id="最佳实践：加密算法使用-RS256-而不是-HS256"><a href="#最佳实践：加密算法使用-RS256-而不是-HS256" class="headerlink" title="最佳实践：加密算法使用 RS256 而不是 HS256"></a>最佳实践：加密算法使用 RS256 而不是 HS256</h2><p>假设我们的认证逻辑放在认证服务器上（比如说第三方的认证服务），使用 HS256 算法进行加密，整个过程如下：</p>
+<ol>
+<li>用户通过登录接口，携带账号密码请求认证服务器</li>
+<li>认证服务器校验账号密码，校验失败返回登录失败信息，校验成功则进行下一步</li>
+<li>将用户的一些必要信息（主要是用户的唯一标识）封装成 JWT 的 payload 部分</li>
+<li>将 JWT 的 header、payload 分别进行 Base64url 编码，用 <code>.</code> 连接后与密钥一起参与 HS256 加密得到 signature</li>
+<li>将三部分用 <code>.</code> 连接后组成最终的 JWT 返回</li>
+</ol>
+<p>应用服务器在接收到需要认证的接口请求时，先获取请求中携带的 JWT，然后进行校验，这里我们就会看到一些问题。因为是对称式加密算法，所以加密用的密钥和解密用的密钥必须是同一个，否则是应用服务器是没法做校验的。那么我们只能把密钥在应用服务器上也保存一份，从而增加了密钥泄漏的可能性（当然也只是相比于使用非对称式加密算法而言，毕竟在应用服务器里还有很多其他的 secret key，能丢 JWT 的 key，其他 key 也能丢。。。）</p>
+<p>那我们使用 RS256 非对称式加密算法就不会丢了吗？是的，至少应用服务器不用背这个锅！因为应用服务器根本就不需要存储这份重要的密钥。</p>
+<p>简单科普下非对称式加密算法：有两个密钥，一个公开密钥和一个私有密钥，私钥参与加密，公钥用于解密，巧妙之处是解密只能用公钥来解，即便是加密用的密钥也无法对密文进行解密。你可以看到加密和解密需要两个不同的密钥，故称之为非对称加密。</p>
+<p>所以我们应用服务器只需要存一份公开密钥用于校验和解密认证服务器签发的 JWT 即可，即便这个公开密钥泄漏了也没事。因为用公开密钥进行加密的密文再用公开密钥去解密是解不出来的，也就是说我们的应用服务器会认为这个 JWT 是无效的！</p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://jwt.io/introduction/">JSON Web Token Introduction - jwt.io</a></li>
+<li><a target="_blank" rel="noopener" href="https://tools.ietf.org/html/rfc7519">RFC 7519 - JSON Web Token (JWT)</a></li>
+<li><a target="_blank" rel="noopener" href="https://tools.ietf.org/html/rfc7515">RFC 7515 - JSON Web Signature (JWS)</a></li>
+<li><a target="_blank" rel="noopener" href="https://tools.ietf.org/html/rfc7516">RFC 7516 - JSON Web Encryption (JWE)</a></li>
+<li><a target="_blank" rel="noopener" href="https://tools.ietf.org/html/rfc7518">RFC 7518 - JSON Web Algorithms (JWA)</a></li>
+<li><a target="_blank" rel="noopener" href="https://tools.ietf.org/html/rfc6749#section-4.1.3">RFC 6749 - The OAuth 2.0 Authorization Framework</a></li>
+<li><a target="_blank" rel="noopener" href="https://auth0.com/blog/refresh-tokens-what-are-they-and-when-to-use-them/">Refresh Tokens: When to Use Them and How They Interact with JWTs</a></li>
+<li><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Cross-origin_resource_sharing">Cross-origin resource sharing - Wikipedia</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.ruanyifeng.com/blog/2018/07/json_web_token-tutorial.html">JSON Web Token 入门教程 - 阮一峰的网络日志</a></li>
+<li><a target="_blank" rel="noopener" href="http://insights.thoughtworkers.org/do-not-use-jwt-anymore/">讲真，别再使用 JWT 了 – ThoughtWorks 洞见</a></li>
+<li><a target="_blank" rel="noopener" href="https://medium.com/@rahulgolwalkar/pros-and-cons-in-using-jwt-json-web-tokens-196ac6d41fb4">Pros and cons in using JWT (JSON Web Tokens) – Rahul Golwalkar – Medium</a></li>
+<li><a target="_blank" rel="noopener" href="https://news.ycombinator.com/item?id=12332119">Pros and Cons in Using JWT (JSON Web Tokens) | Hacker News</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.angular-university.io/angular-jwt/">https://blog.angular-university.io/angular...</a></li>
+<li><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Public-key_cryptography">https://en.wikipedia.org/wiki/Public-key_c…</a></li>
+</ul>
+<div id="paginator"></div></div><div id="post-footer"><div id="pages"><div class="footer-link" style="width: 50%;text-align:right;border-right:1px #fe2 solid"><a href="/2023/05/21/ubuntu%E6%8D%A2%E9%95%9C%E5%83%8F%E6%BA%90%EF%BC%88ubuntu%E6%8D%A2%E6%BA%90%EF%BC%89/">← Next ubuntu换镜像源（ubuntu换源）</a></div><div class="footer-link" style="width: 50%;right:1px;border-left:1px #fe2 solid"><a href="/2023/05/21/Docker-%E5%AE%89%E8%A3%85/">Docker 安装 Prev →</a></div></div></div></div><div class="bottom-btn"><div><a id="to-top" onClick="scrolls.scrolltop();" title="To Top" style="opacity: 0; display: none;">∧</a><a id="to-index" href="#toc-div" title="To Catalog">≡</a><a id="color-mode" onClick="colorMode.change()" title="Change Theme"></a></div></div></article><aside><div id="about"><a href="/" id="logo"><img src="https://ak.hypergryph.com/assets/index/images/ak/pc/faction/1.png" alt="Logo"></a><h1 id="Dr"><a href="/">John Doe</a></h1><div id="description"><p></p></div></div><div id="aside-block"><div id="toc-div"><h1>Catalog</h1><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#JWT-%E7%9A%84%E7%BB%84%E6%88%90"><span class="toc-number">1.</span> <span class="toc-text">JWT 的组成</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%A4%B4%E9%83%A8-The-Header"><span class="toc-number">1.1.</span> <span class="toc-text">1. 头部 The Header</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E6%95%B0%E6%8D%AE%E4%BD%93-The-Payload"><span class="toc-number">1.2.</span> <span class="toc-text">2. 数据体 The Payload</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E7%AD%BE%E5%90%8D-x2F-%E5%8A%A0%E5%AF%86-The-signature-x2F-encryption-data"><span class="toc-number">1.3.</span> <span class="toc-text">3. 签名 &#x2F; 加密 The signature&#x2F;encryption data</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Why-JWTs"><span class="toc-number">2.</span> <span class="toc-text">Why JWTs</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E5%85%A8"><span class="toc-number">3.</span> <span class="toc-text">安全</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%97%AE%E9%A2%98%E5%92%8C%E6%80%9D%E8%80%83"><span class="toc-number">4.</span> <span class="toc-text">问题和思考</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E6%95%B0%E6%8D%AE%E8%87%83%E8%82%BF"><span class="toc-number">4.1.</span> <span class="toc-text">1. 数据臃肿</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E6%97%A0%E6%B3%95%E5%BA%9F%E5%BC%83%E5%92%8C%E7%BB%AD%E7%AD%BE"><span class="toc-number">4.2.</span> <span class="toc-text">2. 无法废弃和续签</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-Token-%E4%B8%A2%E5%A4%B1"><span class="toc-number">4.3.</span> <span class="toc-text">3. Token 丢失</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5%EF%BC%9A%E5%8A%A0%E5%AF%86%E7%AE%97%E6%B3%95%E4%BD%BF%E7%94%A8-RS256-%E8%80%8C%E4%B8%8D%E6%98%AF-HS256"><span class="toc-number">5.</span> <span class="toc-text">最佳实践：加密算法使用 RS256 而不是 HS256</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5"><span class="toc-number">6.</span> <span class="toc-text">参考链接</span></a></li></ol></div></div><footer><nobr>Published with <a target="_blank" rel="noopener" href="http://hexo.io">Hexo</a></nobr><wbr><nobr> Theme <a target="_blank" rel="noopener" href="https://github.com/Yue-plus/hexo-theme-arknights">Arknights</a></nobr><wbr><nobr>by <a target="_blank" rel="noopener" href="https://github.com/Yue-plus">Yue_plus</a></nobr></footer></aside></main><canvas id="canvas-dust"></canvas><script src="/js/search.js"></script><script src="/js/arknights.js"></script><script src="//unpkg.com/lightgallery@2.7.1/lightgallery.min.js"></script><script src="//unpkg.com/lightgallery@2.7.1/plugins/zoom/lg-zoom.min.js"></script><script src="//unpkg.com/lightgallery@2.7.1/plugins/thumbnail/lg-thumbnail.min.js"></script><script src="/js/pjax.js"></script><script class="pjax-js">reset= () => {code.findCode();
+document.querySelector('.lg-container')?.remove()
+lightGallery(document.getElementById('post-bg'), {
+  plugins: [lgZoom,lgThumbnail],
+  selector: '.item-img'})}</script><script>window.addEventListener("load",() => {pjax = new Pjax({
+ cacheBust: false,
+ selectors: ['title','article','#aside-block','.pjax-js'],
+ switches: {'article': Pjax.switches.sideBySide},
+ switchesOptions: {
+   'article': {
+     classNames: {
+       remove: "pjax-out",
+       add: "pjax-in"
+     }
+   }
+ }
+});
+document.addEventListener("pjax:complete", reset);reset()})</script></body></html>

@@ -1,0 +1,367 @@
+<!DOCTYPE html><html lang="en" theme-mode="dark"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>2021 Archlinux双系统安装教程（超详细） | xue的个人博客</title><link rel="icon" type="image/x-icon" href="/favicon.ico"><script>var config = {"root":"/","search":{"preload":false,"activeHolder":"Enter here","blurHolder":"Search","noResult":"Data \"$0\" not found"},"code":{"codeInfo":"$0 - $1 lines","copy":"copy","copyFinish":"copied","expand":"expand"}}</script><script src="//unpkg.com/mermaid@9.2.2/dist/mermaid.min.js"></script><link type="text/css" rel="stylesheet" href="//unpkg.com/lightgallery@2.7.1/css/lightgallery.css"><link type="text/css" rel="stylesheet" href="//unpkg.com/lightgallery@2.7.1/css/lg-zoom.css"><link type="text/css" rel="stylesheet" href="//unpkg.com/lightgallery@2.7.1/css/lg-thumbnail.css"><link type="text/css" rel="stylesheet" href="/lib/fontawesome/brands.min.css"><link type="text/css" rel="stylesheet" href="/lib/fontawesome/fontawesome.min.css"><link rel="stylesheet" href="/css/arknights.css"><script>if (window.localStorage.getItem('theme-mode') === 'light') document.documentElement.setAttribute('theme-mode', 'light')
+if (window.localStorage.getItem('theme-mode') === 'dark') document.documentElement.setAttribute('theme-mode', 'dark')</script><style>@font-face {
+ font-family: BenderLight;
+ src: local('Bender'), url("/font/BenderLight.ttf");
+}
+@font-face {
+ font-family: 'JetBrains Mono';
+ src: local('JetBrains Mono'), url('/font/JetBrainsMono-Regular.woff2') format('woff2');
+}
+@font-face {
+ font-family: 'Font Awesome 6 Brands';
+ src: local('Font Awesome 6 Brands'), url('/lib/fontawesome/fa-brands.woff2') format('woff2');
+}
+@font-face {
+ font-family: 'Font Awesome 6 Free';
+ src: local('Font Awesome 6 Free'), url('/lib/fontawesome/fa-regular.woff2') format('woff2');
+}</style><style>:root {
+  --dark-background: url('https://ak.hypergryph.com/assets/index/images/ak/pc/bk.jpg');
+  --light-background: url('/img/bk.jpg');
+}</style><meta name="generator" content="Hexo 7.0.0-rc2"></head><body><div class="loading" style="opacity: 0"><div class="loadingBar left"></div><div class="loadingBar right"></div></div><main><header class="closed"><nav><div class="navBtn hide"><i class="navBtnIcon"><span class="navBtnIconBar"></span><span class="navBtnIconBar"></span><span class="navBtnIconBar"></span></i></div><div class="navItem" id="search-header"><span class="navItemTitle"><input autocomplete="off" autocorrect="off" autocapitalize="none" placeholder="Search" spellcheck="false" maxlength="50" type="text" id="search-input"></span></div><div class="navItem" id="search-holder"></div><div class="search-popup"><div id="search-result"></div></div><ol class="navContent"><li class="navItem"><a class="navBlock" href="/"><span class="navItemTitle">Home</span></a></li><li class="navItem" matchdata="categories,tags"><a class="navBlock" href="/archives/"><span class="navItemTitle">Archives</span></a></li><li class="navItem"><a class="navBlock" href="/categories/"><span class="navItemTitle">About</span></a></li></ol></nav></header><article><div id="post-bg"><div id="post-title"><h1>2021 Archlinux双系统安装教程（超详细）</h1><div id="post-info"><span>First Post: <div class="control"><time datetime="2023-05-20T17:06:37.000Z" id="date"> 2023-05-21</time></div></span><br><span>Last Update: <div class="control"><time datetime="2023-09-18T07:55:46.375Z" id="updated"> 2023-09-18</time></div></span><br><span>Word Count: <div class="control">2.8k</div></span><br><span>Read Time: <div class="control">11 min</div></span></div></div><hr><div id="post-content"><p>来源：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/138951848">https://zhuanlan.zhihu.com/p/138951848</a></p>
+<p>如果你不想折腾，直接上Manjaro，如果你喜欢折腾、有时间并且有一定的能力，Arch欢迎你</p>
+<p>这篇教程来帮助那些想用Arch但是又害怕命令行的同学（Arch Wiki写得很详细，但其实对小白来说还是有难度）</p>
+<p>因为截图很重要这里我按照YouTube上一个可靠教程来贴截图讲解</p>
+<p>有条件的也可以直接去看 <a href="https://link.zhihu.com/?target=https://www.youtube.com/watch?v=QU0KRTgRJZU&t=14s">YouTube原视频</a></p>
+<p>我的CPU是Intel i5-8250U（x86_64）<br> <span id="more"></span><br><strong>启动方式是UEFI而非BIOS（重要）</strong></p>
+<p>显卡是UHD 620+NVIDIA MX150</p>
+<p>安装Arch的硬盘是Samsang 970 EVO（NVME）</p>
+<p>硬盘的类型最好确认一下，如果是NVMe的，先进BIOS修改 从硬盘的启动方式 为AHCI，否则你进入安装界面不会看到你的NVMe硬盘</p>
+<p><strong>为确保一次成功，以下步骤（包括输入的命令）如果你不是很懂不要颠倒顺序，此外请保证安装时有顺畅的网络连接</strong></p>
+<p><strong>因为EFI分区用的是windows的 而这个区还只有100MB 所以建议借助一些分区工具比如傲梅分区进入PE把这个区扩大 具体操作可以直接百度</strong></p>
+<h2 id="0-下载ISO"><a href="#0-下载ISO" class="headerlink" title="0.下载ISO"></a>0.下载ISO</h2><p><a href="https://link.zhihu.com/?target=https://www.archlinux.org/download/">Arch Linux - Downloadswww.archlinux.org/download/</a></p>
+<p>建议去下面找中国的镜像下</p>
+<h2 id="1-硬盘分区"><a href="#1-硬盘分区" class="headerlink" title="1.硬盘分区"></a>1.硬盘分区</h2><p>分区使用Windows的磁盘管理就行，没必要用DiskGenius</p>
+<p>这里我使用的分区方案是 只额外分一个区来挂载 &#x2F; 目录 EFI利用Windows的EFI分区</p>
+<p>不使用swap分区 而是swap文件</p>
+<p class='item-img' data-src='https://pic2.zhimg.com/80/v2-54e0ac602cbc3fca1859bc1f5ea6132d_720w.webp'><img src="https://pic2.zhimg.com/80/v2-54e0ac602cbc3fca1859bc1f5ea6132d_720w.webp" alt="img">这里分了250G</p>
+<h2 id="2-制作启动U盘"><a href="#2-制作启动U盘" class="headerlink" title="2.制作启动U盘"></a>2.制作启动U盘</h2><p>制作工具建议使用 <a href="https://link.zhihu.com/?target=https://rufus.ie/">Rufus</a>，写入方式为DD而非ISO，选项那选择GPT而非默认的MBR</p>
+<h2 id="3-BIOS的设置"><a href="#3-BIOS的设置" class="headerlink" title="3.BIOS的设置"></a>3.BIOS的设置</h2><p>保持上一步制作好的启动U盘一直插着</p>
+<p>开机出现品牌logo时狂按对应键进入BIOS设置比如我的Dell Inspiron就是F12</p>
+<p>进去之后</p>
+<p>1.禁用safeboot 2.如果你的硬盘是NVMe的，把 <strong>从硬盘的启动方式</strong> 改成 <strong>AHCI</strong></p>
+<p>3.修改启动顺序，把U盘的启动顺序放到最上面（此处小心，不要delete任何东西）</p>
+<p>完成之后退出重启</p>
+<p>重启之后就是选择，回车进入arch iso</p>
+<h2 id="4-检查网络"><a href="#4-检查网络" class="headerlink" title="4.检查网络"></a>4.检查网络</h2><p>输入下面指令检查：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">ip a<br></code></pre></td></tr></table></figure>
+
+<p class='item-img' data-src='https://pic3.zhimg.com/80/v2-2cce585de83d1c35149b117af9558de2_720w.webp'><img src="https://pic3.zhimg.com/80/v2-2cce585de83d1c35149b117af9558de2_720w.webp" alt="img"></p>
+<p>这里用的是有线连接，如果你用的是无线连接需要按照下面的步骤连接到无线网：</p>
+<p>输入</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">iwctl<br></code></pre></td></tr></table></figure>
+
+<p>进入iwd模式，输入</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">device list<br></code></pre></td></tr></table></figure>
+
+<p>查看你的网卡名字，这里假设是wlan0，输入</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">station wlan0 scan<br></code></pre></td></tr></table></figure>
+
+<p>检查扫描网络，输入</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">station wlan0 get-networks<br></code></pre></td></tr></table></figure>
+
+<p>查看网络名字，假设名字叫BUPT-portal，输入</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">station wlan0 connect BUPT-portal<br></code></pre></td></tr></table></figure>
+
+<p>接着输入密码（如果有密码的话），输入</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">exit<br></code></pre></td></tr></table></figure>
+
+<p>退出iwd模式</p>
+<p>连接成功之后，检查可以连接到pacman源</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">pacman -Syyy<br></code></pre></td></tr></table></figure>
+
+<p class='item-img' data-src='https://pic3.zhimg.com/80/v2-da5d5bc2996a7b6990673c4c4700d77a_720w.webp'><img src="https://pic3.zhimg.com/80/v2-da5d5bc2996a7b6990673c4c4700d77a_720w.webp" alt="img">如图说明一切正常</p>
+<p>重新设置mirrorlist（可选，建议）：</p>
+<p>使用reflector来获取速度最快的6个镜像，并将地址保存至&#x2F;etc&#x2F;pacman.d&#x2F;mirrorlist</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">reflector -c China -a 6 --<span class="hljs-built_in">sort</span> rate --save /etc/pacman.d/mirrorlist<br><br></code></pre></td></tr></table></figure>
+
+<p>或者手动添加中科大镜像源</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">Server = https://mirrors.ustc.edu.cn/archlinux/$repo/os/$arch<br></code></pre></td></tr></table></figure>
+
+
+
+<h2 id="5-硬盘"><a href="#5-硬盘" class="headerlink" title="5.硬盘"></a>5.硬盘</h2><p>1.检查硬盘</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">lsblk<br><br></code></pre></td></tr></table></figure>
+
+<p class='item-img' data-src='https://pic3.zhimg.com/80/v2-202971d782206ee00df4894348acf2b6_720w.webp'><img src="https://pic3.zhimg.com/80/v2-202971d782206ee00df4894348acf2b6_720w.webp" alt="img"></p>
+<p>这里没有看到之前划分好的空间，不要慌，那是因为之前只是划了空间，并没有建立分区</p>
+<p>2.建立分区</p>
+<p>因为之前划好的空间在nvme0n1上，所以执行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">cfdisk /dev/nvme0n1<br><br></code></pre></td></tr></table></figure>
+
+<p>这里以你个人情况而定 sda sdb 或是其他的</p>
+<p class='item-img' data-src='https://pic2.zhimg.com/80/v2-49855cb185cf06755485c570310f0af1_720w.webp'><img src="https://pic2.zhimg.com/80/v2-49855cb185cf06755485c570310f0af1_720w.webp" alt="img">这里我们就能看到最后有250G的Free Space</p>
+<p class='item-img' data-src='https://pic2.zhimg.com/80/v2-d254c8449f527d10e724fe7b0c5cd465_720w.webp'><img src="https://pic2.zhimg.com/80/v2-d254c8449f527d10e724fe7b0c5cd465_720w.webp" alt="img"></p>
+<p>选择New 回车</p>
+<p class='item-img' data-src='https://pic2.zhimg.com/80/v2-beb16fd18d81dc69d910bc0f9578cacd_720w.webp'><img src="https://pic2.zhimg.com/80/v2-beb16fd18d81dc69d910bc0f9578cacd_720w.webp" alt="img"></p>
+<p>这里就输入250G 回车</p>
+<p class='item-img' data-src='https://pic1.zhimg.com/80/v2-4c370c9718b302ed0774c8f2a9faad44_720w.webp'><img src="https://pic1.zhimg.com/80/v2-4c370c9718b302ed0774c8f2a9faad44_720w.webp" alt="img"></p>
+<p>选择Write 回车 输入 yes 回车</p>
+<p>写入完成 选择Quit 回车退出</p>
+<p>检查分区情况</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">lsblk<br><br></code></pre></td></tr></table></figure>
+
+<p class='item-img' data-src='https://pic1.zhimg.com/80/v2-553670cd4ee4b584a616078bc750c948_720w.webp'><img src="https://pic1.zhimg.com/80/v2-553670cd4ee4b584a616078bc750c948_720w.webp" alt="img">建立分区之后就可以看到分好的250G区</p>
+<p>3.分区格式化</p>
+<p>将刚刚分好的区格式化为ext4格式，这里认准分区号是nvme0n1p5</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">mkfs.ext4 /dev/nvme0n1p5<br><br></code></pre></td></tr></table></figure>
+
+<p class='item-img' data-src='https://pic4.zhimg.com/80/v2-311d75a2b56ac97898484f449341009b_720w.webp'><img src="https://pic4.zhimg.com/80/v2-311d75a2b56ac97898484f449341009b_720w.webp" alt="img"></p>
+<p>4.挂载分区</p>
+<p>先挂载&#x2F;分区，同样，这里分区号也是nvme0n1p5</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">mount /dev/nvme0n1p5 /mnt<br><br></code></pre></td></tr></table></figure>
+
+<p>这里利用Windows的EFI分区，检查EFI分区号</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">lsblk<br><br></code></pre></td></tr></table></figure>
+
+<p class='item-img' data-src='https://pic2.zhimg.com/80/v2-dcb17539e1c3938c74b377a65526001d_720w.webp'><img src="https://pic2.zhimg.com/80/v2-dcb17539e1c3938c74b377a65526001d_720w.webp" alt="img">这里可以看到是nvme0n1p2</p>
+<p>建立boot文件夹</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">mkdir /mnt/boot<br><br></code></pre></td></tr></table></figure>
+
+<p>挂载EFI分区</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">mount /dev/nvme0n1p2 /mnt/boot<br><br></code></pre></td></tr></table></figure>
+
+<p class='item-img' data-src='https://pic3.zhimg.com/80/v2-265d33a99301d176fae47b6343311c1e_720w.webp'><img src="https://pic3.zhimg.com/80/v2-265d33a99301d176fae47b6343311c1e_720w.webp" alt="img"></p>
+<h2 id="6-安装基本系统"><a href="#6-安装基本系统" class="headerlink" title="6.安装基本系统"></a>6.安装基本系统</h2><p>执行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">pacstrap /mnt base linux linux-firmware nano<br><br></code></pre></td></tr></table></figure>
+
+<p>等待安装完毕</p>
+<p>（如果你不想用默认的内核，也可以使用linux-lts, linux-zen, linux-hardened，具体介绍请看<a href="https://link.zhihu.com/?target=https://wiki.archlinux.org/index.php/kernel">Wiki</a>）</p>
+<h2 id="7-生成fstab文件"><a href="#7-生成fstab文件" class="headerlink" title="7.生成fstab文件"></a>7.生成fstab文件</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">genfstab -U /mnt &gt;&gt; /mnt/etc/fstab<br><br></code></pre></td></tr></table></figure>
+
+<p>检查生成的fstab文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cat</span> /mnt/etc/fstab<br><br></code></pre></td></tr></table></figure>
+
+<p class='item-img' data-src='https://pic4.zhimg.com/80/v2-bb67b920ff61eb7ea40d8c073bd15857_720w.webp'><img src="https://pic4.zhimg.com/80/v2-bb67b920ff61eb7ea40d8c073bd15857_720w.webp" alt="img"></p>
+<p>如图说明一切正确</p>
+<h2 id="8-正式配置新系统"><a href="#8-正式配置新系统" class="headerlink" title="8.正式配置新系统"></a>8.正式配置新系统</h2><p>1.切换到装好的系统</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">arch-chroot /mnt<br><br></code></pre></td></tr></table></figure>
+
+<p>2.建立swapfile（建议，没有swap空间无法休眠）</p>
+<blockquote>
+<p>在 ext4 上使用 swapfile 的用户请注意，升级到 5.7.x 内核后可能出现诸如「kernel: swapon: swapfile has holes」这样的报错而无法启用 swapfile 。使用 dd 命令创建 swapfile （而非 fallocate） 可能可以解决问题，也可以回退 5.6 系列内核等待上游修复。<br>Arch Linux 错误跟踪：<a href="https://link.zhihu.com/?target=https://bugs.archlinux.org/task/66921">https://bugs.archlinux.org/task/66921</a><br>内核错误跟踪：<a href="https://link.zhihu.com/?target=https://bugzilla.kernel.org/show_bug.cgi?id=207585">https://bugzilla.kernel.org/show_bug.cgi?id&#x3D;207585</a></p>
+</blockquote>
+<p>如果之前安装的内核是linux-lts：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">fallocate -l 2GB /swapfile<br><br></code></pre></td></tr></table></figure>
+
+<p>注意：命令中是 <strong>小写字母l</strong> 而非 数字1 也非 字母i的大写</p>
+<p>如果之前安装的内核不是linux-lts，这里创建swapfile需要使用dd命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">dd</span> <span class="hljs-keyword">if</span>=/dev/zero of=/swapfile bs=2048 count=1048576 status=progress<br><br></code></pre></td></tr></table></figure>
+
+<p>这里分了2G作为swapfile</p>
+<p>改权限</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">chmod</span> 600 /swapfile<br><br></code></pre></td></tr></table></figure>
+
+<p>建立swap空间</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">mkswap /swapfile<br><br></code></pre></td></tr></table></figure>
+
+<p>激活swap空间</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">swapon /swapfile<br><br></code></pre></td></tr></table></figure>
+
+<p>修改&#x2F;etc&#x2F;fstab文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">nano /etc/fstab<br><br></code></pre></td></tr></table></figure>
+
+<p>到文件末尾输入</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">/swapfile none swap defaults 0 0<br><br></code></pre></td></tr></table></figure>
+
+<p class='item-img' data-src='https://pic4.zhimg.com/80/v2-32f9a86a9806695b1a4c6d94c79d25e3_720w.webp'><img src="https://pic4.zhimg.com/80/v2-32f9a86a9806695b1a4c6d94c79d25e3_720w.webp" alt="img"></p>
+<p>保存退出</p>
+<p>3.设置时区</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">ln</span> -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime<br><br></code></pre></td></tr></table></figure>
+
+<p>或</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">timedatectl set-timezone Asia/Shanghai<br><br></code></pre></td></tr></table></figure>
+
+<p>同步硬件时钟</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">hwclock --systohc<br><br></code></pre></td></tr></table></figure>
+
+<p>4.设置locale</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">nano /etc/locale.gen<br><br></code></pre></td></tr></table></figure>
+
+<p>Ctrl+W 输入 #en_US 回车 找到UTF-8那一行 删掉前面的#（取消注释）</p>
+<p>Ctrl+W 输入 #zh_CN 回车 找到UTF-8那一行 删掉前面的#（取消注释）</p>
+<p>保存退出</p>
+<p>生成locale</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">locale-gen<br><br></code></pre></td></tr></table></figure>
+
+<p>创建并写入&#x2F;etc&#x2F;locale.conf文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">nano /etc/locale.conf <br><br></code></pre></td></tr></table></figure>
+
+<p>填入内容，注意这里只能填这个</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">LANG=en_US.UTF-8<br><br></code></pre></td></tr></table></figure>
+
+<p>5.创建并写入hostname</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">nano /etc/hostname<br><br></code></pre></td></tr></table></figure>
+
+<p>这里我写入的是 arch 作为hostname，你也可以输别的</p>
+<p class='item-img' data-src='https://pic2.zhimg.com/80/v2-c6f62d0bf545ebaa952a1746cd7668ad_720w.webp'><img src="https://pic2.zhimg.com/80/v2-c6f62d0bf545ebaa952a1746cd7668ad_720w.webp" alt="img"></p>
+<p>保存退出</p>
+<p>6.修改hosts</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">nano /etc/hosts<br><br></code></pre></td></tr></table></figure>
+
+<p>写入内容如图（中间的空白用tab而非空格），arch替换为你之前在hostname里写入的内容，其他都按照图里面的写（注意最后一行的ip是127.0.1.1）</p>
+<p class='item-img' data-src='https://pic3.zhimg.com/80/v2-54fc38004dc15b76d68983a78e59928a_720w.webp'><img src="https://pic3.zhimg.com/80/v2-54fc38004dc15b76d68983a78e59928a_720w.webp" alt="img"></p>
+<p>保存退出</p>
+<p>建议上述编辑的内容都用cat输出检查一下</p>
+<p>7.为root用户创建密码</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">passwd<br><br></code></pre></td></tr></table></figure>
+
+<p>然后输入并确认密码（linux终端的密码没有回显，输完直接回车就好）</p>
+<p>8.创建启动器</p>
+<p>安装基本的包，这里使用grub为启动器</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">pacman -S grub efibootmgr networkmanager network-manager-applet dialog wireless_tools wpa_supplicant os-prober mtools dosfstools ntfs-3g base-devel linux-headers reflector git sudo<br><br></code></pre></td></tr></table></figure>
+
+<p><strong>如果你不知道这些包的作用，请务必确保输入的指令与上面的一致</strong></p>
+<p>检查完毕回车，需要选择直接回车就好，等待安装结束</p>
+<p>如果你是intel的cpu，需要安装intel的微码文件</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">pacman -S intel-ucode<br><br></code></pre></td></tr></table></figure>
+
+<p>如果是amd</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">pacman -S amd-ucode<br><br></code></pre></td></tr></table></figure>
+
+<hr>
+<p>2021.06.16更新：</p>
+<blockquote>
+<p>Grub 2.06 更新 os-prober 用户需要手动干预</p>
+<p>grub 2.06 更新已经进入官方源，本次更新有以下两个需要注意的变化：<br>\1. 如果您正在使用 os-prober 生成其他系统的引导项，grub 2.06 不再自动启用 os-prober，您需要添加 GRUB_DISABLE_OS_PROBER&#x3D;false 至 &#x2F;etc&#x2F;default&#x2F;grub 配置文件中并且重新运行 grub-mkconfig<br>\2. grub 2.06 现在会自动添加 固件设置菜单 引导项目，无需手动创建</p>
+</blockquote>
+<p>鉴于此需要手动启用os-prober来确保Windows能被正确识别：</p>
+<p>输入</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">nano /etc/default/grub<br><br></code></pre></td></tr></table></figure>
+
+<p>在里面找一条空行输入</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">GRUB_DISABLE_OS_PROBER=false<br><br></code></pre></td></tr></table></figure>
+
+<p>之后Ctrl-X 加Y回车保存退出</p>
+<p class='item-img' data-src='https://pic4.zhimg.com/80/v2-405f1485261b0213aceef88ca833909b_720w.webp'><img src="https://pic4.zhimg.com/80/v2-405f1485261b0213aceef88ca833909b_720w.webp" alt="img"></p>
+<p>完成之后输入</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=Arch<br><br></code></pre></td></tr></table></figure>
+
+<p>确保输入指令完全正确回车</p>
+<p class='item-img' data-src='https://pic3.zhimg.com/80/v2-9a43ea86f2ab93b70b53549d3ee84c52_720w.webp'><img src="https://pic3.zhimg.com/80/v2-9a43ea86f2ab93b70b53549d3ee84c52_720w.webp" alt="img"></p>
+<p>生成grub.cfg</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">grub-mkconfig -o /boot/grub/grub.cfg<br><br></code></pre></td></tr></table></figure>
+
+<p>完成之后如图</p>
+<p class='item-img' data-src='https://pic3.zhimg.com/80/v2-de2e93e62d337ba61654e02001a1f226_720w.webp'><img src="https://pic3.zhimg.com/80/v2-de2e93e62d337ba61654e02001a1f226_720w.webp" alt="img"></p>
+<h2 id="9-退出新系统并取消挂载"><a href="#9-退出新系统并取消挂载" class="headerlink" title="9.退出新系统并取消挂载"></a>9.退出新系统并取消挂载</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">exit</span><br><br></code></pre></td></tr></table></figure>
+
+<p class='item-img' data-src='https://pic2.zhimg.com/80/v2-240ca9989b005714cdeaf20e85c7340d_720w.webp'><img src="https://pic2.zhimg.com/80/v2-240ca9989b005714cdeaf20e85c7340d_720w.webp" alt="img"></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">umount -a<br><br></code></pre></td></tr></table></figure>
+
+<p class='item-img' data-src='https://pic1.zhimg.com/80/v2-e87ae5d5e79da0247e93cf2e19e3bc50_720w.webp'><img src="https://pic1.zhimg.com/80/v2-e87ae5d5e79da0247e93cf2e19e3bc50_720w.webp" alt="img"></p>
+<p>重启</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">reboot<br><br></code></pre></td></tr></table></figure>
+
+<p>启动时请拔出u盘</p>
+<h2 id="10-进入装好的Arch系统并激活网络"><a href="#10-进入装好的Arch系统并激活网络" class="headerlink" title="10.进入装好的Arch系统并激活网络"></a>10.进入装好的Arch系统并激活网络</h2><p>进去之后 先输入 root 回车 输入密码 回车</p>
+<p>启动网络服务</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">systemctl enable --now NetworkManager<br><br></code></pre></td></tr></table></figure>
+
+<p>设置WiFi</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">nmtui<br><br></code></pre></td></tr></table></figure>
+
+<p class='item-img' data-src='https://pic4.zhimg.com/80/v2-3be8707847310be9f8f8d86de0799c8f_720w.webp'><img src="https://pic4.zhimg.com/80/v2-3be8707847310be9f8f8d86de0799c8f_720w.webp" alt="img"></p>
+<p>回车</p>
+<p class='item-img' data-src='https://pic1.zhimg.com/80/v2-8e0546e1ea798ec7f146f4a05924e28c_720w.webp'><img src="https://pic1.zhimg.com/80/v2-8e0546e1ea798ec7f146f4a05924e28c_720w.webp" alt="img"></p>
+<p>选择你要连接到的WiFi 输入密码 回车 然后退出</p>
+<h2 id="11-新建用户并授权"><a href="#11-新建用户并授权" class="headerlink" title="11.新建用户并授权"></a>11.新建用户并授权</h2><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">useradd -m -G wheel mir<br><br></code></pre></td></tr></table></figure>
+
+<p>wheel后面是你的用户名，这里输入的是mir</p>
+<p>为用户创建密码</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">passwd mir<br><br></code></pre></td></tr></table></figure>
+
+<p>输入并确认密码</p>
+<p>授权</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">EDITOR=nano visudo<br><br></code></pre></td></tr></table></figure>
+
+<p>Ctrl+W 输入 # %wheel 回车 找到这行 删除前面的 #（取消注释）</p>
+<p class='item-img' data-src='https://pic1.zhimg.com/80/v2-8aaf436214afc9aaefbee330f96f4690_720w.webp'><img src="https://pic1.zhimg.com/80/v2-8aaf436214afc9aaefbee330f96f4690_720w.webp" alt="img"></p>
+<p>保存退出</p>
+<h2 id="12-安装显卡驱动"><a href="#12-安装显卡驱动" class="headerlink" title="12.安装显卡驱动"></a>12.安装显卡驱动</h2><p>安装AMD集显驱动</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">pacman -S xf86-video-amdgpu<br><br></code></pre></td></tr></table></figure>
+
+<p>安装NVIDIA独显驱动</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">pacman -S nvidia nvidia-utils<br><br></code></pre></td></tr></table></figure>
+
+<h2 id="13-安装Display-Server"><a href="#13-安装Display-Server" class="headerlink" title="13.安装Display Server"></a>13.安装Display Server</h2><p>这里用的是开源世界最为流行的xorg</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">pacman -S xorg<br><br></code></pre></td></tr></table></figure>
+
+<p>出现选择直接回车即可</p>
+<h2 id="14-安装Display-Manager"><a href="#14-安装Display-Manager" class="headerlink" title="14.安装Display Manager"></a>14.安装Display Manager</h2><p>这里需要按你要安装的桌面环境而定，这里没有列出的可以自己去ArchWiki查</p>
+<p>Gnome：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">pacman -S gdm<br><br></code></pre></td></tr></table></figure>
+
+<p>KDE：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">pacman -S sddm<br><br></code></pre></td></tr></table></figure>
+
+<p>Xfce || DDE：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">pacman -S lightdm lightdm-gtk-greeter<br><br></code></pre></td></tr></table></figure>
+
+<p>设置开机自动启动，以gdm为例：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">systemctl enable gdm<br><br></code></pre></td></tr></table></figure>
+
+<p>如果是别的请将这里的gdm替换为你安装的那个dm</p>
+<h2 id="15-安装Desktop-Environment"><a href="#15-安装Desktop-Environment" class="headerlink" title="15.安装Desktop Environment"></a>15.安装Desktop Environment</h2><p>Gnome：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">pacman -S gnome<br><br></code></pre></td></tr></table></figure>
+
+<p>KDE：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">pacman -S plasma kde-applications packagekit-qt5<br><br></code></pre></td></tr></table></figure>
+
+<p>Xfce：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">pacman -S xfce4 xfce4-goodies<br><br></code></pre></td></tr></table></figure>
+
+<p>DDE：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">pacman -S deepin deepin-extra<br><br></code></pre></td></tr></table></figure>
+
+<p>同样 需要选择时直接回车</p>
+<h2 id="16-添加archlinuxcn源"><a href="#16-添加archlinuxcn源" class="headerlink" title="16.添加archlinuxcn源"></a>16.添加archlinuxcn源</h2><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">nano /etc/pacman.conf<br><br></code></pre></td></tr></table></figure>
+
+<p>在最后加上下面两行（我这里使用了北外的镜像站）</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs text">[archlinuxcn]<br>#Server = https://mirrors.bfsu.edu.cn/archlinuxcn/$arch<br>#中科大<br>Server = https://mirrors.ustc.edu.cn/archlinuxcn/$arch<br><br></code></pre></td></tr></table></figure>
+
+<p>同时取消对multilib源的注释</p>
+<p class='item-img' data-src='https://pic3.zhimg.com/80/v2-5519f934341533ce81fdff7259b0e9d6_720w.webp'><img src="https://pic3.zhimg.com/80/v2-5519f934341533ce81fdff7259b0e9d6_720w.webp" alt="img"></p>
+<p>保存退出之后同步并安装archlinuxcn-keyring</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">pacman -Syu &amp;&amp; pacman -S archlinuxcn-keyring<br><br></code></pre></td></tr></table></figure>
+
+<p>最后不要忘记安装中文的字体，如果这一步不装进去图形界面之后还是要装：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">pacman -S ttf-sarasa-gothic noto-fonts-cjk<br><br></code></pre></td></tr></table></figure>
+
+<p>我这里安装的是更纱黑体和noto cjk，包比较大，耐心等待安装完毕。</p>
+<p>最后重启</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">reboot<br><br></code></pre></td></tr></table></figure>
+
+<p>在grub界面选择archlinux回车</p>
+<p>当你看到登录界面时，恭喜你，一个相对完整的Arch安装完毕，Enjoy it！</p>
+<hr>
+<p>进一步配置可以看看专栏前面那篇Manjaro-KDE的配置，装点常用的软件，大体上就能用了，然后根据自己的情况配配显卡驱动，就差不多能玩游戏了</p>
+<p>关于N卡的启用与切换，建议使用<a href="https://link.zhihu.com/?target=https://github.com/Askannz/optimus-manager">optimus-manager</a>（其他方案我都试过不好使</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs text">sudo pacman -S optimus-manager<br><br></code></pre></td></tr></table></figure>
+
+<p>没有DE只有一个Bspwm 这是我的dotfiles：</p>
+<p><a href="https://link.zhihu.com/?target=https://github.com/MiraculousMoon/bspwm-dotfiles.git">Dracula&amp;Nord Dotfilesgithub.com&#x2F;MiraculousMoon&#x2F;bspwm-dotfiles.git</a></p>
+<p>此外还有i3wm的：</p>
+<p><a href="https://link.zhihu.com/?target=https://github.com/ayamir/i3-dotfiles">https://github.com/ayamir/i3-dotfilesgithub.com/ayamir/i3-dotfiles</a></p>
+<p>dwm的：</p>
+<p><a href="https://link.zhihu.com/?target=https://github.com/ayamir/dwm-dotfiles">https://github.com/ayamir/dwm-dotfilesgithub.com/ayamir/dwm-dotfiles</a></p>
+<p>spectrwm，xmonad，sway的：</p>
+<p><a href="https://link.zhihu.com/?target=https://github.com/ayamir/nord-and-light">https://github.com/ayamir/nord-and-lightgithub.com/ayamir/nord-and-light</a></p>
+<p>最后多说一句，如果你装完了，就要意识到自己拥有了Arch WiKi（世界上最好的WiKi之一），这也是Arch用户令人羡慕的一点。遇到问题先找Arch WiKi，再去找别的资料</p>
+<div id="paginator"></div></div><div id="post-footer"><div id="pages"><div class="footer-link" style="width: 50%;text-align:right;border-right:1px #fe2 solid"><a href="/2023/05/21/openwrt%E7%BC%96%E8%AF%91%E6%95%99%E7%A8%8B/">← Next openwrt编译教程</a></div><div class="footer-link" style="width: 50%;right:1px;border-left:1px #fe2 solid"><a href="/2023/05/21/VirtualBox-%E5%AE%89%E8%A3%85-Arch-Linux-%E4%BB%8E%E6%96%B0%E5%BB%BA%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%88%B0%E5%9B%BE%E5%BD%A2%E7%95%8C%E9%9D%A2/">VirtualBox 安装 Arch Linux: 从新建虚拟机到图形界面 Prev →</a></div></div></div></div><div class="bottom-btn"><div><a id="to-top" onClick="scrolls.scrolltop();" title="To Top" style="opacity: 0; display: none;">∧</a><a id="to-index" href="#toc-div" title="To Catalog">≡</a><a id="color-mode" onClick="colorMode.change()" title="Change Theme"></a></div></div></article><aside><div id="about"><a href="/" id="logo"><img src="https://ak.hypergryph.com/assets/index/images/ak/pc/faction/1.png" alt="Logo"></a><h1 id="Dr"><a href="/">John Doe</a></h1><div id="description"><p></p></div></div><div id="aside-block"><div id="toc-div"><h1>Catalog</h1><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0-%E4%B8%8B%E8%BD%BDISO"><span class="toc-number">1.</span> <span class="toc-text">0.下载ISO</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E7%A1%AC%E7%9B%98%E5%88%86%E5%8C%BA"><span class="toc-number">2.</span> <span class="toc-text">1.硬盘分区</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%88%B6%E4%BD%9C%E5%90%AF%E5%8A%A8U%E7%9B%98"><span class="toc-number">3.</span> <span class="toc-text">2.制作启动U盘</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-BIOS%E7%9A%84%E8%AE%BE%E7%BD%AE"><span class="toc-number">4.</span> <span class="toc-text">3.BIOS的设置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E6%A3%80%E6%9F%A5%E7%BD%91%E7%BB%9C"><span class="toc-number">5.</span> <span class="toc-text">4.检查网络</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E7%A1%AC%E7%9B%98"><span class="toc-number">6.</span> <span class="toc-text">5.硬盘</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E5%AE%89%E8%A3%85%E5%9F%BA%E6%9C%AC%E7%B3%BB%E7%BB%9F"><span class="toc-number">7.</span> <span class="toc-text">6.安装基本系统</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-%E7%94%9F%E6%88%90fstab%E6%96%87%E4%BB%B6"><span class="toc-number">8.</span> <span class="toc-text">7.生成fstab文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-%E6%AD%A3%E5%BC%8F%E9%85%8D%E7%BD%AE%E6%96%B0%E7%B3%BB%E7%BB%9F"><span class="toc-number">9.</span> <span class="toc-text">8.正式配置新系统</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-%E9%80%80%E5%87%BA%E6%96%B0%E7%B3%BB%E7%BB%9F%E5%B9%B6%E5%8F%96%E6%B6%88%E6%8C%82%E8%BD%BD"><span class="toc-number">10.</span> <span class="toc-text">9.退出新系统并取消挂载</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-%E8%BF%9B%E5%85%A5%E8%A3%85%E5%A5%BD%E7%9A%84Arch%E7%B3%BB%E7%BB%9F%E5%B9%B6%E6%BF%80%E6%B4%BB%E7%BD%91%E7%BB%9C"><span class="toc-number">11.</span> <span class="toc-text">10.进入装好的Arch系统并激活网络</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-%E6%96%B0%E5%BB%BA%E7%94%A8%E6%88%B7%E5%B9%B6%E6%8E%88%E6%9D%83"><span class="toc-number">12.</span> <span class="toc-text">11.新建用户并授权</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#12-%E5%AE%89%E8%A3%85%E6%98%BE%E5%8D%A1%E9%A9%B1%E5%8A%A8"><span class="toc-number">13.</span> <span class="toc-text">12.安装显卡驱动</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#13-%E5%AE%89%E8%A3%85Display-Server"><span class="toc-number">14.</span> <span class="toc-text">13.安装Display Server</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#14-%E5%AE%89%E8%A3%85Display-Manager"><span class="toc-number">15.</span> <span class="toc-text">14.安装Display Manager</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#15-%E5%AE%89%E8%A3%85Desktop-Environment"><span class="toc-number">16.</span> <span class="toc-text">15.安装Desktop Environment</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#16-%E6%B7%BB%E5%8A%A0archlinuxcn%E6%BA%90"><span class="toc-number">17.</span> <span class="toc-text">16.添加archlinuxcn源</span></a></li></ol></div></div><footer><nobr>Published with <a target="_blank" rel="noopener" href="http://hexo.io">Hexo</a></nobr><wbr><nobr> Theme <a target="_blank" rel="noopener" href="https://github.com/Yue-plus/hexo-theme-arknights">Arknights</a></nobr><wbr><nobr>by <a target="_blank" rel="noopener" href="https://github.com/Yue-plus">Yue_plus</a></nobr></footer></aside></main><canvas id="canvas-dust"></canvas><script src="/js/search.js"></script><script src="/js/arknights.js"></script><script src="//unpkg.com/lightgallery@2.7.1/lightgallery.min.js"></script><script src="//unpkg.com/lightgallery@2.7.1/plugins/zoom/lg-zoom.min.js"></script><script src="//unpkg.com/lightgallery@2.7.1/plugins/thumbnail/lg-thumbnail.min.js"></script><script src="/js/pjax.js"></script><script class="pjax-js">reset= () => {code.findCode();
+document.querySelector('.lg-container')?.remove()
+lightGallery(document.getElementById('post-bg'), {
+  plugins: [lgZoom,lgThumbnail],
+  selector: '.item-img'})}</script><script>window.addEventListener("load",() => {pjax = new Pjax({
+ cacheBust: false,
+ selectors: ['title','article','#aside-block','.pjax-js'],
+ switches: {'article': Pjax.switches.sideBySide},
+ switchesOptions: {
+   'article': {
+     classNames: {
+       remove: "pjax-out",
+       add: "pjax-in"
+     }
+   }
+ }
+});
+document.addEventListener("pjax:complete", reset);reset()})</script></body></html>

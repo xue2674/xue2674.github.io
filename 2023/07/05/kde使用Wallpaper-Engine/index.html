@@ -1,0 +1,66 @@
+<!DOCTYPE html><html lang="en" theme-mode="dark"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>kde使用Wallpaper Engine | xue的个人博客</title><link rel="icon" type="image/x-icon" href="/favicon.ico"><script>var config = {"root":"/","search":{"preload":false,"activeHolder":"Enter here","blurHolder":"Search","noResult":"Data \"$0\" not found"},"code":{"codeInfo":"$0 - $1 lines","copy":"copy","copyFinish":"copied","expand":"expand"}}</script><script src="//unpkg.com/mermaid@9.2.2/dist/mermaid.min.js"></script><link type="text/css" rel="stylesheet" href="//unpkg.com/lightgallery@2.7.1/css/lightgallery.css"><link type="text/css" rel="stylesheet" href="//unpkg.com/lightgallery@2.7.1/css/lg-zoom.css"><link type="text/css" rel="stylesheet" href="//unpkg.com/lightgallery@2.7.1/css/lg-thumbnail.css"><link type="text/css" rel="stylesheet" href="/lib/fontawesome/brands.min.css"><link type="text/css" rel="stylesheet" href="/lib/fontawesome/fontawesome.min.css"><link rel="stylesheet" href="/css/arknights.css"><script>if (window.localStorage.getItem('theme-mode') === 'light') document.documentElement.setAttribute('theme-mode', 'light')
+if (window.localStorage.getItem('theme-mode') === 'dark') document.documentElement.setAttribute('theme-mode', 'dark')</script><style>@font-face {
+ font-family: BenderLight;
+ src: local('Bender'), url("/font/BenderLight.ttf");
+}
+@font-face {
+ font-family: 'JetBrains Mono';
+ src: local('JetBrains Mono'), url('/font/JetBrainsMono-Regular.woff2') format('woff2');
+}
+@font-face {
+ font-family: 'Font Awesome 6 Brands';
+ src: local('Font Awesome 6 Brands'), url('/lib/fontawesome/fa-brands.woff2') format('woff2');
+}
+@font-face {
+ font-family: 'Font Awesome 6 Free';
+ src: local('Font Awesome 6 Free'), url('/lib/fontawesome/fa-regular.woff2') format('woff2');
+}</style><style>:root {
+  --dark-background: url('https://ak.hypergryph.com/assets/index/images/ak/pc/bk.jpg');
+  --light-background: url('/img/bk.jpg');
+}</style><meta name="generator" content="Hexo 7.0.0-rc2"></head><body><div class="loading" style="opacity: 0"><div class="loadingBar left"></div><div class="loadingBar right"></div></div><main><header class="closed"><nav><div class="navBtn hide"><i class="navBtnIcon"><span class="navBtnIconBar"></span><span class="navBtnIconBar"></span><span class="navBtnIconBar"></span></i></div><div class="navItem" id="search-header"><span class="navItemTitle"><input autocomplete="off" autocorrect="off" autocapitalize="none" placeholder="Search" spellcheck="false" maxlength="50" type="text" id="search-input"></span></div><div class="navItem" id="search-holder"></div><div class="search-popup"><div id="search-result"></div></div><ol class="navContent"><li class="navItem"><a class="navBlock" href="/"><span class="navItemTitle">Home</span></a></li><li class="navItem" matchdata="categories,tags"><a class="navBlock" href="/archives/"><span class="navItemTitle">Archives</span></a></li><li class="navItem"><a class="navBlock" href="/categories/"><span class="navItemTitle">About</span></a></li></ol></nav></header><article><div id="post-bg"><div id="post-title"><h1>kde使用Wallpaper Engine</h1><div id="post-info"><span>First Post: <div class="control"><time datetime="2023-07-05T04:54:57.000Z" id="date"> 2023-07-05</time></div></span><br><span>Last Update: <div class="control"><time datetime="2023-09-18T07:55:46.393Z" id="updated"> 2023-09-18</time></div></span><br><span>Word Count: <div class="control">297</div></span><br><span>Read Time: <div class="control">1 min</div></span></div></div><hr><div id="post-content"><h2 id="安装Wallpaper-Engine-KDE-Plugin"><a href="#安装Wallpaper-Engine-KDE-Plugin" class="headerlink" title="安装Wallpaper Engine KDE Plugin"></a>安装Wallpaper Engine KDE Plugin</h2><p>kde现在已经可以直接在桌面设置拉取Wallpaper Engine KDE Plugin</p>
+<p class='item-img' data-src='/2023/07/05/kde%E4%BD%BF%E7%94%A8Wallpaper-Engine/a01c83711b601eccbe7dab94040a9625.png'><img src="/2023/07/05/kde%E4%BD%BF%E7%94%A8Wallpaper-Engine/a01c83711b601eccbe7dab94040a9625.png"></p>
+<p>获取可以去github获取Wallpaper Engine KDE Plugin的源码自行编译<br>项目地址：<a target="_blank" rel="noopener" href="https://github.com/catsout/wallpaper-engine-kde-plugin">https://github.com/catsout/wallpaper-engine-kde-plugin</a></p>
+<h2 id="安装Wallpaper-Engine"><a href="#安装Wallpaper-Engine" class="headerlink" title="安装Wallpaper Engine"></a>安装Wallpaper Engine</h2><p>本系统为archlinux</p>
+<p>添加archlinuxcn源</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">sudo nano /etc/pacman.conf<br></code></pre></td></tr></table></figure>
+
+<p>在底部添加以下行。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">[archlinuxcn]<br>Server = https://mirrors.ustc.edu.cn/archlinuxcn/$arch<br></code></pre></td></tr></table></figure>
+
+<p>保存后执行<code>sudo pacman -Sy archlinuxcn-keyring</code>更新软件数据库并安装 ArchLinuxCN GPG 密钥</p>
+<p>安装yay</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">sudo pacman -S yay<br></code></pre></td></tr></table></figure>
+
+<p>使用yay安装steam</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">yay -S steam<br></code></pre></td></tr></table></figure>
+
+<p>在steam设置中启用steam play</p>
+<p class='item-img' data-src='/2023/07/05/kde%E4%BD%BF%E7%94%A8Wallpaper-Engine/e312261aeb2c517f0740b237021988f6.png'><img src="/2023/07/05/kde%E4%BD%BF%E7%94%A8Wallpaper-Engine/e312261aeb2c517f0740b237021988f6.png"></p>
+<p>然后才能安装壁纸引擎</p>
+<h2 id="使用Wallpaper-Engine-KDE-Plugin"><a href="#使用Wallpaper-Engine-KDE-Plugin" class="headerlink" title="使用Wallpaper Engine KDE Plugin"></a>使用Wallpaper Engine KDE Plugin</h2><p>使用Wallpaper Engine下载好壁纸后，选择壁纸目录&#x2F;&#x2F;home&#x2F;user&#x2F;.local&#x2F;share&#x2F;Steam</p>
+<p>可以右键文件夹选择显示隐藏目录</p>
+<h3 id="问题："><a href="#问题：" class="headerlink" title="问题："></a>问题：</h3><p>1、scene类型的壁纸无法应用，原因是因为scene壁纸还需要安装vulkan</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs plaintext">sudo pacman -S mesa xf86-video-intel vulkan-intel<br></code></pre></td></tr></table></figure>
+
+<p>我这边执行这一条语句就解决了</p>
+<p>更详细的驱动安装参考这篇文章：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_25675517/article/details/120733383">https://blog.csdn.net/qq_25675517/article/details/120733383</a></p>
+<p>2、scene壁纸无法填满屏幕</p>
+<p>将单个壁纸Display设置为Scale to Full，或者在settings将默认Display设置为Scale to Full</p>
+<div id="paginator"></div></div><div id="post-footer"><div id="pages"><div class="footer-link" style="width: 50%;text-align:right;border-right:1px #fe2 solid"><a href="/2023/07/13/Waydroid%E6%95%99%E5%AD%A6%EF%BC%9A%E5%9C%A8Arch-Linux%E7%94%B5%E8%84%91%E8%B7%91Android-APP/">← Next Waydroid教学：在Arch Linux电脑跑Android APP</a></div><div class="footer-link" style="width: 50%;right:1px;border-left:1px #fe2 solid"><a href="/2023/07/04/arch%E5%88%9B%E5%BB%BAap%E7%83%AD%E7%82%B9/">arch创建ap热点 Prev →</a></div></div></div></div><div class="bottom-btn"><div><a id="to-top" onClick="scrolls.scrolltop();" title="To Top" style="opacity: 0; display: none;">∧</a><a id="to-index" href="#toc-div" title="To Catalog">≡</a><a id="color-mode" onClick="colorMode.change()" title="Change Theme"></a></div></div></article><aside><div id="about"><a href="/" id="logo"><img src="https://ak.hypergryph.com/assets/index/images/ak/pc/faction/1.png" alt="Logo"></a><h1 id="Dr"><a href="/">John Doe</a></h1><div id="description"><p></p></div></div><div id="aside-block"><div id="toc-div"><h1>Catalog</h1><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85Wallpaper-Engine-KDE-Plugin"><span class="toc-number">1.</span> <span class="toc-text">安装Wallpaper Engine KDE Plugin</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85Wallpaper-Engine"><span class="toc-number">2.</span> <span class="toc-text">安装Wallpaper Engine</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8Wallpaper-Engine-KDE-Plugin"><span class="toc-number">3.</span> <span class="toc-text">使用Wallpaper Engine KDE Plugin</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%97%AE%E9%A2%98%EF%BC%9A"><span class="toc-number">3.1.</span> <span class="toc-text">问题：</span></a></li></ol></li></ol></div></div><footer><nobr>Published with <a target="_blank" rel="noopener" href="http://hexo.io">Hexo</a></nobr><wbr><nobr> Theme <a target="_blank" rel="noopener" href="https://github.com/Yue-plus/hexo-theme-arknights">Arknights</a></nobr><wbr><nobr>by <a target="_blank" rel="noopener" href="https://github.com/Yue-plus">Yue_plus</a></nobr></footer></aside></main><canvas id="canvas-dust"></canvas><script src="/js/search.js"></script><script src="/js/arknights.js"></script><script src="//unpkg.com/lightgallery@2.7.1/lightgallery.min.js"></script><script src="//unpkg.com/lightgallery@2.7.1/plugins/zoom/lg-zoom.min.js"></script><script src="//unpkg.com/lightgallery@2.7.1/plugins/thumbnail/lg-thumbnail.min.js"></script><script src="/js/pjax.js"></script><script class="pjax-js">reset= () => {code.findCode();
+document.querySelector('.lg-container')?.remove()
+lightGallery(document.getElementById('post-bg'), {
+  plugins: [lgZoom,lgThumbnail],
+  selector: '.item-img'})}</script><script>window.addEventListener("load",() => {pjax = new Pjax({
+ cacheBust: false,
+ selectors: ['title','article','#aside-block','.pjax-js'],
+ switches: {'article': Pjax.switches.sideBySide},
+ switchesOptions: {
+   'article': {
+     classNames: {
+       remove: "pjax-out",
+       add: "pjax-in"
+     }
+   }
+ }
+});
+document.addEventListener("pjax:complete", reset);reset()})</script></body></html>
