@@ -211,6 +211,16 @@
 &lt;pre&gt;&lt;code&gt;&lt;span&gt;&lt;span&gt;sed&lt;/span&gt;&lt;span&gt; -i&lt;/span&gt;&lt;span&gt; &apos;s/^pubDate:/date:/&apos;&lt;/span&gt;&lt;span&gt; *&lt;/span&gt;&lt;span&gt;.md&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
 &lt;h3&gt;5. 图片优化&lt;a href=&quot;#5-图片优化&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;/a&gt;&lt;/h3&gt;
 &lt;p&gt;Node.js 20 下 &lt;code&gt;sharp&lt;/code&gt; 的安装遇到了问题，最终使用 &lt;code&gt;passthroughImageService()&lt;/code&gt; 绕过了图片处理。&lt;/p&gt;
+&lt;h3&gt;6. GitHub Pages 忽略 _astro 资源文件&lt;a href=&quot;#6-github-pages-忽略-_astro-资源文件&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;/a&gt;&lt;/h3&gt;
+&lt;p&gt;部署到 GitHub Pages 后，页面样式和交互完全失效，控制台全是 404 错误。查看网络请求发现所有 &lt;code&gt;/_astro/&lt;/code&gt; 目录下的 JS/CSS 文件都返回了 404。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;根因&lt;/strong&gt;：GitHub Pages 默认使用 Jekyll 处理站点，而 Jekyll 会忽略所有以 &lt;code&gt;_&lt;/code&gt; 开头的文件和目录。Astro 构建生成的所有资源文件都放在 &lt;code&gt;_astro/&lt;/code&gt; 目录下，所以全部被忽略了。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;解决方案&lt;/strong&gt;：在构建完成后添加一个空的 &lt;code&gt;.nojekyll&lt;/code&gt; 文件到输出目录，告知 GitHub Pages 跳过 Jekyll 处理：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&lt;span&gt;&lt;span&gt;# .github/workflows/deploy.yml&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span&gt;- &lt;/span&gt;&lt;span&gt;run&lt;/span&gt;&lt;span&gt;: &lt;/span&gt;&lt;span&gt;pnpm install&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span&gt;- &lt;/span&gt;&lt;span&gt;run&lt;/span&gt;&lt;span&gt;: &lt;/span&gt;&lt;span&gt;pnpm build&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span&gt;- &lt;/span&gt;&lt;span&gt;run&lt;/span&gt;&lt;span&gt;: &lt;/span&gt;&lt;span&gt;touch dist/.nojekyll&lt;/span&gt;&lt;span&gt;          # ← 添加这一行&lt;/span&gt;&lt;/span&gt;
+&lt;span&gt;&lt;span&gt;- &lt;/span&gt;&lt;span&gt;uses&lt;/span&gt;&lt;span&gt;: &lt;/span&gt;&lt;span&gt;JamesIves/github-pages-deploy-action@v4&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;这个文件告诉 GitHub Pages 直接提供静态文件，不经过 Jekyll 处理。添加后所有 &lt;code&gt;_astro/&lt;/code&gt; 资源正常加载。&lt;/p&gt;
 &lt;h2&gt;最终效果&lt;a href=&quot;#最终效果&quot;&gt;&lt;span&gt;&lt;/span&gt;&lt;/a&gt;&lt;/h2&gt;
 &lt;p&gt;迁移完成后：&lt;/p&gt;
 
@@ -253,7 +263,7 @@
 
 
 
-&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;指标&lt;/th&gt;&lt;th&gt;Hexo&lt;/th&gt;&lt;th&gt;Astro&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td&gt;构建时间&lt;/td&gt;&lt;td&gt;~8s&lt;/td&gt;&lt;td&gt;~2s&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;页面数&lt;/td&gt;&lt;td&gt;31 篇&lt;/td&gt;&lt;td&gt;231 页（含多语言、分类、标签等）&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;搜索&lt;/td&gt;&lt;td&gt;无&lt;/td&gt;&lt;td&gt;Pagefind 全文搜索&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;主题风格&lt;/td&gt;&lt;td&gt;Butterfly&lt;/td&gt;&lt;td&gt;koharu（日系风）&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;包管理&lt;/td&gt;&lt;td&gt;npm&lt;/td&gt;&lt;td&gt;pnpm&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;构建工具&lt;/td&gt;&lt;td&gt;Hexo CLI&lt;/td&gt;&lt;td&gt;Vite&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;
+&lt;table&gt;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;指标&lt;/th&gt;&lt;th&gt;Hexo&lt;/th&gt;&lt;th&gt;Astro&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td&gt;构建时间&lt;/td&gt;&lt;td&gt;~8s&lt;/td&gt;&lt;td&gt;~2s&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;页面数&lt;/td&gt;&lt;td&gt;31 篇&lt;/td&gt;&lt;td&gt;263 页（含多语言、分类、标签等）&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;搜索&lt;/td&gt;&lt;td&gt;无&lt;/td&gt;&lt;td&gt;Pagefind 全文搜索&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;主题风格&lt;/td&gt;&lt;td&gt;Butterfly&lt;/td&gt;&lt;td&gt;koharu（日系风）&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;包管理&lt;/td&gt;&lt;td&gt;npm&lt;/td&gt;&lt;td&gt;pnpm&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td&gt;构建工具&lt;/td&gt;&lt;td&gt;Hexo CLI&lt;/td&gt;&lt;td&gt;Vite&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;
 &lt;p&gt;实际构建输出：&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;&lt;span&gt;&lt;span&gt;231 page(s) built in 19.24s&lt;/span&gt;&lt;/span&gt;
 &lt;span&gt;&lt;span&gt;Pagefind indexed 231 pages&lt;/span&gt;&lt;/span&gt;
