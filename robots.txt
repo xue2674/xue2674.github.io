@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://xue2674.github.io/sitemap-index.xml
